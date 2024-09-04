@@ -6,7 +6,7 @@
 /*   By: raphaelcarbonnel <raphaelcarbonnel@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 19:17:57 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/09/04 13:35:08 by raphaelcarb      ###   ########.fr       */
+/*   Updated: 2024/09/04 16:12:55 by raphaelcarb      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,5 +15,5 @@
 
 char *ft_check_line(int fd, char *str)
 {
-       
+    
 }

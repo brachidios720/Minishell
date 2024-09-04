@@ -1,26 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: raphaelcarbonnel <raphaelcarbonnel@stud    +#+  +:+       +#+        */
+/*   By: spagliar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/03 16:54:54 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/09/04 18:27:19 by raphaelcarb      ###   ########.fr       */
+/*   Created: 2023/01/26 02:14:51 by spagliar          #+#    #+#             */
+/*   Updated: 2023/01/26 02:15:23 by spagliar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+int	ft_strlen(char *str)
 
-int main(int ac, char **av)
 {
-    if(ac < 2)
-        ft_exit(1);
-    else
-        ft_printf("%s",av[1]);
-    // while(1)
-    // {
-    //     readline("Minishell> ")
-    // }
-}
+	int	i;
 
+	i = 0;
+	while (str[i] != '\0')
+	{
+		i++;
+	}	
+	return (i);
+}

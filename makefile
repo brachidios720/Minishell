@@ -6,38 +6,42 @@
 #    By: raphaelcarbonnel <raphaelcarbonnel@stud    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/03 18:39:18 by raphaelcarb       #+#    #+#              #
-#    Updated: 2024/09/03 18:43:04 by raphaelcarb      ###   ########.fr        #
+#    Updated: 2024/09/04 18:26:19 by raphaelcarb      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = clang
 CFLAGS = -Wall -Werror -Wextra -g3
-EXE = philo
+EXE = Minishell
 RM = rm -rf
 
+LIBFT_PATH = ./LIBFT
+LIBFT = $(LIBFT_PATH)/libft.a
+
 src = 	src/utils.c \
-		src/minishell.c \
+		src/minishell.c
 
 srco = $(src:.c=.o)
 
 all: $(EXE)
 
-$(MAKE) -C 
+$(LIBFT):
+	$(MAKE) -C $(LIBFT_PATH)
 
-$(EXE): $(srco) $(LINK)
-	$(CC) $(CFLAGS) $(srco) -o $(EXE)
+$(EXE): $(srco) $(LIBFT)
+	$(CC) $(CFLAGS) $(srco) $(LIBFT) -o $(EXE)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	$(MAKE) -C clean
 	$(RM) $(srco)
+	$(MAKE) -C $(LIBFT_PATH) clean
 
 fclean: clean
-	$(MAKE) -C fclean
 	$(RM) $(EXE)
+	$(MAKE) -C $(LIBFT_PATH) fclean
 
 re: fclean all
 
-.PHONY: all clean fclean re libft
+.PHONY: all clean fclean re

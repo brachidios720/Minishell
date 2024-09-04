@@ -1,26 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   ft_putchar_fd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: raphaelcarbonnel <raphaelcarbonnel@stud    +#+  +:+       +#+        */
+/*   By: spagliar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/03 16:54:54 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/09/04 18:27:19 by raphaelcarb      ###   ########.fr       */
+/*   Created: 2023/05/02 12:00:53 by spagliar          #+#    #+#             */
+/*   Updated: 2023/05/02 12:00:55 by spagliar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+#include "ft_printf.h"
 
-#include "../include/minishell.h"
+void	ft_putchar_fd(char c, int fd)
 
-int main(int ac, char **av)
 {
-    if(ac < 2)
-        ft_exit(1);
-    else
-        ft_printf("%s",av[1]);
-    // while(1)
-    // {
-    //     readline("Minishell> ")
-    // }
+	write (fd, &c, 1);
 }
-

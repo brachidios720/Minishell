@@ -6,13 +6,13 @@
 /*   By: raphaelcarbonnel <raphaelcarbonnel@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 15:12:37 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/09/03 18:28:58 by raphaelcarb      ###   ########.fr       */
+/*   Updated: 2024/09/04 18:29:20 by raphaelcarb      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
-#ifndef minishell.h
-#define minishell.h
+#ifndef minishell_h
+#define minishell_h
 
 #include <stdio.h>
 #include <unistd.h>
@@ -22,6 +22,10 @@
 #include <limits.h>
 #include <curses.h>
 #include <term.h>
+#include "../LIBFT/libft.h"
+#include "../LIBFT/printf/ft_printf.h"
+#include "../LIBFT/get_next_line/get_next_line.h"
+#include "../LIBFT/get_next_line/get_next_line_bonus.h"
 
 
 // parsing 

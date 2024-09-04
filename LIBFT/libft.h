@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: spagliar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: raphaelcarbonnel <raphaelcarbonnel@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 15:41:53 by spagliar          #+#    #+#             */
-/*   Updated: 2023/04/18 10:59:45 by spagliar         ###   ########.fr       */
+/*   Updated: 2024/09/04 18:37:41 by raphaelcarb      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,5 +73,18 @@ char	*ft_strtrim(char const *s1, char const *set);
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 char	**ft_split(char const *s, char c);
 char	*ft_itoa(int n);
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 5
+# endif
+
+char	*get_next_line(int fd);
+char	*ft_read_to_carstock(int fd, char *carstock);
+char	*ft_cpy_line(char *line, char *carstock);
+char	*ft_freejoin(char *carstock, char *buff);
+char	*ft_new_carstock(char *carstock);
+char	*ft_strchr(const char *s, int c);
+char	*ft_gnl_strjoin(char *carstock, char *buff);
+size_t	ft_strlen(const char *s);
 
 #endif

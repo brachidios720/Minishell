@@ -3,13 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: spagliar <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: raphaelcarbonnel <raphaelcarbonnel@stud    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/11 15:22:24 by spagliar          #+#    #+#              #
-#    Updated: 2023/04/11 15:23:04 by spagliar         ###   ########.fr        #
+#    Updated: 2024/09/04 17:48:40 by raphaelcarb      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-NAME = libft.a 
+
+CC = gcc
+
+NAME = libft.a
 
 SRC = ft_atoi.c \
 		ft_bzero.c \
@@ -46,40 +49,59 @@ SRC = ft_atoi.c \
 		ft_tolower.c \
 		ft_toupper.c
 
-CC = gcc
-
 OBJ = $(SRC:.c=.o)
 
 BONUS = ft_lstadd_back.c \
-			ft_lstadd_front.c \
-			ft_lstclear.c \
-			ft_lstdelone.c \
-			ft_lstiter.c \
-			ft_lstlast.c \
-			ft_lstmap.c \
-			ft_lstnew.c \
-			ft_lstsize.c
+		ft_lstadd_front.c \
+		ft_lstclear.c \
+		ft_lstdelone.c \
+		ft_lstiter.c \
+		ft_lstlast.c \
+		ft_lstmap.c \
+		ft_lstnew.c \
+		ft_lstsize.c
 
 BONUS_OBJS = $(BONUS:.c=.o)
 
+SRCG = get_next_line/get_next_line_bonus.c \
+		get_next_line/get_next_line_utils_bonus.c \
+		get_next_line/get_next_line_utils.c \
+		get_next_line/get_next_line.c
+
+OBJG = $(SRCG:.c=.o)
+
+SRCP = printf/ft_pprintptr.c \
+		printf/ft_printf.c \
+		printf/ft_printnbru.c \
+		printf/ft_putchar_fd.c \
+		printf/ft_putchar.c \
+		printf/ft_putdeci.c \
+		printf/ft_puthexa.c \
+		printf/ft_putstr.c \
+		printf/ft_strlen.c 
+
+OBJP = $(SRCP:.c=.o)
+
 all: $(NAME)
 
-$(NAME) : $(OBJ)
-	ar -rc $(NAME) $(OBJ)
+$(NAME): $(OBJ) $(OBJG) $(OBJP)
+	ar -rc $(NAME) $(OBJ) $(OBJG) $(OBJP)
 	ranlib $(NAME)
 
 clean:
-	/bin/rm -f *.o
+	/bin/rm -f $(OBJ) $(BONUS_OBJS) $(OBJG) $(OBJP)
 
 fclean: clean
 	/bin/rm -f $(NAME)
 
-re : fclean all
+re:
+	$(MAKE) fclean
+	$(MAKE) all
 
-bonus : $(OBJS) $(BONUS_OBJS)
-				ar rcs $(NAME) $(OBJS) $(BONUS_OBJS)
+bonus: $(OBJ) $(BONUS_OBJS) $(OBJG) $(OBJP)
+	ar rcs $(NAME) $(OBJ) $(BONUS_OBJS) $(OBJG) $(OBJP)
 
 %.o: %.c
 	$(CC) -Wall -Wextra -Werror -c $< -o $@
 
-.PHONY :	all clean fclean re bonus
+.PHONY: all clean fclean re bonus
