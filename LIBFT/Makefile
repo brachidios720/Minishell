@@ -6,7 +6,7 @@
 #    By: raphaelcarbonnel <raphaelcarbonnel@stud    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/11 15:22:24 by spagliar          #+#    #+#              #
-#    Updated: 2024/09/04 17:48:40 by raphaelcarb      ###   ########.fr        #
+#    Updated: 2024/09/06 20:47:17 by raphaelcarb      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -63,22 +63,22 @@ BONUS = ft_lstadd_back.c \
 
 BONUS_OBJS = $(BONUS:.c=.o)
 
-SRCG = get_next_line/get_next_line_bonus.c \
-		get_next_line/get_next_line_utils_bonus.c \
-		get_next_line/get_next_line_utils.c \
-		get_next_line/get_next_line.c
+SRCG = get_next_linee/get_next_line_bonus.c \
+		get_next_linee/get_next_line_utils_bonus.c \
+		get_next_linee/get_next_line_utils.c \
+		get_next_linee/get_next_line.c
 
 OBJG = $(SRCG:.c=.o)
 
-SRCP = printf/ft_pprintptr.c \
-		printf/ft_printf.c \
-		printf/ft_printnbru.c \
-		printf/ft_putchar_fd.c \
-		printf/ft_putchar.c \
-		printf/ft_putdeci.c \
-		printf/ft_puthexa.c \
-		printf/ft_putstr.c \
-		printf/ft_strlen.c 
+SRCP = printff/ft_pprintptr.c \
+		printff/ft_printf.c \
+		printff/ft_printnbru.c \
+		printff/ft_putchar_fd.c \
+		printff/ft_putchar.c \
+		printff/ft_putdeci.c \
+		printff/ft_puthexa.c \
+		printff/ft_putstr.c \
+		printff/ft_strlen.c 
 
 OBJP = $(SRCP:.c=.o)
 
