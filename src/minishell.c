@@ -6,21 +6,33 @@
 /*   By: raphaelcarbonnel <raphaelcarbonnel@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 16:54:54 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/09/04 18:27:19 by raphaelcarb      ###   ########.fr       */
+/*   Updated: 2024/09/06 19:43:21 by raphaelcarb      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int main(int ac, char **av)
+int main(int ac, char **av, char **envp)
 {
-    if(ac < 2)
-        ft_exit(1);
-    else
-        ft_printf("%s",av[1]);
+
+    (void)ac;
+    (void)av;
+    ft_check_line(envp);
+    // (void)av;
+    // char *line = readline("Minishell> ");
+    // char *buf = NULL;
+    // if(ac < 2)
+    //     ft_exit(1);
+    // while(1)
+    // {
+    //     line = readline("Minishell> ");
+    //     if(!line)
+    //         break;
+    //     buf = line;
+    // }
     // while(1)
     // {
     //     readline("Minishell> ")
     // }
 }
-
+ 

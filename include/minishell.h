@@ -6,7 +6,7 @@
 /*   By: raphaelcarbonnel <raphaelcarbonnel@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 15:12:37 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/09/04 18:29:20 by raphaelcarb      ###   ########.fr       */
+/*   Updated: 2024/09/06 19:43:28 by raphaelcarb      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,23 @@
 #include <limits.h>
 #include <curses.h>
 #include <term.h>
+#include <stdbool.h>
+#include <readline/readline.h>
 #include "../LIBFT/libft.h"
-#include "../LIBFT/printf/ft_printf.h"
-#include "../LIBFT/get_next_line/get_next_line.h"
-#include "../LIBFT/get_next_line/get_next_line_bonus.h"
+#include "../LIBFT/printff/ft_printf.h"
+#include "../LIBFT/get_next_linee/get_next_line.h"
+#include "../LIBFT/get_next_linee/get_next_line_bonus.h"
+
 
 
 // parsing 
 
 
 // utils 
+
 void ft_exit(int i);
+int ft_strcmp(char *s1, char *s2);
+void ft_check_line(char **env);
 
 // token
 
