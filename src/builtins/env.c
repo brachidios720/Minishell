@@ -1,25 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   read_line.c                                        :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: raphaelcarbonnel <raphaelcarbonnel@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/03 19:17:57 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/09/09 18:06:06 by raphaelcarb      ###   ########.fr       */
+/*   Created: 2024/09/09 16:35:54 by raphaelcarb       #+#    #+#             */
+/*   Updated: 2024/09/09 16:45:58 by raphaelcarb      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
-
-void ft_check_line(char **av, char **env)
+void    ft_env(char **str)
 {
-    char *line = readline("Minishell> ");
-
-    if(line == NULL || ft_strcmp(line, "exit") == 0)
-        return(free(line));
-    ft_check_bultins(line, env);
-    free(line);
-    ft_check_line(av, env);
+    int i = 0;
+    while(str[i] != NULL)
+    {
+        ft_printf("%s\n", str[i]);
+        i++;
+    }
 }

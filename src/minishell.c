@@ -6,7 +6,7 @@
 /*   By: raphaelcarbonnel <raphaelcarbonnel@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 16:54:54 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/09/06 19:43:21 by raphaelcarb      ###   ########.fr       */
+/*   Updated: 2024/09/09 17:10:07 by raphaelcarb      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,9 @@ int main(int ac, char **av, char **envp)
 
     (void)ac;
     (void)av;
-    ft_check_line(envp);
+    print_minishell();
+    ft_check_line(av, envp);
+    
     // (void)av;
     // char *line = readline("Minishell> ");
     // char *buf = NULL;

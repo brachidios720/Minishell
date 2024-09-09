@@ -1,25 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   read_line.c                                        :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: raphaelcarbonnel <raphaelcarbonnel@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/03 19:17:57 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/09/09 18:06:06 by raphaelcarb      ###   ########.fr       */
+/*   Created: 2024/09/09 16:35:52 by raphaelcarb       #+#    #+#             */
+/*   Updated: 2024/09/09 16:45:13 by raphaelcarb      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
-
-void ft_check_line(char **av, char **env)
+int    ft_pwd(void)
 {
-    char *line = readline("Minishell> ");
+    char line[PATH_MAX];
 
-    if(line == NULL || ft_strcmp(line, "exit") == 0)
-        return(free(line));
-    ft_check_bultins(line, env);
-    free(line);
-    ft_check_line(av, env);
+    if(getcwd(line, PATH_MAX))
+    {
+        printf("%s\n", line);
+        return(0);
+    }
+    else
+    {
+        ft_printf("error");
+        return(1);
+    }
 }

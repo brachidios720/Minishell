@@ -6,7 +6,7 @@
 #    By: raphaelcarbonnel <raphaelcarbonnel@stud    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/03 18:39:18 by raphaelcarb       #+#    #+#              #
-#    Updated: 2024/09/06 19:43:44 by raphaelcarb      ###   ########.fr        #
+#    Updated: 2024/09/09 18:13:52 by raphaelcarb      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,12 @@ LIBFT = $(LIBFT_PATH)/libft.a
 
 src = 	src/utils.c \
 		src/minishell.c \
-		src/read_line.c
+		src/read_line.c \
+		src/builtins/builtins.c \
+		src/builtins/pwd.c \
+		src/builtins/env.c \
+		src/builtins/echo.c \
+		src/free.c
 
 srco = $(src:.c=.o)
 

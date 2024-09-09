@@ -6,7 +6,7 @@
 /*   By: raphaelcarbonnel <raphaelcarbonnel@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 15:12:37 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/09/06 19:43:28 by raphaelcarb      ###   ########.fr       */
+/*   Updated: 2024/09/09 18:09:39 by raphaelcarb      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,29 @@
 
 // utils 
 
-void ft_exit(int i);
-int ft_strcmp(char *s1, char *s2);
-void ft_check_line(char **env);
+void    ft_exit(int i);
+int     ft_strcmp(char *s1, char *s2);
+void    ft_check_line(char **av, char **env);
+void    print_minishell(void);
 
 // token
+
+
+// bultins
+
+void    ft_check_bultins(char *line, char **env);
+int     ft_pwd(void);
+void    ft_env(char **str);
+void    ft_echo(char **av);
 
 
 // pipe
 
 
+
+
+// free
+
+void    ft_free_tab(char **av);
 
 #endif
