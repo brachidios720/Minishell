@@ -6,7 +6,7 @@
 /*   By: raphaelcarbonnel <raphaelcarbonnel@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 15:12:37 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/09/09 18:09:39 by raphaelcarb      ###   ########.fr       */
+/*   Updated: 2024/09/09 18:38:49 by raphaelcarb      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void    print_minishell(void);
 void    ft_check_bultins(char *line, char **env);
 int     ft_pwd(void);
 void    ft_env(char **str);
-void    ft_echo(char **av);
+void    ft_echo(char **argv);
 
 
 // pipe
