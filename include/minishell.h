@@ -6,7 +6,7 @@
 /*   By: raphaelcarbonnel <raphaelcarbonnel@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 15:12:37 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/09/09 18:38:49 by raphaelcarb      ###   ########.fr       */
+/*   Updated: 2024/09/11 16:05:16 by raphaelcarb      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,29 @@
 #include "../LIBFT/get_next_linee/get_next_line_bonus.h"
 
 
+// structure
+
+typedef struct s_chain
+{
+    char            *str;
+    struct t_chain  *prev;
+    struct t_chain  *next;
+    
+}   t_chain;
+
+typedef struct s_data
+{
+    char **copy_env;
+    char *path;
+    char *pwd;
+    char *old_pwd;
+    struct t_chain *chain;
+    
+} t_data;
+
+// init
+
+void    init_data(t_data *data);
 
 // parsing 
 
@@ -50,6 +73,7 @@ void    ft_check_bultins(char *line, char **env);
 int     ft_pwd(void);
 void    ft_env(char **str);
 void    ft_echo(char **argv);
+void    ft_cd(char *path);
 
 
 // pipe

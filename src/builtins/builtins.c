@@ -6,7 +6,7 @@
 /*   By: raphaelcarbonnel <raphaelcarbonnel@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:35:56 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/09/09 18:35:48 by raphaelcarb      ###   ########.fr       */
+/*   Updated: 2024/09/10 17:13:18 by raphaelcarb      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ void      ft_check_bultins(char *line, char **env)
         ft_pwd();
     else if(ft_strcmp(arg[0], "echo") == 0)
         ft_echo(arg);
+    else if(ft_strcmp(arg[0], "cd") == 0)
+        ft_cd(arg[1]);
     else 
         write(1, "command not found\n", 19);
     free(arg);
