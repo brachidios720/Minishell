@@ -9,16 +9,17 @@
 /*   Updated: 2024/09/09 17:10:07 by raphaelcarb      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 #include "../include/minishell.h"
 
 int main(int ac, char **av, char **envp)
 {
-
+    char **str;
     (void)ac;
     (void)av;
-    print_minishell();
-    ft_check_line(av, envp);
+    //print_minishell();
+    //ft_check_line(av, envp);
+    str = ft_strdup_tab(envp);
+    ft_env(str);
     
     // (void)av;
     // char *line = readline("Minishell> ");
