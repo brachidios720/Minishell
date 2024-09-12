@@ -26,7 +26,8 @@ src = 	src/utils.c \
 		src/builtins/pwd.c \
 		src/builtins/env.c \
 		src/builtins/echo.c \
-		src/free.c
+		src/builtins/unset.c \
+		src/free.c \
 
 srco = $(src:.c=.o)
 
