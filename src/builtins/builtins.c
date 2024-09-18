@@ -27,6 +27,8 @@ void	ft_check_bultins(char *line, char **env)
 		ft_echo(arg);
 	else if (ft_strcmp(arg[0], "unset") == 0)
 		ft_unset(arg, env);
+	else if (ft_strcmp(arg[0], "export") == 0)
+		ft_export(arg, env);
 	else
 		write (1, "command not found\n", 19);
 	free(arg);

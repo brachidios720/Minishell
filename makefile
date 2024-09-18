@@ -20,6 +20,7 @@ LIBFT_PATH = ./LIBFT
 LIBFT = $(LIBFT_PATH)/libft.a
 
 src = 	src/utils.c \
+		src/utils_2.c \
 		src/minishell.c \
 		src/read_line.c \
 		src/builtins/builtins.c \
@@ -27,6 +28,7 @@ src = 	src/utils.c \
 		src/builtins/env.c \
 		src/builtins/echo.c \
 		src/builtins/unset.c \
+		src/builtins/export.c \
 		src/free.c \
 
 srco = $(src:.c=.o)

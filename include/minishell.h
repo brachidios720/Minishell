@@ -48,9 +48,13 @@ typedef struct s_data
 // utils 
 void	ft_exit(int i);
 int		ft_strcmp(char *s1, char *s2);
-void	ft_check_line(char **av, char **env);
 void	print_minishell(void);
+
+// utils_2
 char	**ft_strdup_tab(char **env);
+void	sort_array(char **env, int len);
+bool	check_id(char *argv);
+int		search_var(char *argv, char **env);
 
 // token
 
@@ -58,23 +62,27 @@ char	**ft_strdup_tab(char **env);
 //						--------------
 //builtins.c
 void	ft_check_bultins(char *line, char **env);
-//pwd.c
-int		ft_pwd(void);
-//env.C
-void	ft_env(char **str);
 //echo.c
 bool	echo_n(char *argv);
 void	ft_echo(char **argv);
+//env.c
+void	ft_env(char **str);
+//export.c
+bool	export_no_args(char **env, int len);
+int		exist(char *argv, char **copy_env);
+bool	export(char *argv, char **copy_env);
+int		ft_export	(char **argv, char **copy_env);
+//pwd.c
+int		ft_pwd(void);
 //unset.c
-bool	check_id(char *argv);
-int		search_var(char *argv, char **env);
 void	check_env(char *var_to_delete, char **env);
 bool	delete_var(char *argv, char **env);
 int		ft_unset(char **argv, char **env);
-
-// pipe
-
+//						------------------
 // free
 void	ft_free_tab(char **av);
+//read_line.c
+void	ft_check_line(char **av, char **env);
+// pipe
 
-#endif
+# endif
