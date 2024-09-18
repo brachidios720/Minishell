@@ -6,7 +6,7 @@
 #    By: raphaelcarbonnel <raphaelcarbonnel@stud    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/03 18:39:18 by raphaelcarb       #+#    #+#              #
-#    Updated: 2024/09/09 18:13:52 by raphaelcarb      ###   ########.fr        #
+#    Updated: 2024/09/11 16:12:01 by raphaelcarb      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,9 @@ src = 	src/utils.c \
 		src/builtins/pwd.c \
 		src/builtins/env.c \
 		src/builtins/echo.c \
-		src/free.c
+		src/builtins/cd.c \
+		src/free.c \
+		src/init.c 
 
 srco = $(src:.c=.o)
 

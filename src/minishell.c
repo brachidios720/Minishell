@@ -6,7 +6,7 @@
 /*   By: raphaelcarbonnel <raphaelcarbonnel@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 16:54:54 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/09/09 17:10:07 by raphaelcarb      ###   ########.fr       */
+/*   Updated: 2024/09/17 15:25:27 by raphaelcarb      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,11 @@
 
 int main(int ac, char **av, char **envp)
 {
-
+    t_data *data = NULL;
     (void)ac;
-    (void)av;
     print_minishell();
-    ft_check_line(av, envp);
-    
-    // (void)av;
-    // char *line = readline("Minishell> ");
-    // char *buf = NULL;
-    // if(ac < 2)
-    //     ft_exit(1);
-    // while(1)
-    // {
-    //     line = readline("Minishell> ");
-    //     if(!line)
-    //         break;
-    //     buf = line;
-    // }
-    // while(1)
-    // {
-    //     readline("Minishell> ")
-    // }
+    data = malloc(sizeof(t_data));
+    data->copy_env = ft_strdup_tab(envp);
+    init_data(data);
+    ft_check_line(av, envp, data);
 }
- 
