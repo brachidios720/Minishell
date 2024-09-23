@@ -32,6 +32,6 @@ char	*ft_freejoin(char *carstock, char *buff);
 char	*ft_new_carstock(char *carstock);
 char	*ft_strchr(const char *s, int c);
 char	*ft_gnl_strjoin(char *carstock, char *buff);
-size_t	ft_strlen(const char *s);
+size_t	ft_strlenn(const char *s);
 
 #endif

@@ -33,7 +33,9 @@ src = 	src/utils.c \
 		src/init.c \
 		src/free.c \
 		src/ctrl/ctrl.c \
-		src/parsing/utils_parsing.c
+		src/parsing/utils_parsing.c \
+		src/parsing/parsing1.c \
+		src/parsing/ft_utils_cmd.c \
 
 srco = $(src:.c=.o)
 
