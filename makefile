@@ -29,7 +29,13 @@ src = 	src/utils.c \
 		src/builtins/echo.c \
 		src/builtins/unset.c \
 		src/builtins/export.c \
+<<<<<<< Updated upstream
+=======
+		src/init.c \
+>>>>>>> Stashed changes
 		src/free.c \
+		src/ctrl/ctrl.c \
+		src/parsing/utils_parsing.c
 
 srco = $(src:.c=.o)
 

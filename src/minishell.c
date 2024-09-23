@@ -18,6 +18,7 @@ int main(int ac, char **av, char **envp)
     (void)ac;
     (void)av;
     print_minishell();
+<<<<<<< Updated upstream
     ft_check_line(av, envp);
     str = ft_strdup_tab(envp);
     ft_env(str);
@@ -40,3 +41,9 @@ int main(int ac, char **av, char **envp)
     }
 }
  
+=======
+    data = malloc(sizeof(t_data));
+    data->copy_env = ft_strdup_tab(envp);
+    ft_check_line(av, envp, data);
+}
+>>>>>>> Stashed changes

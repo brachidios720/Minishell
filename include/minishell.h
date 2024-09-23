@@ -23,14 +23,16 @@
 # include <term.h>
 # include <stdbool.h>
 # include <readline/readline.h>
+# include <readline/history.h>
 # include "../LIBFT/libft.h"
 # include "../LIBFT/printff/ft_printf.h"
 # include "../LIBFT/get_next_linee/get_next_line.h"
 # include "../LIBFT/get_next_linee/get_next_line_bonus.h"
 
-typedef struct s_chain
+typedef struct s_cmd
 {
 	char	*str;//stock 1 chaine de car
+<<<<<<< Updated upstream
 }	t_chain;
 
 typedef struct s_data
@@ -42,15 +44,49 @@ typedef struct s_data
 	char			*old_pwd;//chaine qui stock la valeur precedente du rep de travail ->pour revenir en arriere
 	struct t_chain	*chain;
 }	t_data;
+=======
+    int     num; // token 
+    char    *option; // option cmd 
+    struct s_cmd   *next;
+}	t_cmd;
+
+typedef struct s_data
+{
+    char **copy_env;
+    char *path;
+    char *pwd;
+    char *old_pwd;
+    char *line;
+    char **matrice;
+    char **cut_matrice;
+    int  pipe;
+    struct t_cmd *cmd;
+    
+} t_data;
+
+// init
+
+void    init_data(t_data *data);
+void    ft_check_line(char **av, char **env, t_data *data);
+>>>>>>> Stashed changes
 
 // parsing 
+
+t_cmd	*ft_lsttnew(void *content);
+int     ft_check_pipe(char c);
+char    *ft_cut_cont(char *str);
+int     count_pipe(char *str);
 
 // utils 
 void	ft_exit(int i);
 int		ft_strcmp(char *s1, char *s2);
 void	print_minishell(void);
+void    ft_handler(int a);
+void    ft_handlequit(int b);
+char    *ft_strncpy(char *s1, char *s2, int n);
 
 // utils_2
+
 char	**ft_strdup_tab(char **env);
 void	sort_array(char **env, int len);
 bool	check_id(char *argv);
@@ -58,11 +94,18 @@ int		search_var(char *argv, char **env);
 
 // token
 
+<<<<<<< Updated upstream
 //						BUILTINS FILES
 //						--------------
 //builtins.c
 void	ft_check_bultins(char *line, char **env);
 //echo.c
+=======
+void    ft_check_bultins(char *line, t_data *data);
+int     ft_pwd(void);
+void    ft_env(char **str);
+void    ft_cd(t_data *data);
+>>>>>>> Stashed changes
 bool	echo_n(char *argv);
 void	ft_echo(char **argv);
 //env.c
