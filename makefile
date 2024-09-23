@@ -6,7 +6,7 @@
 #    By: raphaelcarbonnel <raphaelcarbonnel@stud    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/03 18:39:18 by raphaelcarb       #+#    #+#              #
-#    Updated: 2024/09/09 18:13:52 by raphaelcarb      ###   ########.fr        #
+#    Updated: 2024/09/11 16:12:01 by raphaelcarb      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,19 +20,17 @@ LIBFT_PATH = ./LIBFT
 LIBFT = $(LIBFT_PATH)/libft.a
 
 src = 	src/utils.c \
-		src/utils_2.c \
+		src/utils_env.c \
 		src/minishell.c \
 		src/read_line.c \
 		src/builtins/builtins.c \
 		src/builtins/pwd.c \
 		src/builtins/env.c \
 		src/builtins/echo.c \
+		src/builtins/cd.c \
 		src/builtins/unset.c \
 		src/builtins/export.c \
-<<<<<<< Updated upstream
-=======
 		src/init.c \
->>>>>>> Stashed changes
 		src/free.c \
 		src/ctrl/ctrl.c \
 		src/parsing/utils_parsing.c
