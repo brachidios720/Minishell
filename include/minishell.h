@@ -54,14 +54,16 @@ typedef struct s_data
 // init
 
 void    init_data(t_data *data);
-void    ft_check_line(char **av, char **env, t_data *data);
+void    ft_check_line(char **av, char **env, t_data *data, t_cmd **cmd);
 
 // parsing 
 
-t_cmd	*ft_lsttnew(void *content);
-int     ft_check_pipe(char c);
-char    *ft_cut_cont(char *str);
+t_cmd	*ft_lsttnew(t_data *data, int i);
+void    ft_lstclearr(t_cmd **cmd);
+void	ft_lst_addbackk(t_cmd **stack, t_cmd *node);
+void    ft_cut_cont(char *str, t_data *data);
 int     count_pipe(char *str);
+void	ft_do_all(char *str, t_cmd **cmd, t_data *data, t_cmd *new_node);
 
 // utils 
 void	ft_exit(int i);
@@ -85,6 +87,7 @@ void    ft_change_env(t_data *data, char *name, char *new_name);
 char    *search_in_env(t_data *data, char *name);
 char    *ft_strcpy(char *s1 , char *s2);
 char    *ft_tab(char **av);
+int     ft_lstsizee(t_cmd *cmd);
 
 // token
 
@@ -105,6 +108,7 @@ bool	delete_var(char *argv, char **env);
 int		ft_unset(char **argv, char **env);
 // free
 void	ft_free_tab(char **av);
+void    ft_free(char *str, t_cmd **cmd);
 //read_line.c
 // pipe
 

@@ -53,7 +53,7 @@ char	*ft_new_carstock(char *carstock)
 		free(carstock);
 		return (NULL);
 	}
-	str = malloc(sizeof(char) * (ft_strlen(carstock) - i + 1));
+	str = malloc(sizeof(char) * (ft_strlenn(carstock) - i + 1));
 	if (!str)
 		return (NULL);
 	i++;
