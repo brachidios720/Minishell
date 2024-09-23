@@ -39,6 +39,10 @@ void    print_minishell(void)
 	printf("\033[32m ##   ##   ####    ##  ##    ####    ######   ###  ##   #####    ####     ####        ##   ######\033[0m\n");
 }
 
+/*Objectif : creer une copy du tab de chaine de caractere
+Role de la fonction : retourne une copy de notre environement
+dans le tableau d'origine*/
+
 char	**ft_strdup_tab(char **env)
 {
 	char	**new_tab;

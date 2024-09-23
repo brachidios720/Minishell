@@ -15,13 +15,28 @@
 
 void ft_check_line(char **av, char **env, t_data *data)
 {
+    signal(SIGINT, ft_handler);
+    signal(SIGQUIT, ft_handlequit);
+
     char *line = readline("Minishell> ");
     add_history(line);
     data->line = line;
     if(line == NULL || ft_strcmp(line, "exit") == 0)
         return(free(line));
+    data->cut_matrice = ft_split(line, '|');
+    data->pipe = count_pipe(line);
+    int i = 0;
+    int y = 0;
+    while(data->cut_matrice[i])
+    {
+        printf("%s\n", data->cut_matrice[i]);
+        y = ft_strlen(data->cut_matrice[i]);
+        printf("%d\n", y);
+        i++;
+    }
     data->matrice = ft_split(line, ' '); // commance a matrice[0]
-    ft_check_bultins(line, env, data);
+    init_data(data);
+    ft_check_bultins(line, data);
     free(line);
     ft_check_line(av, env, data);
 }

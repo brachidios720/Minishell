@@ -15,34 +15,7 @@
 /*Objectif : creer une copy du tab de chaine de caractere
 Role de la fonction : retourne une copy de notre environement
 dans le tableau d'origine*/
-char	**ft_strdup_tab(char **env)
-{
-	char	**new_tab;
-	int		i;
-	int		len;
 
-	len = 0;
-	while (env[len]) //!= NULL
-		len++;
-	new_tab = (char **)malloc(sizeof(char *) * (len + 1));
-	if (!new_tab) //verif ok malloc
-		return (NULL);
-	i = 0;
-	while (env[i]) //!= NULL
-	{
-		new_tab[i] = ft_strdup(env[i]); //attribut la copy
-		if (!new_tab[i]) //si vide
-		{
-			while (i > 0)
-				free(new_tab[i--]); //libere la memoire allouee en decrementant
-			free(new_tab);
-			return (NULL);
-		}
-		i++;
-	}
-	new_tab[i] = NULL;//fin de copy
-	return (new_tab);
-}
 
 /*Objectif : trier les chaines du tab pour les mettre par ordre croissant
 Role de la fonction : tableau trie -> faciliter recherche et lecture*/
@@ -118,4 +91,16 @@ int	search_var(char *argv, char **env)
 		j++;
 	}
 	return (-1);// Si la variable n'est pas trouvée
+}
+
+char *ft_strncpy(char *s1, char *s2, int n)
+{
+	int i = 0;
+	while(s1[i] && i < n)
+	{
+		s2[i] = s1[i];
+		i++;
+	}
+	s2[i] = '\0';
+	return(s2);
 }

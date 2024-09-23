@@ -30,8 +30,10 @@ src = 	src/utils.c \
 		src/builtins/cd.c \
 		src/builtins/unset.c \
 		src/builtins/export.c \
-		src/init.c 
+		src/init.c \
 		src/free.c \
+		src/ctrl/ctrl.c \
+		src/parsing/utils_parsing.c
 
 srco = $(src:.c=.o)
 

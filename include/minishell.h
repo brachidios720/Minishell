@@ -23,35 +23,19 @@
 # include <term.h>
 # include <stdbool.h>
 # include <readline/readline.h>
+# include <readline/history.h>
 # include "../LIBFT/libft.h"
 # include "../LIBFT/printff/ft_printf.h"
 # include "../LIBFT/get_next_linee/get_next_line.h"
 # include "../LIBFT/get_next_linee/get_next_line_bonus.h"
 
-typedef struct s_chain
+typedef struct s_cmd
 {
 	char	*str;//stock 1 chaine de car
-}	t_chain;
-
-typedef struct s_data
-{
-	char			**av;//tab de chaine ->stock les arg de argv[]
-	char			**copy_env;//tab de chaine contient les var env ->copy de l'env 
-	char			*path;//chaine qui contient le chemin de lexecutable d'une commade
-	char			*pwd;//chaine represente -> le rep de travail actuel
-	char			*old_pwd;//chaine qui stock la valeur precedente du rep de travail ->pour revenir en arriere
-	struct t_chain	*chain;
-}	t_data;
-
-// structure
-
-typedef struct s_chain
-{
-    char            *str;
-    struct t_chain  *prev;
-    struct t_chain  *next;
-    
-}   t_chain;
+    int     num; // token 
+    char    *option; // option cmd 
+    struct s_cmd   *next;
+}	t_cmd;
 
 typedef struct s_data
 {
@@ -61,23 +45,34 @@ typedef struct s_data
     char *old_pwd;
     char *line;
     char **matrice;
-    struct t_chain *chain;
+    char **cut_matrice;
+    int  pipe;
+    struct t_cmd *cmd;
     
 } t_data;
 
 // init
 
 void    init_data(t_data *data);
-
 void    ft_check_line(char **av, char **env, t_data *data);
+
 // parsing 
+
+t_cmd	*ft_lsttnew(void *content);
+int     ft_check_pipe(char c);
+char    *ft_cut_cont(char *str);
+int     count_pipe(char *str);
 
 // utils 
 void	ft_exit(int i);
 int		ft_strcmp(char *s1, char *s2);
 void	print_minishell(void);
+void    ft_handler(int a);
+void    ft_handlequit(int b);
+char    *ft_strncpy(char *s1, char *s2, int n);
 
 // utils_2
+
 char	**ft_strdup_tab(char **env);
 void	sort_array(char **env, int len);
 bool	check_id(char *argv);
@@ -93,7 +88,7 @@ char    *ft_tab(char **av);
 
 // token
 
-void    ft_check_bultins(char *line, char **env, t_data *data);
+void    ft_check_bultins(char *line, t_data *data);
 int     ft_pwd(void);
 void    ft_env(char **str);
 void    ft_cd(t_data *data);

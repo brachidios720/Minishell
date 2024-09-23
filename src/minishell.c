@@ -19,6 +19,5 @@ int main(int ac, char **av, char **envp)
     print_minishell();
     data = malloc(sizeof(t_data));
     data->copy_env = ft_strdup_tab(envp);
-    init_data(data);
     ft_check_line(av, envp, data);
 }
