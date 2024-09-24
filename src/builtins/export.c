@@ -11,45 +11,32 @@
 /* ************************************************************************** */
 #include "../../include/minishell.h"
 
-
 //export apl sans args -> affiche les var d'environnement attendu
-bool export_no_args(t_env *env)
+bool	export_no_args(t_env *env)
 {
-	char	**arr;
+	char	**tab;
 	int		i;
 	int		j;
 
-	// Convertir la liste chaînée t_env en tableau de chaînes de caractères
-	arr = lst_to_arr(env);
-	if (!arr)
+	tab = lst_to_tab(env); // con list en tab
+	if (!tab)
 		return (false);
-
-	// Trier les variables d'environnement par ordre alphabétique
-	sort_array(arr, len_list(env));
-
+	sort_tab(tab, len_tab(env)); // tri les var par ordre alpha
 	i = 0;
-	while (arr[i])
+	while (tab[i])
 	{
-		// Afficher "declare -x " avant chaque variable
-		printf("declare -x ");
+		printf("declare -x "); //affiche declare av chaque var
 		j = 0;
-
-		// Afficher le nom de la variable jusqu'au signe '='
-		while (arr[i][j] && arr[i][j] != '=')
-			printf("%c", arr[i][j++]);
-
+		while (tab[i][j] && tab[i][j] != '=') //affiche jusqu a =
+			printf("%c", tab[i][j++]);
 		// Si la variable a une valeur, l'afficher avec des guillemets
-		if (arr[i][j] && arr[i][j] == '=')
-			printf("=\"%s\"\n", &arr[i][j + 1]);
+		if (tab[i][j] && tab[i][j] == '=')
+			printf("=\"%s\"\n", &tab[i][j + 1]);
 		else
 			// Si la variable n'a pas de valeur, sauter à la ligne
 			printf("\n");
-
 		i++;
 	}
-
-	// Libérer la mémoire allouée pour le tableau
-	free(arr);
-
+	free(tab);
 	return (true);
 }

@@ -12,57 +12,43 @@
 
 #include "../include/minishell.h"
 
-char	*ft_strncpy(char *s1, char *s2, int n)
-{
-	int	i;
-
-	i = 0;
-	while (s1[i] && i < n)
-	{
-		s2[i] = s1[i];
-		i++;
-	}
-	s2[i] = '\0';
-	return (s2);
-}
-
+//calcul la longueur (nbr d'elements) de la liste t_env
 int len_list(t_env *env)
 {
-    int     len = 0;
-    t_env   *current = env;
+    int nb; //cptr pour le nbre d'elements
+    t_env *lst; //ptr parcourt la liste
 
-    while (current)
+	nb = 0;
+	lst = env; //initialise au premier element d ela liste
+    while (lst != NULL)
     {
-        len++;
-        current = current->next;
+        nb++;
+        lst = lst->next;
     }
-    return (len);
+    return (nb);
 }
-
-char	**lst_to_arr(t_env *env)
+//convertit la liste en un tab de chaine de car
+char	**lst_to_tab(t_env *env)
 {
-	t_env	*lst;
-	char	**dest;
-	int		i;
+	t_env	*lst; //lst parcourt la liste
+	char	**dest; //tab a retourner
+	int		i; //clst pour le tab
 
-	// Allouer de la mémoire pour le tableau de chaînes de caractères
-	dest = (char **)malloc(sizeof(char *) * (len_list(env) + 1)); // +1 pour le NULL terminal
+	dest = malloc(sizeof(char *) * (len_list(env) + 1));
 	if (!dest)
 		return (NULL);
-	
 	lst = env;
 	i = 0;
 	while (lst)  // Parcourir la liste chaînée jusqu'à la fin
 	{
-		dest[i] = strdup((char *)lst->content);  // Copier le contenu de la liste (variable d'environnement)
-		if (!dest[i])  // Vérification en cas d'échec de strdup
+		dest[i] = strdup(lst->content);  // Copier le contenu de la liste (variable d'environnement)
+		/*if (!dest[i])  // Vérification en cas d'échec de strdup
 		{
-			// En cas d'erreur de mémoire, libérer ce qui a été alloué
 			while (i > 0)
 				free(dest[--i]);
 			free(dest);
 			return (NULL);
-		}
+		}*/
 		lst = lst->next;  // Passer à l'élément suivant
 		i++;
 	}
@@ -71,7 +57,7 @@ char	**lst_to_arr(t_env *env)
 }
 
 // Trie le tableau de chaînes de caractères
-void	sort_array(char **arr, int len)
+void	sort_tab(char **arr, int len)
 {
 	int		i;
 	int		j;
@@ -87,8 +73,7 @@ void	sort_array(char **arr, int len)
 			// Comparaison lexicographique entre arr[i] et arr[j]
 			diff = ft_strncmp(arr[i], arr[j], __INT_MAX__);  
 			
-			// Si arr[i] est plus grand que arr[j], on les échange
-			if (diff > 0)
+			if (diff > 0) //			// Si arr[i] est plus grand que arr[j], on les échange
 			{
 				tmp = arr[i];
 				arr[i] = arr[j];
@@ -98,4 +83,18 @@ void	sort_array(char **arr, int len)
 		}
 		i++;
 	}
+}
+
+char	*ft_strncpy(char *s1, char *s2, int n)
+{
+	int	i;
+
+	i = 0;
+	while (s1[i] && i < n)
+	{
+		s2[i] = s1[i];
+		i++;
+	}
+	s2[i] = '\0';
+	return (s2);
 }

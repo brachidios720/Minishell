@@ -75,7 +75,7 @@ void	print_minishell(void);
 char	**ft_strdup_tab(char **env);
 char	*ft_strcpy(char *s1, char *s2);
 char	*ft_strncpy(char *s1, char *s2, int n);
-char	**lst_to_arr(t_env *env);//export
+char	**lst_to_tab(t_env *env);//export->utils env
 int		len_list(t_env *env);//export
 void	sort_array(char **arr, int len);//export
 void	ft_handler(int a);//readline
