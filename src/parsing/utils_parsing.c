@@ -1,6 +1,5 @@
 #include "../../include/minishell.h"
 
-
 int ft_check_pipe(char c)
 {
     if(c == '|')
@@ -10,8 +9,11 @@ int ft_check_pipe(char c)
 
 int count_pipe(char *str)
 {
-    int i = 0;
-    int y = 0;
+    int i;
+    int y;
+    
+    i = 0;
+    y = 0;
     while(str[i])
     {
         if(str[i] == '|')
@@ -20,8 +22,6 @@ int count_pipe(char *str)
     }
     return(y);
 }
-
-
 
 // char **ft_cut_cont(char *str)
 // {

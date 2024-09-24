@@ -31,6 +31,7 @@
 typedef struct	s_env//gestion de env
 {
 	void			*content;//ptr pour stocker des chaines de car->var d'env ex: "VAR=value"
+	struct s_env	*prev;
 	struct s_env	*next;//ptr ver 2nd element suivant de la liste ex: "HOME=/home/user"
 
 }		t_env;
@@ -54,7 +55,7 @@ typedef struct s_data //donnees principales
 	char			**cut_matrice;
 	int				pipe;
 	struct s_env	*env;//liste chainee des var d'environnement
-	struct t_cmd	*cmd;//ptr vers la 1ere commande de la liste chainee
+	struct s_cmd	*cmd;//ptr vers la 1ere commande de la liste chainee
 
 }	t_data;
 
@@ -75,9 +76,10 @@ void	print_minishell(void);
 char	**ft_strdup_tab(char **env);
 char	*ft_strcpy(char *s1, char *s2);
 char	*ft_strncpy(char *s1, char *s2, int n);
-char	**lst_to_tab(t_env *env);//export->utils env
-int		len_list(t_env *env);//export
-void	sort_array(char **arr, int len);//export
+int		len_list(t_env *env);//export->utils env
+char	**lst_to_arr(t_env *env);//export->utils env
+void	sort_arr(char **arr, int len);//export->utils env
+int		append(t_list **list, char *elem);
 void	ft_handler(int a);//readline
 void	ft_handlequit(int b);//ctrl
 void	ft_change_env(t_data *data, char *name, char *new_name);//cd
@@ -91,8 +93,11 @@ void	ft_env(char **str);
 void	ft_cd(t_data *data);
 bool	echo_n(char *argv);//echo
 void	ft_echo(char **argv);//echo
-int		exist(char *argv, char **copy_env);
 bool	export_no_args(t_env *env);//export
+bool	valid_id(char *str);//export
+int		exist(char *str, t_env *env);//export
+bool	export_var(char *str, t_data *data);//export
+int		ft_export(char **str, t_data *data);//export
 
 // free
 void	ft_free_tab(char **av);

@@ -12,7 +12,7 @@
 
 CC = clang
 CFLAGS = -Wall -Werror -Wextra -g3
-LDFLAGS = -lreadline
+LDFLAGS = -lreadline -ltinfo
 EXE = Minishell
 RM = rm -rf
 

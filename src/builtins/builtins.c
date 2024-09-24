@@ -25,9 +25,9 @@ void      ft_check_bultins(char *line, t_data *data)
     else if(ft_strcmp(data->matrice[0], "cd") == 0)
         ft_cd(data);
     else if(ft_strcmp(data->matrice[0], "export") == 0)
-        ft_export(data->matrice, data->copy_env);
-    else if(ft_strcmp(data->matrice[0], "unset") == 0)
-        ft_unset(data->matrice, data->copy_env);
+        ft_export(data->matrice, data);
+    //else if(ft_strcmp(data->matrice[0], "unset") == 0)
+    //    ft_unset(data->matrice, data->copy_env);
     else 
         write(1, "command not found\n", 19);
     free(data->matrice);

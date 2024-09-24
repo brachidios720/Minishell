@@ -13,35 +13,34 @@
 #include "../include/minishell.h"
 
 //calcul la longueur (nbr d'elements) de la liste t_env
-int len_list(t_env *env)
+int	len_list(t_env *env)
 {
-    int nb; //cptr pour le nbre d'elements
-    t_env *lst; //ptr parcourt la liste
-
+	int		nb;//cptr pour le nbre d'elements
+	t_env	*lst; //ptr parcourt la liste
 	nb = 0;
 	lst = env; //initialise au premier element d ela liste
-    while (lst != NULL)
-    {
-        nb++;
-        lst = lst->next;
-    }
-    return (nb);
+	while (lst != NULL)
+	{
+		nb++;
+		lst = lst->next;
+	}
+	return (nb);
 }
-//convertit la liste en un tab de chaine de car
-char	**lst_to_tab(t_env *env)
-{
-	t_env	*lst; //lst parcourt la liste
-	char	**dest; //tab a retourner
-	int		i; //clst pour le tab
 
+//convertit la liste en un tab de chaine de car
+char	**lst_to_arr(t_env *env)
+{
+	t_env	*lst; //ptr parcourt la liste
+	char	**dest; //arr a retourner
+	int		i;
 	dest = malloc(sizeof(char *) * (len_list(env) + 1));
 	if (!dest)
 		return (NULL);
 	lst = env;
 	i = 0;
-	while (lst)  // Parcourir la liste chaînée jusqu'à la fin
+	while (lst) // Parcourir la liste chaînée jusqu'à la fin
 	{
-		dest[i] = strdup(lst->content);  // Copier le contenu de la liste (variable d'environnement)
+		dest[i] = strdup(lst->content);
 		/*if (!dest[i])  // Vérification en cas d'échec de strdup
 		{
 			while (i > 0)
@@ -49,15 +48,15 @@ char	**lst_to_tab(t_env *env)
 			free(dest);
 			return (NULL);
 		}*/
-		lst = lst->next;  // Passer à l'élément suivant
+		lst = lst->next;
 		i++;
 	}
-	dest[i] = NULL;  // Terminer le tableau avec un pointeur NULL
+	dest[i] = NULL;
 	return (dest);
 }
 
 // Trie le tableau de chaînes de caractères
-void	sort_tab(char **arr, int len)
+void	sort_arr(char **arr, int len)
 {
 	int		i;
 	int		j;
@@ -70,10 +69,8 @@ void	sort_tab(char **arr, int len)
 		j = i + 1;
 		while (j < len)
 		{
-			// Comparaison lexicographique entre arr[i] et arr[j]
-			diff = ft_strncmp(arr[i], arr[j], __INT_MAX__);  
-			
-			if (diff > 0) //			// Si arr[i] est plus grand que arr[j], on les échange
+			diff = ft_strncmp(arr[i], arr[j], __INT_MAX__);
+			if (diff > 0) //Si arr[i] > que arr[j] -> échange
 			{
 				tmp = arr[i];
 				arr[i] = arr[j];
@@ -84,6 +81,7 @@ void	sort_tab(char **arr, int len)
 		i++;
 	}
 }
+
 
 char	*ft_strncpy(char *s1, char *s2, int n)
 {
