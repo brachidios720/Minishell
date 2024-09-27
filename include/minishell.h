@@ -29,6 +29,14 @@
 # include "../LIBFT/get_next_linee/get_next_line.h"
 # include "../LIBFT/get_next_linee/get_next_line_bonus.h"
 
+#define RED "\033[31m"
+#define GREEN "\033[32m"
+#define YELLOW "\033[33m"
+#define BLUE "\033[34m"
+#define MAGENTA "\033[35m"
+#define CYAN "\033[36m"
+#define RESET "\033[0m"
+
 typedef struct s_cmd
 {
 	char	*str;//stock 1 chaine de car
@@ -64,6 +72,10 @@ void	ft_lst_addbackk(t_cmd **stack, t_cmd *node);
 void    ft_cut_cont(char *str, t_data *data);
 int     count_pipe(char *str);
 void	ft_do_all(char *str, t_cmd **cmd, t_data *data, t_cmd *new_node);
+int     ft_check_dash(char *str);
+int     ft_check_option(t_data *data);
+int     ft_check_one_quote(char *str);
+int     ft_check_pipe(char *str);
 
 // utils 
 void	ft_exit(int i);
@@ -101,7 +113,9 @@ bool	export_no_args(char **env, int len);
 int		exist(char *argv, char **copy_env);
 bool	export(char *argv, char **copy_env);
 int		ft_export	(char **argv, char **copy_env);
+
 //export.c
+
 //unset.c
 void	check_env(char *var_to_delete, char **env);
 bool	delete_var(char *argv, char **env);
@@ -110,6 +124,7 @@ int		ft_unset(char **argv, char **env);
 void	ft_free_tab(char **av);
 void    ft_free(char *str, t_cmd **cmd);
 //read_line.c
+
 // pipe
 
 # endif

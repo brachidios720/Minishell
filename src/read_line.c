@@ -19,7 +19,7 @@ void ft_check_line(char **av, char **env, t_data *data, t_cmd **cmd)
 
     signal(SIGINT, ft_handler);
     signal(SIGQUIT, ft_handlequit);
-    char *line = readline("Minishell> ");
+    char *line = readline(CYAN"Minishell> "RESET);
     add_history(line);
     data->line = line;
     if(line == NULL || ft_strcmp(line, "exit") == 0)
@@ -27,7 +27,15 @@ void ft_check_line(char **av, char **env, t_data *data, t_cmd **cmd)
     data->matrice = ft_split(line, ' '); // commance a matrice[0]
     init_data(data);
     ft_do_all(line, cmd, data, new_node);
-    ft_check_bultins(line, data);
-    ft_free(line, cmd);
-    ft_check_line(av, env, data, cmd);
+    if(ft_check_option(data) == 1)
+    {
+        ft_free(line, cmd);
+        ft_check_line(av, env, data, cmd);
+    }
+    else
+    {
+        ft_check_bultins(line, data);
+        ft_free(line, cmd);
+        ft_check_line(av, env, data, cmd);
+    }
 }

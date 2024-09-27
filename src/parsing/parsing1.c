@@ -30,3 +30,4 @@ void	ft_do_all(char *str, t_cmd **cmd, t_data *data, t_cmd *new_node)
         ft_lst_addbackk(cmd, new_node);
     }
 }
+

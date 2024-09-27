@@ -12,7 +12,7 @@
 
 CC = clang
 CFLAGS = -Wall -Werror -Wextra -g3
-LDFLAGS = -lreadline
+LDFLAGS = -lreadline -ltinfo
 EXE = Minishell
 RM = rm -rf
 
@@ -36,6 +36,8 @@ src = 	src/utils.c \
 		src/parsing/utils_parsing.c \
 		src/parsing/parsing1.c \
 		src/parsing/ft_utils_cmd.c \
+		src/parsing/option.c \
+		src/parsing/parsing2.c \
 
 srco = $(src:.c=.o)
 

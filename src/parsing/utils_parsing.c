@@ -13,8 +13,6 @@ int count_pipe(char *str)
     return(y);
 }
 
-
-
 void    ft_cut_cont(char *str, t_data *data)
 {
     int i = 0;
@@ -26,3 +24,16 @@ void    ft_cut_cont(char *str, t_data *data)
         i++;
     }
 }
+
+int     ft_check_one_quote(char *str)
+{
+    int i = 0;
+    int y = 0;
+    while(str[i])
+    {
+        if(str[i] == '"')
+            y++;
+        i++;
+    }
+    return(y);
+} 
