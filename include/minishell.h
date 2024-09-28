@@ -62,8 +62,9 @@ void    init_data(t_data *data);
 void    ft_check_line(char **av, char **envp, t_data *data, t_cmd **cmd, t_env **env);
 
 //init_lst
-t_env	*ft_env_new(t_env, char **envp, int i);
+t_env	*ft_env_new(char **envp, int i);
 t_env	*init_env(char **envp);
+void	ft_lstadd_back_list(t_env **env, t_env *n);
 
 // parsing 
 
@@ -78,8 +79,6 @@ void	ft_do_all(char *str, t_cmd **cmd, t_data *data, t_cmd *new_node);
 int		ft_strcmp(char *s1, char *s2);
 void	print_minishell(void);
 char	**ft_strdup_tab(char **env);
-int     ft_strcmp(char *s1, char *s2);
-void    print_minishell(void);
 void    ft_change_env(t_data *data, char *name, char *new_name);
 char    *search_in_env(t_data *data, char *name);
 char    *ft_strcpy(char *s1 , char *s2);
@@ -92,6 +91,9 @@ void    ft_check_bultins(char *line, t_data *data, t_env **env);
 int     ft_pwd(void);
 void    ft_env(t_env **env);
 void    ft_cd(t_data *data);
+//ctrl.c
+void    ft_handler(int a);
+void    ft_handlequit(int b);
 //echo.c
 bool	echo_n(char *argv);
 void	ft_echo(char **argv);
