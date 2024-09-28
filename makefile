@@ -27,10 +27,9 @@ src = 	src/utils.c \
 		src/builtins/pwd.c \
 		src/builtins/env.c \
 		src/builtins/echo.c \
-		src/builtins/cd.c \
-		src/builtins/unset.c \
 		src/builtins/export.c \
 		src/init.c \
+		src/init_lst.c\
 		src/free.c \
 		src/ctrl/ctrl.c \
 		src/parsing/utils_parsing.c \

@@ -13,7 +13,7 @@
 #include "../include/minishell.h"
 
 
-void ft_check_line(char **av, char **env, t_data *data, t_cmd **cmd)
+void ft_check_line(char **av, char **envp, t_data *data, t_cmd **cmd, t_env **env)
 {
     t_cmd *new_node = NULL;
 
@@ -27,7 +27,7 @@ void ft_check_line(char **av, char **env, t_data *data, t_cmd **cmd)
     data->matrice = ft_split(line, ' '); // commance a matrice[0]
     init_data(data);
     ft_do_all(line, cmd, data, new_node);
-    ft_check_bultins(line, data);
+    ft_check_bultins(line, data, env);
     ft_free(line, cmd);
-    ft_check_line(av, env, data, cmd);
+    ft_check_line(av, envp, data, cmd, env);
 }

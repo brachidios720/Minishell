@@ -29,17 +29,23 @@
 # include "../LIBFT/get_next_linee/get_next_line.h"
 # include "../LIBFT/get_next_linee/get_next_line_bonus.h"
 
+typedef struct s_env
+{
+	char            *content;//stock 1 chaine de car
+    struct s_env    *next;
+}	t_env;
+
 typedef struct s_cmd
 {
-	char	*str;//stock 1 chaine de car
-    int     num; // token 
-    char    *option; // option cmd 
-    struct s_cmd   *next;
+	char            *str;//stock 1 chaine de car
+    int             num; // token 
+    char            *option; // option cmd 
+    struct s_cmd    *next;
 }	t_cmd;
 
 typedef struct s_data
 {
-    char **copy_env;
+    t_env *copy_env;
     char *path;
     char *pwd;
     char *old_pwd;
@@ -54,7 +60,11 @@ typedef struct s_data
 // init
 
 void    init_data(t_data *data);
-void    ft_check_line(char **av, char **env, t_data *data, t_cmd **cmd);
+void    ft_check_line(char **av, char **envp, t_data *data, t_cmd **cmd, t_env **env);
+
+//init_lst
+t_env	*ft_env_new(t_env, char **envp, int i);
+t_env	*init_env(char **envp);
 
 // parsing 
 
@@ -66,7 +76,6 @@ int     count_pipe(char *str);
 void	ft_do_all(char *str, t_cmd **cmd, t_data *data, t_cmd *new_node);
 
 // utils 
-void	ft_exit(int i);
 int		ft_strcmp(char *s1, char *s2);
 void	print_minishell(void);
 void    ft_handler(int a);
@@ -76,13 +85,8 @@ char    *ft_strncpy(char *s1, char *s2, int n);
 // utils_2
 
 char	**ft_strdup_tab(char **env);
-void	sort_array(char **env, int len);
-bool	check_id(char *argv);
-int		search_var(char *argv, char **env);
-void    ft_exit(int i);
 int     ft_strcmp(char *s1, char *s2);
 void    print_minishell(void);
-char	**ft_strdup_tab(char **env);
 void    ft_change_env(t_data *data, char *name, char *new_name);
 char    *search_in_env(t_data *data, char *name);
 char    *ft_strcpy(char *s1 , char *s2);
@@ -91,21 +95,22 @@ int     ft_lstsizee(t_cmd *cmd);
 
 // token
 
-void    ft_check_bultins(char *line, t_data *data);
+void    ft_check_bultins(char *line, t_data *data, t_env **env);
 int     ft_pwd(void);
-void    ft_env(char **str);
+void    ft_env(t_env **env);
 void    ft_cd(t_data *data);
+//echo.c
 bool	echo_n(char *argv);
 void	ft_echo(char **argv);
-bool	export_no_args(char **env, int len);
-int		exist(char *argv, char **copy_env);
-bool	export(char *argv, char **copy_env);
-int		ft_export	(char **argv, char **copy_env);
 //export.c
+void    export_with_nothing(t_env *env);
+void    export_with_variable(t_env **env, char *new_var);
+void    ft_export(t_env **env, char **args);
+
 //unset.c
 void	check_env(char *var_to_delete, char **env);
 bool	delete_var(char *argv, char **env);
-int		ft_unset(char **argv, char **env);
+//int		ft_unset(char **argv, char **env);
 // free
 void	ft_free_tab(char **av);
 void    ft_free(char *str, t_cmd **cmd);

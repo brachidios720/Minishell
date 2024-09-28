@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
+/
 void	check_env(char *var_to_delete, char **env)
 {
 	int	i;

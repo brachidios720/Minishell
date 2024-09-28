@@ -12,121 +12,82 @@
 
 #include "../../include/minishell.h"
 
-bool	export_no_args(char **copy_env, int len)
-{
-	int	i;
-	int	j;
+//si je tape export -> affichage de l'env
 
-	i = 0;
-	if (!copy_env)
-		return (false);
-	sort_array(copy_env, len);
-	while (i < len)
-	{
-		printf("declare -x");
-		j = 0;
-		while (copy_env[i][j] != '\0' && copy_env[i][j] != '=' )
-		{
-			printf ("%c", copy_env[i][j]);
-			j++;
-		}
-		if (copy_env[i][j] != '\0' && copy_env[i][j] == '=')
-		{
-			printf ("=%s\"\n", &copy_env[i][j + 1]);
-		}
-		else
-			printf ("\n");
-		i++;
-	}
-	return (true);
+void export_with_nothing(t_env *env)
+{
+	t_env *ptr; //parcourt la liste chainee
+    //char *tmp; //stock le contenu de la variable pour chaque noeud
+
+    ptr = env; //assigne ptr en debut de liste
+    while(ptr)
+    {
+        printf("declare -x %s\n", ptr->content); //print la var d environnement
+        ptr = ptr->next; //passe au noeud suivant
+    }
 }
 
-int	exist(char *argv, char **copy_env)
+//si je tape export MY_VAR="Pag"
+//ajout nouv variable ou mise a jour d une
+void export_with_variable(t_env **env, char *new_var)
 {
-	int	i;
-	int	j;
+    t_env *ptr; //parcourt la liste
+    t_env *new_node; //creation ny noeud
 
-	i = 0;
-	j = 0;
-	while (argv[i] && argv[i] != '=')
-		i++;
-	while (copy_env[j] != NULL)
-	{
-		if (!ft_strncmp(copy_env[j], argv, strlen(argv))
-			&& (copy_env[j][i] == '\0' || copy_env[j][i] == '='))
-			return (j);
-		j++;
-	}
-	return (-1);
+    ptr = *env;//init ptr avec le 1er element
+    while (ptr)
+    {
+        // Si la variable existe, on la met à jour
+        if (ft_strncmp(ptr->content, new_var, ft_strchr(new_var, '=') - new_var) == 0)//si la comparaison est vrai
+        {
+            free(ptr->content); //on libere l ancienne
+            ptr->content = ft_strdup(new_var);  // Mis a jour de la valeur d env
+            return;
+        }
+        ptr = ptr->next;
+    }
+
+    // Si la variable n'existe pas, on l'ajoute à la liste
+    new_node = malloc(sizeof(t_env));
+    if (!new_node)
+        return;
+    new_node->content = ft_strdup(new_var);
+    new_node->next = NULL;
+
+    // Ajout du nouveau nœud en fin de la liste
+    if (*env == NULL)
+    {
+        *env = new_node;  // Si liste vide, on init avec la nouvelle variable
+    }
+    else
+    {
+        ptr = *env;
+        while (ptr->next)
+            ptr = ptr->next;
+        ptr->next = new_node;  // Ajout à la fin de la liste
+    }
 }
 
-bool	export(char *argv, char **copy_env)
+void ft_export(t_env **env, char **args)
 {
-	int		len;
-	int		pos;
-	char	*value;
-	char	**new_env;
-	int		i;
+    int i;
+    if (!args[1]) //si pas d argu
+    {
+        export_with_nothing(*env);
+    }
+    else
+    {
+        i = 1; //apres export qui est 0
+        while (args[i]) //si argu
+        {
+            export_with_variable(env, args[i]);
+            i++;
+        }
 
-	len = 0;
-	pos = exist(argv, copy_env);
-	value = ft_strdup(argv);
-	if (!value)
-		return (false);
-	if (pos >= 0)
-	{
-		free((copy_env)[pos]);
-		(copy_env)[pos] = value;
-		return (true);
-	}
-	else
-	{
-		while ((copy_env)[len] != NULL)
-			len++;
-		new_env = malloc((len + 2) * sizeof(char *));
-		if (!new_env)
-		{
-			free (value);
-			return (false);
-		}
-		i = 0;
-		while ((*copy_env)[i])
-		{
-			new_env[i] = (copy_env)[i];
-			i++;
-		}
-		new_env[i] = value;
-		new_env[i + 1] = NULL;
-		free(*copy_env);
-		copy_env = new_env;
-	}
-	return (true);
+    }
 }
 
-int	ft_export(char **argv, char **copy_env)
-{
-	int	exit;
-	int	i;
-	int	len;
-
-	exit = 0;
-	i = 1;
-	len = 0;
-	while ((copy_env)[len])
-		len++;
-	if (!argv || !argv[i])
-	{
-		if (copy_env && !export_no_args(copy_env, len))
-			return (-1);
-		return (0);
-	}
-	while (argv[i])
-	{
-		if (!check_id(argv[i]))
-			exit = 1;
-		else if (!export(argv[i], copy_env))
-			return (-1);
-		i++;
-	}
-	return (exit);
-}
+//export MY_VAR="Pag" :
+//args[0] -> export
+//args 1  -> MY_VAR=PAG
+//ARGS 2  -> NULL
