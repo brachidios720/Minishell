@@ -14,12 +14,13 @@
 
 int	main(int ac, char **av, char **envp)
 {
-	t_data	*data;
-
-	data = NULL;
-	(void) ac;
-	print_minishell();
-	data = malloc(sizeof(t_data));
-	data->copy_env = ft_strdup_tab(envp);
-	ft_check_line(av, envp, data);
+    t_data *data = NULL;
+    t_cmd *cmd = NULL;
+    t_env *env = NULL;
+    (void)ac;
+    print_minishell();
+    data = malloc(sizeof(t_data));
+    env = init_env(envp);
+    ft_check_line(av, envp, data, &cmd, &env);
+    return (0);
 }

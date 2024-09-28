@@ -12,7 +12,7 @@
 
 #include "get_next_line_bonus.h"
 
-size_t	ft_strlen(const char *s)
+size_t	ft_strlenn(const char *s)
 {
 	int	i;
 
@@ -22,29 +22,29 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-char	*ft_strjoin(char *carstock, char *buff)
-{
-	int		i;
-	int		j;
-	char	*result;
+// char	*ft_strjoinn(char *carstock, char *buff)
+// {
+// 	int		i;
+// 	int		j;
+// 	char	*result;
 
-	i = 0;
-	j = 0;
-	if (!buff)
-		return (carstock);
-	result = malloc(sizeof(char) * (ft_strlen(carstock) + ft_strlen(buff)) + 1);
-	if (!result)
-		return (NULL);
-	while (carstock[i])
-	{
-		result[i] = carstock[i];
-		i++;
-	}
-	while (buff[j])
-		result[i++] = buff[j++];
-	result[i] = '\0';
-	return (result);
-}
+// 	i = 0;
+// 	j = 0;
+// 	if (!buff)
+// 		return (carstock);
+// 	result = malloc(sizeof(char) * (ft_strlenn(carstock) + ft_strlenn(buff)) + 1);
+// 	if (!result)
+// 		return (NULL);
+// 	while (carstock[i])
+// 	{
+// 		result[i] = carstock[i];
+// 		i++;
+// 	}
+// 	while (buff[j])
+// 		result[i++] = buff[j++];
+// 	result[i] = '\0';
+// 	return (result);
+// }
 
 char	*ft_strchr(const char *s, int c)
 {

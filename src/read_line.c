@@ -12,21 +12,22 @@
 
 #include "../include/minishell.h"
 
-void ft_check_line(char **av, char **env, t_data *data)
+
+void ft_check_line(char **av, char **envp, t_data *data, t_cmd **cmd, t_env **env)
 {
+    t_cmd *new_node = NULL;
+
     signal(SIGINT, ft_handler);
     signal(SIGQUIT, ft_handlequit);
-
     char *line = readline("Minishell> ");
     add_history(line);
     data->line = line;
     if(line == NULL || ft_strcmp(line, "exit") == 0)
         return(free(line));
-    data->cut_matrice = ft_split(line, '|');
-    data->pipe = count_pipe(line);
     data->matrice = ft_split(line, ' '); // commance a matrice[0]
     init_data(data);
-    ft_check_bultins(line, data);
-    free(line);
-    ft_check_line(av, env, data);
+    ft_do_all(line, cmd, data, new_node);
+    ft_check_bultins(line, data, env);
+    ft_free(line, cmd);
+    ft_check_line(av, envp, data, cmd, env);
 }

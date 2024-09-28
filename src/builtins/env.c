@@ -12,12 +12,14 @@
 
 #include "../../include/minishell.h"
 
-void    ft_env(char **str)
+void    ft_env(t_env **env)
 {
-    int i = 0;
-    while(str[i] != NULL)
+    t_env *ptr;
+
+    ptr = *env;
+    while(ptr)
     {
-        ft_printf("%s\n", str[i]);
-        i++;
+        ft_printf("%s\n", ptr->content);
+        ptr = ptr->next;
     }
 }

@@ -36,7 +36,7 @@
 // }
 
 
-
+/*
 void    ft_change_env(t_data *data, char *name, char *new_name)
 {
     int i = 0;
@@ -80,3 +80,4 @@ void    ft_cd(t_data *data)
     else if(data->matrice[1] != NULL)
         ft_change_cd(data, data->matrice[1]);        
 }
+*/
