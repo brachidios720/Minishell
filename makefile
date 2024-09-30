@@ -28,6 +28,7 @@ src = 	src/utils.c \
 		src/builtins/env.c \
 		src/builtins/echo.c \
 		src/builtins/export.c \
+		src/builtins/unset.c \
 		src/init.c \
 		src/init_lst.c\
 		src/free.c \
