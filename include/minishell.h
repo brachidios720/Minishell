@@ -104,8 +104,8 @@ void    export_with_nothing(t_env *env);
 void    export_with_variable(t_env **env, char *new_var);
 void    ft_export(t_env **env, char **args);
 //unset.c
-void unset_with_variable(t_env **env, char *my_var);
-void ft_unset(t_env **env, char **args);
+void    unset_with_variable(t_env **env, char *my_var);
+int     ft_unset(t_env **env, char **args);
 // free
 void	ft_free_tab(char **av);
 void    ft_free(char *str, t_cmd **cmd);
