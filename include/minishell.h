@@ -15,6 +15,9 @@
 # include <stdio.h>
 # include <unistd.h>
 # include <stdlib.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <stdlib.h>
 # include <signal.h>
 # include <termios.h>
 # include <limits.h>
@@ -51,7 +54,7 @@ typedef struct s_data //donnees principales
     char *line;
     char **matrice;
     char **cut_matrice;
-    int  pipe;
+    int  pipe;//int pour creation de pipeline
     struct t_cmd *cmd;
     
 } t_data;
@@ -93,6 +96,12 @@ void    ft_check_bultins(char *line, t_data *data, t_env **env);
 int     ft_pwd(void);
 void    ft_env(t_env **env);
 void    ft_cd(t_data *data);
+
+//exec.c
+bool exec (t_data *data, t_cmd **cmd);
+bool exec_cmd (t_data *data, t_cmd *cmd);
+void execve_cmd(t_data *data, t_cmd *cmd);
+
 //ctrl.c
 void    ft_handler(int a);
 void    ft_handlequit(int b);

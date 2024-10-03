@@ -33,6 +33,7 @@ src = 	src/utils.c \
 		src/init_lst.c\
 		src/free.c \
 		src/ctrl/ctrl.c \
+		src/exec/exec.c \
 		src/parsing/utils_parsing.c \
 		src/parsing/parsing1.c \
 		src/parsing/ft_utils_cmd.c \
