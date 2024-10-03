@@ -12,17 +12,54 @@
 
 #include "../../include/minishell.h"
 
+char *find_command_path(char *cmd)
+{
+    char *path;
+    char **paths;
+    char *full_path;
+    int i;
+
+    path = getenv("PATH");
+    paths = ft_split(path, ':');  // Divise le PATH en répertoires
+    i = 0;  
+
+    while (paths[i])
+    {
+        full_path = ft_strjoin(paths[i], "/");  // Ajoute un '/' après le répertoire
+        full_path = ft_strjoin(full_path, cmd);  // Concatène avec la commande
+
+        // Vérifie si la commande est accessible dans ce chemin
+        if (access(full_path, X_OK) == 0)
+        {
+            return full_path;  // Retourne le chemin complet si la commande est trouvée
+        }
+        i++;
+    }
+
+    return NULL;  // Retourne NULL si la commande n'est pas trouvée
+}
+
 //apl execve pour executer les commandes externes
 void execve_cmd(t_data *data, t_cmd *cmd)
 {
     (void)*data;
-    char *arg[] = {cmd->str, cmd->option, NULL}; //tab contien les argus de la commande
+    char *cmd_path = find_command_path(cmd->str);  // Recherche le chemin de la commande
+
+    if (!cmd_path)
+    {
+        printf("Commande non trouvée : %s\n", cmd->str);
+        return;
+    }
+    char *argv[] = {cmd_path, cmd->option, NULL}; //tab contien les argus de la commande
     char **envp = NULL; //init envp a NULL pour les besoins de execve on fait simple
 
-    if (execve(cmd->str, arg, envp)==-1) //execute la commande externe
+    if (execve(cmd_path, argv, envp)==-1) //execute la commande externe
     {              //ls  -la   NULL
-        printf ("erreur execve"); //si echoue
+        perror("Erreur execve");  // Affiche l'erreur
+        exit(EXIT_FAILURE);  // Termine le processus enfant en cas d'échec
     }
+
+    free(cmd_path);  // Libère la mémoire allouée pour le chemin de la commande
 }
 
 //gere la creation du processus enfant av fork et exec la comm avec execve ds le processus enfant si ok
@@ -79,11 +116,4 @@ bool exec (t_data *data, t_cmd **cmd)
     wc : Compter les lignes, mots et caractères d’un fichier.
     date : Afficher la date et l’heure actuelles.
 */
-/*  test :
-    ls
-    cat test.txt
-    echo "hello, world"
-    pwd
-    touch fichier.txt
-    rm fichier.txt
-*/
+

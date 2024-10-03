@@ -92,7 +92,7 @@ int     ft_lstsizee(t_cmd *cmd);
 //int   ft_strncmp_env(const char *s1, const char *s2, size_t n);
 
 // token
-void    ft_check_bultins(char *line, t_data *data, t_env **env);
+void    ft_check_builtins(char *line, t_data *data, t_env **env);
 int     ft_pwd(void);
 void    ft_env(t_env **env);
 void    ft_cd(t_data *data);

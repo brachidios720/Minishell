@@ -12,7 +12,7 @@
 
 #include "../../include/minishell.h"
 
-void      ft_check_bultins(char *line, t_data *data, t_env **env)
+void      ft_check_builtins(char *line, t_data *data, t_env **env)
 {
     if(line == NULL || line[0] == '\0')
         return;
