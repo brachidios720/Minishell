@@ -19,3 +19,4 @@ int ft_check_pipe(char *str)
     }
     return(0);
 }
+
