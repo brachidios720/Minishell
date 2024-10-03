@@ -12,61 +12,48 @@
 
 #include "../../include/minishell.h"
 
-void	check_env(char *var_to_delete, char **env)
+//si je tape unset MY_VAR -> delete dans l env
+void unset_with_variable(t_env **env, char *my_var)
 {
-	int	i;
-	i = search_var(var_to_delete, env);
-	if (i != -1)
-	{
-		free(env[i]);
-		while (env[i] != NULL)
-		{
-			env[i] = env[i + 1];
-			i++;
-		}
-	}
+    t_env **ptr;//pointeur vers un pointeur
+    t_env *tmp; //init un ptr temporaire qui parcourt la liste
+    char *pos;//position du caractere "="
+    int len_name;//longeur du nom "my_var" jusqu a =
+    //rappel : content = contenu
+    ptr = env; //ptr est place en tete de la liste chainee
+    
+    while(*ptr)
+    {
+        pos = ft_strchr((*ptr)->content, '=');
+        if(pos)// si position -> =
+            len_name = pos - (*ptr)->content;
+        if (ft_strncmp((*ptr)->content, my_var, len_name) == 0 && my_var[len_name] == '\0')
+        {
+            tmp = *ptr;//sauvegarde le noeud actuel
+            *ptr = (*ptr)->next;
+            free(tmp->content);
+            free(tmp);
+            return;
+        }   
+        ptr = &((*ptr)->next);
+    }
 }
 
-bool	delete_var(char *argv, char **env)
+int ft_unset(t_env **env, char **args)
 {
-	int i;
-	int j;
+    int i;
 
-	i = 0;
-	while (env[i] != NULL)
-	{
-		if (strncmp(env[i], argv, strlen(argv)) == 0 && env[i][strlen(argv)] == '=')
-		{
-			free(env[i]);
-			j = i;
-			while (env[j] != NULL)
-			{
-				env[j] = env[j + 1];
-				j++;
-			}
-			return (true);
-		}
-		i++;
-	}
-	return (false);
-}
-
-int	ft_unset(char **argv, char **env)
-{
-	int	i;
-	int	ret;
-
-	i = 1;
-	ret = 0;
-	while (argv[i] != NULL)
-	{
-		if (!check_id(argv[i]))
-			ret = 1;
-		else if (search_var(argv[i], env) != -1)
-			check_env(argv[i], env);
-		else
-			ret = 1;
-		i++;
-	}
-	return (ret);
+    if (!args[1])
+    {
+        return (1);
+    }
+    i = 1; //unset = args[0]
+    while (args[i])
+    {
+        printf("arg: %s\n", args[i]);
+        unset_with_variable(env, args[i]);
+        i++;
+        printf("arg: %s\n", args[i]);
+    }
+    return (0);
 }

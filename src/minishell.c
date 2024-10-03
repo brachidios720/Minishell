@@ -16,9 +16,27 @@ int main(int ac, char **av, char **envp)
 {
     t_data *data = NULL;
     t_cmd *cmd = NULL;
+    t_env *env = NULL;
     (void)ac;
-    print_minishell();
+
+    print_minishell();  // Affiche l'invite du shell
+
+    // Allocation et initialisation des données
     data = malloc(sizeof(t_data));
-    data->copy_env = ft_strdup_tab(envp);
-    ft_check_line(av, envp, data, &cmd);
+    if (data == NULL)
+    {
+        perror("Erreur d'allocation mémoire pour data");
+        return (1);
+    }
+
+    env = init_env(envp);  // Initialiser les variables d'environnement
+
+    // Boucle principale du shell
+    ft_check_line(av, envp, data, &cmd, &env);
+
+    // Libérer la mémoire avant de quitter
+    free(cmd);
+    free(data);
+
+    return (0);
 }

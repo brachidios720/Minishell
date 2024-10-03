@@ -2,8 +2,11 @@
 
 int count_pipe(char *str)
 {
-    int i = 0;
-    int y = 0;
+    int i;
+    int y;
+    
+    i = 0;
+    y = 0;
     while(str[i])
     {
         if(str[i] == '|')

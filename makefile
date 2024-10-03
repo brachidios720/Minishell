@@ -20,19 +20,20 @@ LIBFT_PATH = ./LIBFT
 LIBFT = $(LIBFT_PATH)/libft.a
 
 src = 	src/utils.c \
-		src/utils_2.c \
+		src/utils_env.c \
 		src/minishell.c \
 		src/read_line.c \
 		src/builtins/builtins.c \
 		src/builtins/pwd.c \
 		src/builtins/env.c \
 		src/builtins/echo.c \
-		src/builtins/cd.c \
-		src/builtins/unset.c \
 		src/builtins/export.c \
+		src/builtins/unset.c \
 		src/init.c \
+		src/init_lst.c\
 		src/free.c \
 		src/ctrl/ctrl.c \
+		src/exec/exec.c \
 		src/parsing/utils_parsing.c \
 		src/parsing/parsing1.c \
 		src/parsing/ft_utils_cmd.c \

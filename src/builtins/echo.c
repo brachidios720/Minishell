@@ -46,11 +46,11 @@ void	ft_echo(char **argv)
 	}
 	while (argv[i])
 	{
-		//if(argv[i] + 1)
-		//{
-		//	write (1, " ", 1);
-		//}
 		write (1, argv[i], strlen(argv[i]));
+		if(argv[i] + 1)
+		{
+			write (1, " ", 1);
+		}
 		i++;
 	}
 	if (new_line)
