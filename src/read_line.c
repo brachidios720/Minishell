@@ -34,7 +34,6 @@ void ft_check_line(char **av, char **envp, t_data *data, t_cmd **cmd, t_env **en
         free(line);
         return;
     }
-
     // Initialiser la commande à partir de la première partie de la ligne
     *cmd = malloc(sizeof(t_cmd));
     if (*cmd == NULL)
@@ -43,20 +42,15 @@ void ft_check_line(char **av, char **envp, t_data *data, t_cmd **cmd, t_env **en
         free(line);
         return;
     }
-
     (*cmd)->str = ft_strdup(data->matrice[0]);  // Commande (ex: ls)
     (*cmd)->option = data->matrice[1] ? ft_strdup(data->matrice[1]) : NULL;  // Option (ex: -l)
     (*cmd)->next = NULL;
-
     // Exécuter la commande
     exec(data, cmd);
-
     // Vérifier si la commande est un built-in
     ft_check_builtins(line, data, env);
-
     // Libérer la ligne et les commandes après l'exécution
     ft_free(line, cmd);
-
     // Relancer pour attendre la commande suivante
     ft_check_line(av, envp, data, cmd, env);
 }
