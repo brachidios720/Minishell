@@ -23,7 +23,7 @@ void      ft_check_builtins(char *line, t_data *data, t_env **env, t_cmd **cmd)
     else if(ft_strcmp(tmp->str, "pwd") == 0)
         ft_pwd();
     else if(ft_strcmp(tmp->str, "echo") == 0)
-        ft_echo(data->matrice);
+         ft_echo(data->matrice);
     else if(ft_strcmp(tmp->str, "cd") == 0)
        ft_cd(env, line);
     else if(ft_strcmp(tmp->str, "export") == 0)

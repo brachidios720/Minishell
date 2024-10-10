@@ -112,7 +112,7 @@ bool exec_cmd (t_data *data, t_cmd *cmd)
         if (WIFEXITED(status)) //verif si fin et extrait le code retour
         {
             data->last_exit_status = WEXITSTATUS(status);//stock le code de retour
-            printf("Code de retour : %d\n", data->last_exit_status);
+                printf("Code de retour : %d\n", data->last_exit_status);
         }
     }
     return (true);
