@@ -71,7 +71,7 @@ char *expand_variable(char *arg, t_data *data)
     return (arg);  // Retourner l'argument tel quel s'il ne s'agit pas d'une variable
 }
 
-void	ft_echo(char **argv, t_data *data)
+void	ft_echo(char **argv, t_data *data)//cf parsing
 {
 	int		i;
 	bool	new_line;
