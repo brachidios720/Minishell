@@ -94,19 +94,24 @@ void	print_minishell(void);
 char	**ft_strdup_tab(char **env);
 char    *ft_strcpy(char *s1 , char *s2);
 char	*ft_strncpy(char *s1, char *s2, int n);
-void    ft_change_env(t_data *data, char *name, char *new_name);
-char    *search_in_env(t_data *data, char *name);
+void    ft_change_cd(t_env **env, char *new_dir);
+void    ft_change_env(t_env **env, char *name, char *new_value);
+char    *ft_get_env_value(char *name, t_env **env);
 char    *ft_tab(char **av);
 int     ft_lstsizee(t_cmd *cmd);
+int     ft_change_directory(char *target_dir);
+void    ft_update_env(t_env **env, char *old_pwd, char *new_pwd);
+char    *ft_get_target_dir(char *target_dir, t_env **env);
+void    init_pwd(t_env **env);
 //utils_env
 //char	*ft_strchr_env(const char *s, int c);
 //int   ft_strncmp_env(const char *s1, const char *s2, size_t n);
 
 // token
-void    ft_check_builtins(char *line, t_data *data, t_env **env);
+void    ft_check_builtins(char *line, t_data *data, t_env **env, t_cmd **cmd);
 int     ft_pwd(void);
 void    ft_env(t_env **env);
-void    ft_cd(t_data *data);
+void    ft_cd(t_env **env, char *target_dir);
 
 //exec.c
 bool exec (t_data *data, t_cmd **cmd);

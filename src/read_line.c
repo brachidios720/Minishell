@@ -30,12 +30,12 @@ void ft_check_line(char **av, char **envp, t_data *data, t_cmd **cmd, t_env **en
     if(ft_check_option(data) == 1)
     {
         ft_free(line, cmd);
-        ft_check_line(av, env, data, cmd, env);
+        ft_check_line(av, envp, data, cmd, env);
     }
     else
     {
-        ft_check_bultins(line, data);
+        ft_check_builtins(line, data, env, cmd);
         ft_free(line, cmd);
-        ft_check_line(av, env, data, cmd, env);
+        ft_check_line(av, envp, data, cmd, env);
     }
 }

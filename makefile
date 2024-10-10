@@ -26,6 +26,7 @@ src = 	src/utils.c \
 		src/builtins/builtins.c \
 		src/builtins/pwd.c \
 		src/builtins/env.c \
+		src/builtins/cd.c \
 		src/builtins/echo.c \
 		src/builtins/export.c \
 		src/builtins/unset.c \
