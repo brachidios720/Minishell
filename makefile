@@ -49,7 +49,7 @@ $(LIBFT):
 	$(MAKE) -C $(LIBFT_PATH)
 
 $(EXE): $(srco) $(LIBFT)
-	$(CC) $(CFLAGS) $(srco) $(LIBFT) -o $(EXE) $(LDFLAGS)
+	$(CC) $(CFLAGS) $(src) $(LIBFT) -o $(EXE) $(LDFLAGS)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@

@@ -31,11 +31,51 @@ bool	echo_n(char *argv)
 	}
 	return (true);
 }
+char	*ft_itoa_m(int n)
+{
+	char	buff[12];
+	long	nb;
+	int		i;
+	int		negatif;
 
-void	ft_echo(char **argv)
+	i = 0;
+	nb = (long)n;
+	negatif = 0;
+	if (!nb)
+		return (ft_zero());
+	if (nb < 0)
+	{
+		negatif = 1;
+		nb = -nb;
+	}
+	while (nb)
+	{
+		buff[i++] = (nb % 10) + 48;
+		nb /= 10;
+	}
+	if (negatif)
+		buff[i++] = '-';
+	buff[i] = '\0';
+	return (ft_return(buff));
+}
+
+char *expand_variable(char *arg, t_data *data)
+{
+    if (arg[0] == '$') 
+	{
+        if (arg[1] == '?') 
+            return (ft_itoa_m(data->last_exit_status)); 
+		else 
+            return (getenv(arg + 1));  // Cherche la variable d'environnement sans le '$'
+    }
+    return (arg);  // Retourner l'argument tel quel s'il ne s'agit pas d'une variable
+}
+
+void	ft_echo(char **argv, t_data *data)//cf parsing
 {
 	int		i;
 	bool	new_line;
+	char	*output;
 
 	i = 1;
 	new_line = true;
@@ -46,19 +86,16 @@ void	ft_echo(char **argv)
 	}
 	while (argv[i])
 	{
-		write (1, argv[i], strlen(argv[i]));
-		if(argv[i] + 1)
-		{
-			write (1, " ", 1);
-		}
-		i++;
+	 	output = expand_variable(argv[i], data);  // Vérifier l'expansion de variable
+	    if (output) 
+            write(1, output, strlen(output));
+        if (argv[i + 1])
+            write(1, " ", 1);
+        i++;
 	}
-	if (new_line)
-	{
-		write (1, "\n", 1);
-	}
+    if (new_line)
+        write(1, "\n", 1);
 }
 //echo sans options -> ajoute un saut de ligne par defaut
 //echo -n -> supprime le saut de ligne
 //echo -nnnnn -> marche comme -n
-//echo --n -> cf parsing
