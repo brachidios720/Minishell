@@ -16,7 +16,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <sys/types.h>
-# include <sys/wait.h>
+# include <sys/wait.h> //wexitstatus
 # include <stdlib.h>
 # include <signal.h>
 # include <termios.h>
@@ -42,6 +42,9 @@ typedef struct s_cmd
 	char            *str;//stock 1 chaine de car
     int             num; // token 
     char            *option; // option cmd 
+    char            *infile; //fichier pour la redirection d'entree <
+    char            *outfile; //fichier pour la redirection de sortie > ou >> ajout
+    int             append; //ajout a la fin >> -> 1 sinon 0
     struct s_cmd    *next;
 }	t_cmd;
 
@@ -55,6 +58,7 @@ typedef struct s_data //donnees principales
     char **matrice;
     char **cut_matrice;
     int  pipe;//int pour creation de pipeline
+    int last_exit_status; //int pour stocker le dernier code de retour cf echo $ 
     struct t_cmd *cmd;
     
 } t_data;
@@ -92,22 +96,25 @@ int     ft_lstsizee(t_cmd *cmd);
 //int   ft_strncmp_env(const char *s1, const char *s2, size_t n);
 
 // token
-void    ft_check_builtins(char *line, t_data *data, t_env **env);
 int     ft_pwd(void);
 void    ft_env(t_env **env);
 void    ft_cd(t_data *data);
 
 //exec.c
-bool exec (t_data *data, t_cmd **cmd);
-bool exec_cmd (t_data *data, t_cmd *cmd);
+char *find_command_path(char *cmd);
+void handle_redir(t_cmd *cmd);
 void execve_cmd(t_data *data, t_cmd *cmd);
+bool exec_cmd (t_data *data, t_cmd *cmd);
+bool exec (t_data *data, t_cmd **cmd);
 
 //ctrl.c
 void    ft_handler(int a);
 void    ft_handlequit(int b);
 //echo.c
 bool	echo_n(char *argv);
-void	ft_echo(char **argv);
+char    *expand_variable(char *arg, t_data *data);
+char	*ft_itoa_m(int n);
+void	ft_echo(char **argv, t_data *data);
 //export.c
 void    export_with_nothing(t_env *env);
 void    export_with_variable(t_env **env, char *new_var);
@@ -119,6 +126,8 @@ int     ft_unset(t_env **env, char **args);
 void	ft_free_tab(char **av);
 void    ft_free(char *str, t_cmd **cmd);
 //read_line.c
+void    parse_command(char **matrice, t_cmd **cmd);
+void    ft_check_builtins(char *line, t_data *data, t_env **env);
 // pipe
 
 #endif

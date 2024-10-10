@@ -12,10 +12,51 @@
 
 #include "../include/minishell.h"
 
+void parse_command(char **matrice, t_cmd **cmd)
+{
+    int i;
 
+    i = 0;
+    //Alloue de la mem pour 1 nvlle commande à partir de la première partie de la ligne
+    *cmd = malloc(sizeof(t_cmd));
+    if (*cmd == NULL)
+    {
+        perror("Erreur d'allocation de mémoire pour cmd");
+        return;
+    }
+    //copie le 1er elemt de matrice = la commande dans str de la structure t_cmd ex:ls
+    (*cmd)->str = ft_strdup(matrice[0]);
+    //si 2 elemts = copie sinon = null ex -l ou rien
+    (*cmd)->option = matrice[1] ? ft_strdup(matrice[1]) : NULL;  // Option (ex: -l)
+    //init ptr next a NULL = fin
+    (*cmd)->next = NULL;
+
+    //boucle pour analyse des redirections
+    while (matrice[i])
+    {
+        //si fichier d 'entree = le fichier d apres -> ds infile
+        if (!ft_strcmp(matrice[i], "<"))
+            (*cmd)->infile = matrice[i+1];
+        //sinon fichier de sortie = fichier d apres -> ds outfile 
+        else if (!ft_strcmp(matrice[i], ">"))
+        {
+            (*cmd)->outfile = matrice[i+1];
+            //mise a jour = fichier ecrase
+            (*cmd)->append = 0;
+        }
+        //sinon si fichier de sortie avec ajout au fichier existant -> ds outfile + 1
+        else if(!ft_strcmp(matrice[i], ">>"))
+        {
+            (*cmd)->outfile = matrice[i+1];
+            (*cmd)->append = 1;
+        }
+        i++;
+    }
+}
+
+//lecture de la ligne et appel des autres fonctions
 void ft_check_line(char **av, char **envp, t_data *data, t_cmd **cmd, t_env **env)
 {
-    //t_cmd *new_node = NULL;
     char *line = readline("Minishell> ");
     add_history(line);
     data->line = line;
@@ -34,17 +75,8 @@ void ft_check_line(char **av, char **envp, t_data *data, t_cmd **cmd, t_env **en
         free(line);
         return;
     }
-    // Initialiser la commande à partir de la première partie de la ligne
-    *cmd = malloc(sizeof(t_cmd));
-    if (*cmd == NULL)
-    {
-        perror("Erreur d'allocation de mémoire pour cmd");
-        free(line);
-        return;
-    }
-    (*cmd)->str = ft_strdup(data->matrice[0]);  // Commande (ex: ls)
-    (*cmd)->option = data->matrice[1] ? ft_strdup(data->matrice[1]) : NULL;  // Option (ex: -l)
-    (*cmd)->next = NULL;
+    //analyse la commandes et les redirections
+    parse_command(data->matrice, cmd);
     // Exécuter la commande
     exec(data, cmd);
     // Vérifier si la commande est un built-in

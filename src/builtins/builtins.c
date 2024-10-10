@@ -21,7 +21,7 @@ void      ft_check_builtins(char *line, t_data *data, t_env **env)
     else if(ft_strcmp(data->matrice[0], "pwd") == 0)
         ft_pwd();
     else if(ft_strcmp(data->matrice[0], "echo") == 0)
-        ft_echo(data->matrice);
+        ft_echo(data->matrice, data);
     //else if(ft_strcmp(data->matrice[0], "cd") == 0)
     //    ft_cd(data);
     else if(ft_strcmp(data->matrice[0], "export") == 0)
