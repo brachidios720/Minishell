@@ -12,71 +12,119 @@
 
 #include "../../include/minishell.h"
 
-// void    ft_cd(char *path)
-// {
-//     char *old_pwd = getenv("PWD");
-//     char cwd[PATH_MAX];
-    
-//     if(path == NULL || strcmp(path, "") == 0)
-//         path = getenv("HOME");
-//     if(ft_strcmp(path, "-"))
-//         getenv("OLD_PWD");
-//         if(path == NULL)
-//             return;
-//     if(chdir(path) != 0)
-//     {
-//         printf("error\n");
-//         return;
-//     }
-//     setenv("OLD_PWD", old_pwd, 1);
-//     if(getcwd(cwd, sizeof(cwd)) != NULL)
-//         setenv("PWD", cwd, 1);
-//     else
-//         perror(cwd);
-// }
-
-
-
-void    ft_change_env(t_data *data, char *name, char *new_name)
+char *ft_get_env_value(char *name, t_env **env)
 {
-    int i = 0;
-    char *tmp;
+    t_env *tmp = *env;
     
-    while(data->copy_env[i])
+    while (tmp)
     {
-        if(ft_strncmp(data->copy_env[i], name, ft_strlen(name)) == 0)
+        if (ft_strncmp(tmp->content, name, ft_strlen(name)) == 0 && tmp->content[ft_strlen(name)] == '=')
+            return (tmp->content + ft_strlen(name) + 1); 
+        tmp = tmp->next;
+    }
+    return (NULL);
+}
+
+void ft_change_env(t_env **env, char *name, char *new_value)
+{
+    t_env *tmp = *env;
+    char *new_content;
+    int name_len = ft_strlen(name);
+    int value_len = ft_strlen(new_value);
+    int total_len = name_len + value_len + 2;
+
+    while (tmp)
+    {
+        if (ft_strncmp(tmp->content, name, name_len) == 0 && tmp->content[name_len] == '=')
         {
-            free(data->copy_env[i]);
-            tmp = ft_strjoin(name, new_name);
-            data->copy_env[i] = ft_strdup(tmp);
-            free(tmp);
+            new_content = (char *)malloc(sizeof(char) * total_len);
+            if (!new_content)
+                return;
+            ft_strcpy(new_content, name);
+            new_content[name_len] = '=';
+            ft_strcpy(new_content + name_len + 1, new_value);
+        
+            free(tmp->content);
+            tmp->content = new_content;
+            return;
         }
-        i++;
+        tmp = tmp->next;
     }
 }
-void    ft_change_cd(t_data *data, char *env)
-{
-    char *str;
 
-    if(chdir(env) == 0)
-    {
-        str = getcwd(NULL, PATH_MAX);
-        ft_change_env(data, "PWD=", str);
-        ft_change_env(data, "OLDPWD=", data->old_pwd); 
-    }
+int ft_change_directory(char *target_dir)
+{
+    if (chdir(target_dir) == 0)
+        return (1); 
     else
-        perror("cd don't work");
+    {
+        perror("cd failed"); 
+        return (0);
+    }
 }
 
-void    ft_cd(t_data *data)
+
+void ft_update_env(t_env **env, char *old_pwd, char *new_pwd)
 {
-    int i = 0;
-    while(data->matrice[i])
-        i++;
-    if(i == 1)
-        ft_change_cd(data, getenv("HOME"));
-    else if(ft_strcmp(data->matrice[1], "-") == 0)
-        ft_change_cd(data, getenv("OLDPWD"));
-    else if(data->matrice[1] != NULL)
-        ft_change_cd(data, data->matrice[1]);        
+    if (old_pwd)
+        ft_change_env(env, "OLDPWD", old_pwd);
+    if (new_pwd)
+        ft_change_env(env, "PWD", new_pwd);
+}
+
+char *ft_get_target_dir(char *target_dir, t_env **env)
+{
+    if (target_dir == NULL || ft_strcmp(target_dir, "~") == 0)
+    {
+        char *home_dir = ft_get_env_value("HOME", env);
+        if (home_dir == NULL)
+        {
+            ft_putstr_fd("cd: HOME not set\n", 2);
+            return (NULL);
+        }
+        return (home_dir);
+    }
+    else if (ft_strcmp(target_dir, "-") == 0)
+    {
+        char *old_pwd_dir = ft_get_env_value("OLDPWD", env);
+        if (old_pwd_dir == NULL)
+        {
+            ft_putstr_fd("cd: OLDPWD not set\n", 2);
+            return (NULL);
+        }
+        return (old_pwd_dir);
+    }
+    return (target_dir);
+}
+
+void ft_cd(t_env **env, char *target_dir)
+{
+    char *current_dir = getcwd(NULL, PATH_MAX); 
+    char *new_target_dir = ft_get_target_dir(target_dir, env);
+
+    printf("cd to: %s\n", target_dir);
+    if (!new_target_dir) 
+    {
+        free(current_dir);
+        return;
+    }
+
+    if (ft_change_directory(new_target_dir))
+    {
+        char *new_dir = getcwd(NULL, PATH_MAX);
+        ft_update_env(env, current_dir, new_dir);
+        free(new_dir);
+    }
+
+    free(current_dir);
+}
+
+void init_pwd(t_env **env)
+{
+    char *cwd = getcwd(NULL, PATH_MAX);
+
+    ft_change_env(env, "PWD", cwd);
+    ft_change_env(env, "OLDPWD", cwd);
+
+    free(cwd);
 }

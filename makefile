@@ -12,7 +12,7 @@
 
 CC = clang
 CFLAGS = -Wall -Werror -Wextra -g3
-LDFLAGS = -lreadline
+LDFLAGS = -lreadline -ltinfo
 EXE = Minishell
 RM = rm -rf
 
@@ -20,20 +20,25 @@ LIBFT_PATH = ./LIBFT
 LIBFT = $(LIBFT_PATH)/libft.a
 
 src = 	src/utils.c \
-		src/utils_2.c \
+		src/utils_env.c \
 		src/minishell.c \
 		src/read_line.c \
 		src/builtins/builtins.c \
 		src/builtins/pwd.c \
 		src/builtins/env.c \
-		src/builtins/echo.c \
 		src/builtins/cd.c \
-		src/builtins/unset.c \
 		src/builtins/export.c \
+		src/builtins/unset.c \
 		src/init.c \
+		src/init_lst.c\
 		src/free.c \
 		src/ctrl/ctrl.c \
-		src/parsing/utils_parsing.c
+		src/exec/exec.c \
+		src/parsing/utils_parsing.c \
+		src/parsing/parsing1.c \
+		src/parsing/ft_utils_cmd.c \
+		src/parsing/option.c \
+		src/parsing/parsing2.c \
 
 srco = $(src:.c=.o)
 
@@ -43,7 +48,7 @@ $(LIBFT):
 	$(MAKE) -C $(LIBFT_PATH)
 
 $(EXE): $(srco) $(LIBFT)
-	$(CC) $(CFLAGS) $(srco) $(LIBFT) -o $(EXE) $(LDFLAGS)
+	$(CC) $(CFLAGS) $(src) $(LIBFT) -o $(EXE) $(LDFLAGS)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@

@@ -14,11 +14,11 @@
 
 void    init_data(t_data *data)
 {
-    data->path = search_in_env(data, "PATH=");
+    //data->path = search_in_env(data, "PATH=");
     data->pwd = getcwd(NULL, PATH_MAX);
     data->old_pwd = data->pwd;
 }
-
+/*
 char    *search_in_env(t_data *data, char *name)
 {
     char *dest = NULL;
@@ -32,7 +32,7 @@ char    *search_in_env(t_data *data, char *name)
         i++;
     }
     return(dest);
-}
+}*/
 
 // char *ft_tab(char **av)
 // {

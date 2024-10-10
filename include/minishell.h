@@ -9,12 +9,14 @@
 /*   Updated: 2024/09/17 17:00:28 by raphaelcarb      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
 # include <stdio.h>
 # include <unistd.h>
+# include <stdlib.h>
+# include <sys/types.h>
+# include <sys/wait.h> //wexitstatus
 # include <stdlib.h>
 # include <signal.h>
 # include <termios.h>
@@ -29,83 +31,120 @@
 # include "../LIBFT/get_next_linee/get_next_line.h"
 # include "../LIBFT/get_next_linee/get_next_line_bonus.h"
 
+#define RED "\033[31m"
+#define GREEN "\033[32m"
+#define YELLOW "\033[33m"
+#define BLUE "\033[34m"
+#define MAGENTA "\033[35m"
+#define CYAN "\033[36m"
+#define RESET "\033[0m"
+
+typedef struct s_env
+{
+	char            *content;//stock 1 chaine de car
+    struct s_env    *next;
+}	t_env;
 typedef struct s_cmd
 {
-	char	*str;//stock 1 chaine de car
-    int     num; // token 
-    char    *option; // option cmd 
-    struct s_cmd   *next;
+	char            *str;//stock 1 chaine de car
+    int             num; // token 
+    char            *option; // option cmd 
+    char            *infile; //fichier pour la redirection d'entree <
+    char            *outfile; //fichier pour la redirection de sortie > ou >> ajout
+    int             append; //ajout a la fin >> -> 1 sinon 0
+    struct s_cmd    *next;
 }	t_cmd;
 
-typedef struct s_data
+typedef struct s_data //donnees principales
 {
-    char **copy_env;
+    t_env *copy_env;
     char *path;
     char *pwd;
     char *old_pwd;
     char *line;
     char **matrice;
     char **cut_matrice;
-    int  pipe;
+    int  pipe;//int pour creation de pipeline
+    int last_exit_status; //int pour stocker le dernier code de retour cf echo $ 
     struct t_cmd *cmd;
     
 } t_data;
 
 // init
-
 void    init_data(t_data *data);
-void    ft_check_line(char **av, char **env, t_data *data);
+void    ft_check_line(char **av, char **envp, t_data *data, t_cmd **cmd, t_env **env);
+
+//init_lst
+void	ft_lstadd_back_list(t_env **env, t_env *n);
+t_env	*ft_env_new(char **envp, int i);
+t_env	*init_env(char **envp);
 
 // parsing 
-
-t_cmd	*ft_lsttnew(void *content);
-int     ft_check_pipe(char c);
-char    *ft_cut_cont(char *str);
+t_cmd	*ft_lsttnew(t_data *data, int i);
+void    ft_lstclearr(t_cmd **cmd);
+void	ft_lst_addbackk(t_cmd **stack, t_cmd *node);
+void    ft_cut_cont(char *str, t_data *data);
 int     count_pipe(char *str);
+void	ft_do_all(char *str, t_cmd **cmd, t_data *data, t_cmd *new_node);
+int     ft_check_dash(char *str);
+int     ft_check_option(t_data *data);
+int     ft_check_one_quote(char *str);
+int     ft_check_pipe(char *str);
 
 // utils 
 void	ft_exit(int i);
 int		ft_strcmp(char *s1, char *s2);
 void	print_minishell(void);
-void    ft_handler(int a);
-void    ft_handlequit(int b);
-char    *ft_strncpy(char *s1, char *s2, int n);
-
-// utils_2
-
 char	**ft_strdup_tab(char **env);
-void	sort_array(char **env, int len);
-bool	check_id(char *argv);
-int		search_var(char *argv, char **env);
-void    ft_exit(int i);
-int     ft_strcmp(char *s1, char *s2);
-void    print_minishell(void);
-char	**ft_strdup_tab(char **env);
-void    ft_change_env(t_data *data, char *name, char *new_name);
-char    *search_in_env(t_data *data, char *name);
 char    *ft_strcpy(char *s1 , char *s2);
+char	*ft_strncpy(char *s1, char *s2, int n);
+void    ft_change_cd(t_env **env, char *new_dir);
+void    ft_change_env(t_env **env, char *name, char *new_value);
+char    *ft_get_env_value(char *name, t_env **env);
 char    *ft_tab(char **av);
+int     ft_lstsizee(t_cmd *cmd);
+int     ft_change_directory(char *target_dir);
+void    ft_update_env(t_env **env, char *old_pwd, char *new_pwd);
+char    *ft_get_target_dir(char *target_dir, t_env **env);
+void    init_pwd(t_env **env);
+//utils_env
+//char	*ft_strchr_env(const char *s, int c);
+//int   ft_strncmp_env(const char *s1, const char *s2, size_t n);
 
 // token
-
-void    ft_check_bultins(char *line, t_data *data);
+void    ft_check_builtins(char *line, t_data *data, t_env **env, t_cmd **cmd);
 int     ft_pwd(void);
-void    ft_env(char **str);
-void    ft_cd(t_data *data);
+void    ft_env(t_env **env);
+void    ft_cd(t_env **env, char *target_dir);
+
+//exec.c
+char *find_command_path(char *cmd);
+void handle_redir(t_cmd *cmd);
+void execve_cmd(t_data *data, t_cmd *cmd);
+bool exec_cmd (t_data *data, t_cmd *cmd);
+bool exec (t_data *data, t_cmd **cmd);
+
+//ctrl.c
+void    ft_handler(int a);
+void    ft_handlequit(int b);
+//echo.c
 bool	echo_n(char *argv);
-void	ft_echo(char **argv);
-bool	export_no_args(char **env, int len);
-int		exist(char *argv, char **copy_env);
-bool	export(char *argv, char **copy_env);
-int		ft_export	(char **argv, char **copy_env);
+char    *expand_variable(char *arg, t_data *data);
+char	*ft_itoa_m(int n);
+void	ft_echo(char **argv, t_data *data);
 //export.c
+void    export_with_nothing(t_env *env);
+void    export_with_variable(t_env **env, char *new_var);
+void    ft_export(t_env **env, char **args);
 //unset.c
-void	check_env(char *var_to_delete, char **env);
-bool	delete_var(char *argv, char **env);
-int		ft_unset(char **argv, char **env);
+void    unset_with_variable(t_env **env, char *my_var);
+int     ft_unset(t_env **env, char **args);
 // free
 void	ft_free_tab(char **av);
+void    ft_free(char *str, t_cmd **cmd);
 //read_line.c
+void    parse_command(char **matrice, t_cmd **cmd);
+void    ft_check_builtins(char *line, t_data *data, t_env **env);
 // pipe
 
-# endif
+#endif
