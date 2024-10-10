@@ -67,7 +67,7 @@ void export_with_variable(t_env **env, char *new_var)
     }
 }
 
-void ft_export(t_env **env, char **args)
+void ft_export(t_env **env, char **args)//cf parsing
 {
     int i;
     if (!args[1]) //si pas d argu
