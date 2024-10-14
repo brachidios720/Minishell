@@ -79,6 +79,7 @@ void	ft_echo(char **argv, t_data *data)//cf parsing
 
 	i = 1;
 	new_line = true;
+
 	while (argv[i] && echo_n(argv[i]))
 	{
 		new_line = false;

@@ -39,13 +39,13 @@ typedef struct s_env
 
 typedef struct s_cmd
 {
-	char            *str;//stock 1 chaine de car
-    int             num; // token 
-    char            *option; // option cmd 
+	char            *str;//stock 1 chaine de car (ex : ls)
+    int             num; // numero de token 
+    char            *option; // option cmd (ex-l) 
     char            *infile; //fichier pour la redirection d'entree <
     char            *outfile; //fichier pour la redirection de sortie > ou >> ajout
     int             append; //ajout a la fin >> -> 1 sinon 0
-    struct s_cmd    *next;
+    struct s_cmd    *next; //ptr pour la prochaine commande
 }	t_cmd;
 
 typedef struct s_data //donnees principales
@@ -76,9 +76,10 @@ t_env	*init_env(char **envp);
 t_cmd	*ft_lsttnew(t_data *data, int i);
 void    ft_lstclearr(t_cmd **cmd);
 void	ft_lst_addbackk(t_cmd **stack, t_cmd *node);
-void    ft_cut_cont(char *str, t_data *data);
-int     count_pipe(char *str);
 void	ft_do_all(char *str, t_cmd **cmd, t_data *data, t_cmd *new_node);
+int     count_pipe(char *str);
+void    ft_cut_cont(char *str, t_data *data);
+void    ft_handle_heredoc(char *delimiter);
 
 // utils 
 void	ft_exit(int i);
@@ -101,11 +102,11 @@ void    ft_env(t_env **env);
 void    ft_cd(t_data *data);
 
 //exec.c
-char *find_command_path(char *cmd);
-void handle_redir(t_cmd *cmd);
-void execve_cmd(t_data *data, t_cmd *cmd);
-bool exec_cmd (t_data *data, t_cmd *cmd);
-bool exec (t_data *data, t_cmd **cmd);
+char    *find_command_path(char *cmd);
+void    handle_redir(t_cmd *cmd);
+void    execve_cmd(t_data *data, t_cmd *cmd);
+bool    exec_cmd (t_data *data, t_cmd *cmd);
+bool    exec (t_data *data, t_cmd **cmd);
 
 //ctrl.c
 void    ft_handler(int a);
