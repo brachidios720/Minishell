@@ -52,6 +52,7 @@ typedef struct s_cmd
     char            *infile; //fichier pour la redirection d'entree <
     char            *outfile; //fichier pour la redirection de sortie > ou >> ajout
     int             append; //ajout a la fin >> -> 1 sinon 0
+    char            **matrice;
     struct s_cmd    *next;
 }	t_cmd;
 
@@ -63,6 +64,8 @@ typedef struct s_data //donnees principales
     char *old_pwd;
     char *line;
     char **matrice;
+    char *mat;
+    bool    real; 
     char **cut_matrice;
     int  pipe;//int pour creation de pipeline
     int last_exit_status; //int pour stocker le dernier code de retour cf echo $ 
@@ -115,7 +118,7 @@ void    init_pwd(t_env **env);
 void    ft_check_builtins(char *line, t_data *data, t_env **env, t_cmd **cmd);
 int     ft_pwd(void);
 void    ft_env(t_env **env);
-void    ft_cd(t_env **env, char *target_dir);
+void    ft_cd(t_env **env, char **target_dir);
 
 //exec.c
 char *find_command_path(char *cmd);
@@ -131,7 +134,7 @@ void    ft_handlequit(int b);
 bool	echo_n(char *argv);
 char    *expand_variable(char *arg, t_data *data);
 char	*ft_itoa_m(int n);
-void	ft_echo(char **argv, t_data *data);
+void	ft_echo(char **argv , t_data *data);
 //export.c
 void    export_with_nothing(t_env *env);
 void    export_with_variable(t_env **env, char *new_var);
@@ -144,7 +147,6 @@ void	ft_free_tab(char **av);
 void    ft_free(char *str, t_cmd **cmd);
 //read_line.c
 void    parse_command(char **matrice, t_cmd **cmd);
-void    ft_check_builtins(char *line, t_data *data, t_env **env);
 // pipe
 
 #endif

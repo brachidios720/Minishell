@@ -2,21 +2,24 @@
 
 int     ft_check_option(t_data *data)
 {
-    int i = 0;
-    int j = 0;
-    while(data->cut_matrice[i])
+    if(data->cut_matrice)
     {
-        if(ft_check_dash(data->cut_matrice[i]) == 1)
-            return(1);
-        j = ft_check_one_quote(data->cut_matrice[i]);
-        if(j % 2 == 1)
+        int i = 0;
+        int j = 0;
+        while(data->cut_matrice[i])
         {
-            printf(RED"error quote"RESET);
-            return(1);
+            if(ft_check_dash(data->cut_matrice[i]) == 1)
+                return(1);
+            j = ft_check_one_quote(data->cut_matrice[i]);
+            if(j % 2 == 1)
+            {
+                perror(RED"error quote"RESET);
+                return(1);
+            }
+            if(ft_check_pipe(data->line) == 1)
+                return(1);
+            i++;
         }
-        if(ft_check_pipe(data->line) == 1)
-            return(1);
-        i++;
     }
     return(0);
 }

@@ -63,6 +63,7 @@ char *expand_variable(char *arg, t_data *data)
 {
     if (arg[0] == '$') 
 	{
+		printf("s\n");
         if (arg[1] == '?') 
             return (ft_itoa_m(data->last_exit_status)); 
 		else 
