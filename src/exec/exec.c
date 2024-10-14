@@ -95,26 +95,26 @@ void execve_cmd(t_data *data, t_cmd *cmd)
 //gere la creation du processus enfant av fork et exec la comm avec execve ds le processus enfant si ok
 bool	exec_cmd(t_data *data, t_cmd *cmd)
 {
-	pid_t	pid;
-	int		status; //recupere le code de retour
-	pid = fork();
-	if (pid < 0)
-	{
-		printf ("error fork");
-		return (false);
-	}
-	else if (pid == 0)
-		execve_cmd(data, cmd);
-	else
-	{
-		waitpid(pid, &status, 0); //recupere avec l& le status du processus fils
-		if (WIFEXITED(status)) //verif si fin et extrait le code retour
-		{
-			data->last_exit_status = WEXITSTATUS(status);//stock le code de retour
-		   // printf("Code de retour : %d\n", data->last_exit_status);
-		}
-	}
-	return (true);
+    pid_t pid;
+    int status; //recupere le code de retour
+
+    pid = fork();
+    if (pid < 0)
+    {
+        printf ("error fork");
+        return (false);
+    }
+    else if (pid == 0)
+        execve_cmd(data, cmd);
+    else
+    {
+        waitpid(pid, &status, 0); //recupere avec l& le status du processus fils
+        if (WIFEXITED(status)) //verif si fin et extrait le code retour
+        {
+            data->last_exit_status = WEXITSTATUS(status);//stock le code de retour
+        }
+    }
+    return (true);
 }
 
 //execution des commandes externes

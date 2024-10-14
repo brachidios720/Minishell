@@ -26,6 +26,7 @@ src = 	src/utils.c \
 		src/builtins/builtins.c \
 		src/builtins/pwd.c \
 		src/builtins/env.c \
+		src/builtins/cd.c \
 		src/builtins/echo.c \
 		src/builtins/export.c \
 		src/builtins/unset.c \
@@ -37,6 +38,8 @@ src = 	src/utils.c \
 		src/parsing/utils_parsing.c \
 		src/parsing/parsing1.c \
 		src/parsing/ft_utils_cmd.c \
+		src/parsing/option.c \
+		src/parsing/parsing2.c \
 
 srco = $(src:.c=.o)
 
