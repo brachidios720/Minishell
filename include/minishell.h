@@ -144,7 +144,6 @@ void	ft_free_tab(char **av);
 void    ft_free(char *str, t_cmd **cmd);
 //read_line.c
 void    parse_command(char **matrice, t_cmd **cmd);
-void    ft_check_builtins(char *line, t_data *data, t_env **env);
 // pipe
 
 #endif
