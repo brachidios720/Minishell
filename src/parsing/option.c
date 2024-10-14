@@ -17,7 +17,10 @@ int     ft_check_option(t_data *data)
                 return(1);
             }
             if(ft_check_pipe(data->line) == 1)
+            {
+                printf(RED"error\n"RESET);
                 return(1);
+            }
             i++;
         }
     }

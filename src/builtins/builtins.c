@@ -19,7 +19,7 @@ void      ft_check_builtins(char *line, t_data *data, t_env **env, t_cmd **cmd)
     if(line == NULL || line[0] == '\0')
         return;
     if (tmp == NULL || tmp->str == NULL) {
-        fprintf(stderr, "Erreur : pointeur nul détecté dans ft_check_builtins\n");
+        return;
     }
     if(ft_strncmp(tmp->str, "env", ft_strlen("env")) == 0)
         ft_env(env);

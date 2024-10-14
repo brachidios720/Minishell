@@ -66,7 +66,6 @@ void ft_check_line(char **av, char **envp, t_data *data, t_cmd **cmd, t_env **en
     data->line = line;
     if(line == NULL || ft_strcmp(line, "exit") == 0)
         return(free(line));
-    data->matrice = ft_split(line, ' '); // commance a matrice[0]
     init_data(data);
     ft_do_all(line, cmd, data, new_node);
     if(ft_check_option(data) == 1)
