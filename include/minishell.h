@@ -79,7 +79,6 @@ void	ft_lst_addbackk(t_cmd **stack, t_cmd *node);
 void	ft_do_all(char *str, t_cmd **cmd, t_data *data, t_cmd *new_node);
 int     count_pipe(char *str);
 void    ft_cut_cont(char *str, t_data *data);
-void    ft_handle_heredoc(char *delimiter);
 
 // utils 
 void	ft_exit(int i);

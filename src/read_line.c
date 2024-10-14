@@ -50,6 +50,11 @@ void parse_command(char **matrice, t_cmd **cmd)
             (*cmd)->outfile = matrice[i+1];
             (*cmd)->append = 1;
         }
+        else if (strcmp(matrice[i], "<<") == 0)
+        {
+            ft_handle_heredoc(matrice[i+1]);
+            i++;
+        }
         i++;
     }
 }
