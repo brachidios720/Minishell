@@ -50,10 +50,8 @@ int ft_unset(t_env **env, char **args)
     i = 1; //unset = args[0]
     while (args[i]) //cf parsing
     {
-        printf("arg: %s\n", args[i]);
         unset_with_variable(env, args[i]);
         i++;
-        printf("arg: %s\n", args[i]);
     }
     return (0);
 }

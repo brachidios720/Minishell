@@ -50,6 +50,11 @@ void parse_command(char **matrice, t_cmd **cmd)
             (*cmd)->outfile = matrice[i+1];
             (*cmd)->append = 1;
         }
+        else if (strcmp(matrice[i], "<<") == 0)
+        {
+            ft_handle_heredoc(matrice[i+1]);
+            i++;
+        }
         i++;
     }
 }
@@ -57,32 +62,26 @@ void parse_command(char **matrice, t_cmd **cmd)
 //lecture de la ligne et appel des autres fonctions
 void ft_check_line(char **av, char **envp, t_data *data, t_cmd **cmd, t_env **env)
 {
-    char *line = readline("Minishell> ");
+    t_cmd *new_node = NULL;
+
+    signal(SIGINT, ft_handler);
+    signal(SIGQUIT, ft_handlequit);
+    char *line = readline(CYAN"Minishell> "RESET);
     add_history(line);
     data->line = line;
-
-    // Si aucune commande n'a été saisie ou si l'utilisateur tape "exit", on quitte
-    if (line == NULL || ft_strcmp(line, "exit") == 0)
+    if(line == NULL || ft_strcmp(line, "exit") == 0)
+        return(free(line));
+    init_data(data);
+    ft_do_all(line, cmd, data, new_node);
+    if(ft_check_option(data) == 1)
     {
-        free(line);
-        return;
+        ft_free(line, cmd);
+        ft_check_line(av, envp, data, cmd, env);
     }
-
-    // Séparer la ligne de commande en fonction des espaces
-    data->matrice = ft_split(line, ' ');  // Découpe la ligne de commande
-    if (data->matrice[0] == NULL)  // Si la ligne est vide
+    else
     {
-        free(line);
-        return;
+        ft_check_builtins(line, data, env, cmd);
+        ft_free(line, cmd);
+        ft_check_line(av, envp, data, cmd, env);
     }
-    //analyse la commandes et les redirections
-    parse_command(data->matrice, cmd);
-    // Exécuter la commande
-    exec(data, cmd);
-    // Vérifier si la commande est un built-in
-    ft_check_builtins(line, data, env);
-    // Libérer la ligne et les commandes après l'exécution
-    ft_free(line, cmd);
-    // Relancer pour attendre la commande suivante
-    ft_check_line(av, envp, data, cmd, env);
 }

@@ -30,7 +30,7 @@ int main(int ac, char **av, char **envp)
     }
 
     env = init_env(envp);  // Initialiser les variables d'environnement
-
+    init_pwd(&env);
     // Boucle principale du shell
     ft_check_line(av, envp, data, &cmd, &env);
 
