@@ -52,6 +52,7 @@ typedef struct s_cmd
     char            *infile; //fichier pour la redirection d'entree <
     char            *outfile; //fichier pour la redirection de sortie > ou >> ajout
     int             append; //ajout a la fin >> -> 1 sinon 0
+    char            **matrice;
     struct s_cmd    *next;
 }	t_cmd;
 
