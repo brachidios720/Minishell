@@ -97,12 +97,12 @@ char *ft_get_target_dir(char *target_dir, t_env **env)
     return (target_dir);
 }
 
-void ft_cd(t_env **env, char *target_dir)
+void ft_cd(t_env **env, char **target_dir)
 {
+    int i = 1;
     char *current_dir = getcwd(NULL, PATH_MAX); 
-    char *new_target_dir = ft_get_target_dir(target_dir, env);
+    char *new_target_dir = ft_get_target_dir(target_dir[i], env);
 
-    printf("cd to: %s\n", target_dir);
     if (!new_target_dir) 
     {
         free(current_dir);

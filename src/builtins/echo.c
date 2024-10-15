@@ -63,6 +63,7 @@ char *expand_variable(char *arg, t_data *data)
 {
     if (arg[0] == '$') 
 	{
+		printf("s\n");
         if (arg[1] == '?') 
             return (ft_itoa_m(data->last_exit_status)); 
 		else 
@@ -79,6 +80,7 @@ void	ft_echo(char **argv, t_data *data)//cf parsing
 
 	i = 1;
 	new_line = true;
+
 	while (argv[i] && echo_n(argv[i]))
 	{
 		new_line = false;

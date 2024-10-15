@@ -17,6 +17,7 @@ void    init_data(t_data *data)
     //data->path = search_in_env(data, "PATH=");
     data->pwd = getcwd(NULL, PATH_MAX);
     data->old_pwd = data->pwd;
+    data->mat = NULL;
 }
 /*
 char    *search_in_env(t_data *data, char *name)

@@ -46,9 +46,9 @@ typedef struct s_env
 }	t_env;
 typedef struct s_cmd
 {
-	char            *str;//stock 1 chaine de car
-    int             num; // token 
-    char            *option; // option cmd 
+	char            *str;//stock 1 chaine de car (ex : ls)
+    int             num; // numero de token 
+    char            *option; // option cmd (ex-l) 
     char            *infile; //fichier pour la redirection d'entree <
     char            *outfile; //fichier pour la redirection de sortie > ou >> ajout
     int             append; //ajout a la fin >> -> 1 sinon 0
@@ -64,6 +64,8 @@ typedef struct s_data //donnees principales
     char *old_pwd;
     char *line;
     char **matrice;
+    char *mat;
+    bool    real; 
     char **cut_matrice;
     int  pipe;//int pour creation de pipeline
     int last_exit_status; //int pour stocker le dernier code de retour cf echo $ 
@@ -85,6 +87,7 @@ t_cmd	*ft_lsttnew(t_data *data, int i);
 void    ft_lstclearr(t_cmd **cmd);
 void	ft_lst_addbackk(t_cmd **stack, t_cmd *node);
 void    ft_cut_cont(char *str, t_data *data);
+void    ft_handle_heredoc(char *delimiter);
 int     count_pipe(char *str);
 void	ft_do_all(char *str, t_cmd **cmd, t_data *data, t_cmd *new_node);
 int     ft_check_dash(char *str);
@@ -116,14 +119,14 @@ void    init_pwd(t_env **env);
 void    ft_check_builtins(char *line, t_data *data, t_env **env, t_cmd **cmd);
 int     ft_pwd(void);
 void    ft_env(t_env **env);
-void    ft_cd(t_env **env, char *target_dir);
+void    ft_cd(t_env **env, char **target_dir);
 
 //exec.c
-char *find_command_path(char *cmd);
-void handle_redir(t_cmd *cmd);
-void execve_cmd(t_data *data, t_cmd *cmd);
-bool exec_cmd (t_data *data, t_cmd *cmd);
-bool exec (t_data *data, t_cmd **cmd);
+char    *find_command_path(char *cmd);
+void    handle_redir(t_cmd *cmd);
+void    execve_cmd(t_data *data, t_cmd *cmd);
+bool    exec_cmd (t_data *data, t_cmd *cmd);
+bool    exec (t_data *data, t_cmd **cmd);
 
 //ctrl.c
 void    ft_handler(int a);
@@ -132,7 +135,7 @@ void    ft_handlequit(int b);
 bool	echo_n(char *argv);
 char    *expand_variable(char *arg, t_data *data);
 char	*ft_itoa_m(int n);
-void	ft_echo(char **argv, t_data *data);
+void	ft_echo(char **argv , t_data *data);
 //export.c
 void    export_with_nothing(t_env *env);
 void    export_with_variable(t_env **env, char *new_var);

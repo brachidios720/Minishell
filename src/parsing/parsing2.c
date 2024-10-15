@@ -4,7 +4,9 @@ int ft_check_pipe(char *str)
 {
     int i = 0;
     while(str[i] == ' ' && str[i])
+    {
         i++;
+    }
     if(str[i] == '|')
         return(1);
     while(str[i])

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 //ECHO :
-//____
+//----
 
 C    echo "hello"                       // 2 lignes "hello"
 R    hello
@@ -56,9 +56,26 @@ R	Affiche le code de retour de la dernière commande. //mes : Erreur ouverture f
 C	echo $NONEXISTANT               //ok chaine vide + code de retour et mess d erreur
 R	Si la variable d'environnement n'existe pas, afficher une chaîne vide ou ignorer cet argument.
 
+//HEREDOC
+//-------
+C	ls | cat << END	//on utlise les fichiers listes par ls et on redirige ds une autres commande
+Ajout	I HATE YOU //on ajoute le texte
+Ajout	END //on ajoute le delimiteur
+//le fait de mettre un pipe permet de jouer avec les commandes
+
+
+//export
+//------
 
 
 
+
+
+
+
+
+
+COMMANDES POUR GIT
 
 
 

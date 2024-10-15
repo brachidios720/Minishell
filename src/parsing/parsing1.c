@@ -25,7 +25,7 @@ void	ft_do_all(char *str, t_cmd **cmd, t_data *data, t_cmd *new_node)
 {
 	ft_cut_cont(str, data);
 	int i = 0;
-	while(data->cut_matrice[i])
+    while(data->cut_matrice[i])
     {
         new_node = ft_lsttnew(data, i);
         i++;
