@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*  utils_2.c                                           :+:      :+:    :+:   */
+/*  utils_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: spagliar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,6 +11,38 @@
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+char	**env_list_to_array(t_env *env_list)
+{
+    int     size = 0;
+    t_env   *temp = env_list;
+    char    **env_array;
+    int     i = 0;
+
+    // Compter le nombre d'éléments dans la liste chaînée
+    while (temp)
+    {
+        size++;
+        temp = temp->next;
+    }
+
+    // Allouer de la mémoire pour le tableau de chaînes (taille +1 pour NULL final)
+    env_array = malloc(sizeof(char *) * (size + 1));
+    if (!env_array)
+        return (NULL);
+
+    // Remplir le tableau avec les variables d'environnement
+    temp = env_list;
+    while (temp)
+    {
+        env_array[i] = ft_strdup(temp->content); // Copie chaque élément de la liste dans le tableau
+        i++;
+        temp = temp->next;
+    }
+    env_array[i] = NULL; // Terminer le tableau avec NULL
+
+    return env_array;
+}
 /*
 char	*ft_strchr_env(const char *s, int c)
 {

@@ -39,11 +39,6 @@
 #define CYAN "\033[36m"
 #define RESET "\033[0m"
 
-typedef struct s_env
-{
-	char            *content;//stock 1 chaine de car
-    struct s_env    *next;
-}	t_env;
 typedef struct s_cmd
 {
 	char            *str;//stock 1 chaine de car (ex : ls)
@@ -56,6 +51,11 @@ typedef struct s_cmd
     struct s_cmd    *next;
 }	t_cmd;
 
+typedef struct s_env
+{
+	char            *content;//stock 1 chaine de car
+    struct s_env    *next;
+}	t_env;
 typedef struct s_data //donnees principales
 {
     t_env *copy_env;
@@ -71,11 +71,11 @@ typedef struct s_data //donnees principales
     int last_exit_status; //int pour stocker le dernier code de retour cf echo $ 
     struct t_cmd *cmd;
     
+
 } t_data;
 
 // init
 void    init_data(t_data *data);
-void    ft_check_line(char **av, char **envp, t_data *data, t_cmd **cmd, t_env **env);
 
 //init_lst
 void	ft_lstadd_back_list(t_env **env, t_env *n);
@@ -90,7 +90,7 @@ void    ft_cut_cont(char *str, t_data *data);
 void    ft_handle_heredoc(char *delimiter);
 int     count_pipe(char *str);
 void	ft_do_all(char *str, t_cmd **cmd, t_data *data, t_cmd *new_node);
-int     ft_check_dash(char *str);
+char    *ft_check_dash(char *str);
 int     ft_check_option(t_data *data);
 int     ft_check_one_quote(char *str);
 int     ft_check_pipe(char *str);
@@ -112,6 +112,7 @@ void    ft_update_env(t_env **env, char *old_pwd, char *new_pwd);
 char    *ft_get_target_dir(char *target_dir, t_env **env);
 void    init_pwd(t_env **env);
 //utils_env
+char	**env_list_to_array(t_env *env_list);
 //char	*ft_strchr_env(const char *s, int c);
 //int   ft_strncmp_env(const char *s1, const char *s2, size_t n);
 
@@ -121,12 +122,20 @@ int     ft_pwd(void);
 void    ft_env(t_env **env);
 void    ft_cd(t_env **env, char **target_dir);
 
+//EXEC
 //exec.c
-char    *find_command_path(char *cmd);
-void    handle_redir(t_cmd *cmd);
+char    **prepare_argv(t_cmd *cmd, char *cmd_path);
+void    exec_with_env_and_redir(t_cmd *cmd, t_data *data);
 void    execve_cmd(t_data *data, t_cmd *cmd);
-bool    exec_cmd (t_data *data, t_cmd *cmd);
-bool    exec (t_data *data, t_cmd **cmd);
+bool	exec_cmd(t_data *data, t_cmd *cmd);
+bool	exec(t_data *data, t_cmd **cmd);
+//inout.c
+void	handle_redir_in_out(t_cmd *cmd);
+//pipe.c
+void	handle_pipe(t_cmd *cmd1, t_cmd *cmd2);
+void	exec_pipe_chain(t_data *data, t_cmd *cmd);
+//path.c
+char	*find_command_path(char *cmd);
 
 //ctrl.c
 void    ft_handler(int a);
@@ -146,8 +155,10 @@ int     ft_unset(t_env **env, char **args);
 // free
 void	ft_free_tab(char **av);
 void    ft_free(char *str, t_cmd **cmd);
+
 //read_line.c
+void    ft_handle_pipe_with_heredoc(t_cmd *cmd, char *delimiter);
 void    parse_command(char **matrice, t_cmd **cmd);
-// pipe
+void    ft_check_line(char **av, char **envp, t_data *data, t_cmd **cmd, t_env **env);
 
 #endif
