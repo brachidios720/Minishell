@@ -55,10 +55,10 @@ void ft_check_line(char **av, char **envp, t_data *data, t_cmd **cmd, t_env **en
     signal(SIGINT, ft_handler);
     signal(SIGQUIT, ft_handlequit);
     char *line = readline(CYAN"Minishell> "RESET);
+    if(line == NULL || ft_strncmp(line, "exit" , ft_strlen("exit")) == 0)
+        return(free(line));
     add_history(line);
     data->line = line;
-    if(line == NULL || ft_strcmp(line, "exit") == 0)
-        return(free(line));
     init_data(data);
     ft_do_all(line, cmd, data, new_node);
     parse_command(data->cut_matrice, cmd);

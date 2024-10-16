@@ -20,17 +20,18 @@ bool	echo_n(char *argv)
 	{
 		return (false);
 	}
-	i = 1;
+	i = 0;
 	while (argv[i])
 	{
-		if (argv[i] != 'n')
-		{
+		if (argv[i] == '-' && argv[i + 1] == 'n')
+			return (true);
+		if (argv[i] == '-' && argv[i + 1] == '-')
 			return (false);
-		}
 		i++;
 	}
 	return (true);
 }
+
 char	*ft_itoa_m(int n)
 {
 	char	buff[12];

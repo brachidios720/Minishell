@@ -20,14 +20,8 @@ void    ft_cut_cont(char *str, t_data *data)
 {
     int i = 0;
     data->pipe = count_pipe(str);
-    if((ft_check_pipe(str)) == 1 && (count_pipe(str) >= 1))
-    if((ft_check_pipe(str)) == 1 && (count_pipe(str) >= 1))
+    if(count_pipe(str) >= 1)
         data->cut_matrice = ft_split(str, '|');
-    else
-    {
-        data->cut_matrice = ft_split(str, '\0');
-        data->real = true;
-    }
     else
     {
         data->cut_matrice = ft_split(str, '\0');
@@ -80,3 +74,20 @@ int     ft_check_one_quote(char *str)
     }
     return(y);
 } 
+
+// int     ft_check_quote(char *str)
+// {
+//     int i = 0;
+
+
+// }
+
+
+// int     ft_check_n_for_echo(char *str)
+// {
+//     int i = 0;
+//     while(str[i])
+//     {
+//         if(ft_strcmp(str, "echo") == 0)
+//     }
+// }

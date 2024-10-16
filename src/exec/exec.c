@@ -84,6 +84,20 @@ void execve_cmd(t_data *data, t_cmd *cmd)
 	//gestion de redirection
 	handle_redir(cmd);
 	//execute la commande externe
+	printf ("cmd_path = %s", cmd_path);
+	int i = 0;
+	while(argv[i])
+	{
+		printf("argv = %s\n", argv[i]);
+		i++;
+	}
+	i = 0;
+	while(envp[i])
+	{
+		printf("envp = %s\n", envp[i]);
+		i++;
+	}
+
 	if (execve(cmd_path, argv, envp) ==-1) //execute la commande externe
 	{              //ls  -la   NULL
 		perror("Erreur execve");  // Affiche l'erreur

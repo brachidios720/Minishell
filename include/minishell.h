@@ -90,7 +90,7 @@ void    ft_cut_cont(char *str, t_data *data);
 void    ft_handle_heredoc(char *delimiter);
 int     count_pipe(char *str);
 void	ft_do_all(char *str, t_cmd **cmd, t_data *data, t_cmd *new_node);
-int     ft_check_dash(char *str);
+char    *ft_check_dash(char *str);
 int     ft_check_option(t_data *data);
 int     ft_check_one_quote(char *str);
 int     ft_check_pipe(char *str);
