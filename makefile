@@ -35,6 +35,9 @@ src = 	src/utils.c \
 		src/free.c \
 		src/ctrl/ctrl.c \
 		src/exec/exec.c \
+		src/exec/inout.c \
+		src/exec/path.c \
+		src/exec/pipe.c \
 		src/parsing/utils_parsing.c \
 		src/parsing/parsing1.c \
 		src/parsing/ft_utils_cmd.c \

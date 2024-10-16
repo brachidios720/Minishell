@@ -61,6 +61,7 @@ R	Si la variable d'environnement n'existe pas, afficher une chaîne vide ou igno
 C	ls | cat << END	//on utlise les fichiers listes par ls et on redirige ds une autres commande
 Ajout	I HATE YOU //on ajoute le texte
 Ajout	END //on ajoute le delimiteur
+Affiche:I HATE YOU
 //le fait de mettre un pipe permet de jouer avec les commandes
 
 
