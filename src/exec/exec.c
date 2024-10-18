@@ -27,7 +27,7 @@ char **prepare_argv(t_cmd *cmd, char *cmd_path)
 	return (argv);
 }
 
-//gestion de l envirionnement et execution + conversion
+//gestion de l execution d une commande avec les redirections et la variables d environnement
 void exec_with_env_and_redir(t_cmd *cmd, t_data *data)
 {
 	char **envp;
@@ -67,8 +67,8 @@ void execve_cmd(t_data *data, t_cmd *cmd)
     }
 
     // Préparer les arguments pour execve et les stocker dans cmd->matrice
-    cmd->matrice = prepare_argv(cmd, data->path);
-    if (!cmd->matrice)
+    cmd->incmd = prepare_argv(cmd, data->path);
+    if (!cmd->incmd)
     {
         perror("Erreur de préparation des arguments");
         free(data->path);
@@ -78,33 +78,32 @@ void execve_cmd(t_data *data, t_cmd *cmd)
     // Gérer l'exécution et les redirections
     exec_with_env_and_redir(cmd, data);
 }
-
-bool	exec_cmd(t_data *data, t_cmd *cmd)
+// gestion de l execution de commande soit directement soit via un pipe
+void	exec_cmd(t_data *data, t_cmd *cmd)
 {
 	pid_t	pid;
 	int		status;
 
-	if (cmd->next != NULL)
-	{
-		handle_pipe(cmd, cmd->next);
-		return (true);
-	}
 	pid = fork();
-	if (pid < 0)
+	if (pid == -1)
 	{
 		printf ("error fork");
-		return (false);
+		return;
 	}
 	else if (pid == 0)
+	{
+		handle_redir_in_out(cmd);
 		execve_cmd(data, cmd);
+		perror("erreur d execution de commande");
+		exit(EXIT_FAILURE);
+	}
+	else
 	{
 		waitpid(pid, &status, 0);
-		if (WIFEXITED(status))
-			data->last_exit_status = WEXITSTATUS(status);
+		data->last_exit_status = WEXITSTATUS(status);
 	}
-	return (true);
 }
-
+//gestion globale de l execution des commandes et des pipes
 bool	exec(t_data *data, t_cmd **cmd)
 {
 	t_cmd	*tmp;

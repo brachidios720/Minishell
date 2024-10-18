@@ -33,7 +33,14 @@ void      ft_check_builtins(char *line, t_data *data, t_env **env, t_cmd **cmd)
         ft_export(env, tmp->matrice);
     else if(ft_strncmp(tmp->str, "unset", ft_strlen("unset")) == 0)
         ft_unset(env, tmp->matrice);
-    else 
-        exec(data, cmd);
+    else
+    {
+        if(tmp->next)
+        {
+            exec_pipe_chain(data, *cmd);
+        }
+        else
+            exec(data, cmd);
+    }
     free(data->matrice);
 }

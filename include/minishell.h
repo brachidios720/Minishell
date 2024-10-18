@@ -48,6 +48,7 @@ typedef struct s_cmd
     char            *outfile; //fichier pour la redirection de sortie > ou >> ajout
     int             append; //ajout a la fin >> -> 1 sinon 0
     char            **matrice;
+    char            **incmd;
     struct s_cmd    *next;
 }	t_cmd;
 
@@ -127,7 +128,7 @@ void    ft_cd(t_env **env, char **target_dir);
 char    **prepare_argv(t_cmd *cmd, char *cmd_path);
 void    exec_with_env_and_redir(t_cmd *cmd, t_data *data);
 void    execve_cmd(t_data *data, t_cmd *cmd);
-bool	exec_cmd(t_data *data, t_cmd *cmd);
+void	exec_cmd(t_data *data, t_cmd *cmd);
 bool	exec(t_data *data, t_cmd **cmd);
 //inout.c
 void	handle_redir_in_out(t_cmd *cmd);
@@ -158,7 +159,7 @@ void    ft_free(char *str, t_cmd **cmd);
 
 //read_line.c
 void    ft_handle_pipe_with_heredoc(t_cmd *cmd, char *delimiter);
-void    parse_command(char **matrice, t_cmd **cmd);
+void    parse_redirection(char **matrice, t_cmd *cmd);
 void    ft_check_line(char **av, char **envp, t_data *data, t_cmd **cmd, t_env **env);
 
 #endif

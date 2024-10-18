@@ -24,6 +24,11 @@ void	handle_pipe(t_cmd *cmd1, t_cmd *cmd2)
 		return ;
 	}
 	pid1 = fork();
+	if (pid1 == -1)
+	{
+		perror("error de fork pour cmd1");
+		exit(EXIT_FAILURE);
+	}
 	if (pid1 == 0)
 	{
 		dup2(pipefd[1], STDOUT_FILENO);
@@ -32,6 +37,12 @@ void	handle_pipe(t_cmd *cmd1, t_cmd *cmd2)
 		execve_cmd(NULL, cmd1);
 	}
 	pid2 = fork();
+	
+	if (pid2 == -1)
+	{
+		perror("error de fork pour cmd2");
+		exit(EXIT_FAILURE);
+	}
 	if (pid2 == 0)
 	{
 		dup2(pipefd[0], STDIN_FILENO);
@@ -51,15 +62,20 @@ void	exec_pipe_chain(t_data *data, t_cmd *cmd)
 	while (cmd != NULL && cmd->next != NULL)
 	{
 		printf("n\n");
-		if (!cmd->next)
+		if (cmd->next && cmd->next->next)
 		{
 			printf("cmd->num : %d\n", cmd->num);
 			handle_pipe(cmd, cmd->next->next);
 			cmd = cmd->next->next;
 		}
-		else
+		else if(cmd->next)
 		{
 			printf("cmd->num2 : %d\n", cmd->num);
+			exec_cmd(data, cmd);
+			cmd = cmd->next;
+		}
+		else
+		{
 			exec_cmd(data, cmd);
 			cmd = cmd->next;
 		}
