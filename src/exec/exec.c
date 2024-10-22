@@ -30,11 +30,12 @@ char **prepare_argv(t_cmd *cmd, char *cmd_path)
 //gestion de l envirionnement et execution + conversion
 void exec_with_env_and_redir(t_cmd *cmd, t_data *data)
 {
+	
 	char **envp;
 	char *cmd_path = data->path;
 
 // Conversion de la liste des variables d'environnement en tableau
-    envp = env_list_to_array(data->copy_env);
+    envp = env_list_to_array(&data->copy_env);
     if (!envp)
     {
         perror("Erreur de conversion des variables d'environnement");
@@ -59,7 +60,6 @@ void execve_cmd(t_data *data, t_cmd *cmd)
 {
     // Trouver le chemin complet de la commande et le stocker dans `data->path`
     data->path = find_command_path(cmd->matrice[0]);
-	printf ("valeur :%s\n", data->path);
     if (!data->path)
     {
         printf("Commande non trouvée : %s\n", cmd->str);
@@ -67,8 +67,8 @@ void execve_cmd(t_data *data, t_cmd *cmd)
     }
 
     // Préparer les arguments pour execve et les stocker dans cmd->matrice
-    cmd->matrice = prepare_argv(cmd, data->path);
-    if (!cmd->matrice)
+    cmd->incmd = prepare_argv(cmd, data->path);
+    if (!cmd->incmd)
     {
         perror("Erreur de préparation des arguments");
         free(data->path);
@@ -79,31 +79,30 @@ void execve_cmd(t_data *data, t_cmd *cmd)
     exec_with_env_and_redir(cmd, data);
 }
 
-bool	exec_cmd(t_data *data, t_cmd *cmd)
+void exec_cmd(t_data *data, t_cmd *cmd)
 {
-	pid_t	pid;
-	int		status;
+    pid_t pid;
+    int status;
 
-	if (cmd->next != NULL)
+    pid = fork();
+    if (pid == -1) {
+        perror("Erreur de fork");
+        return;
+    }
+    if (pid == 0) 
 	{
-		handle_pipe(cmd, cmd->next);
-		return (true);
-	}
-	pid = fork();
-	if (pid < 0)
+        handle_redir_in_out(cmd);
+        execve_cmd(data, cmd); 
+        perror("Erreur d'exécution de la commande");
+        exit(EXIT_FAILURE);
+    } 
+	else 
 	{
-		printf ("error fork");
-		return (false);
-	}
-	else if (pid == 0)
-		execve_cmd(data, cmd);
-	{
-		waitpid(pid, &status, 0);
-		if (WIFEXITED(status))
-			data->last_exit_status = WEXITSTATUS(status);
-	}
-	return (true);
+        waitpid(pid, &status, 0);
+        data->last_exit_status = WEXITSTATUS(status);
+    }
 }
+
 
 bool	exec(t_data *data, t_cmd **cmd)
 {

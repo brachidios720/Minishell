@@ -18,9 +18,9 @@ t_cmd	*ft_lsttnew(t_data *data, int i)
     newnode->matrice = ft_split(newnode->str, ' ');
     newnode->option = ft_check_dash(newnode->str);
 	newnode->next = NULL;
+    parse_redirection(newnode->matrice, newnode);
 	return (newnode);
 }
-
 
 void	ft_do_all(char *str, t_cmd **cmd, t_data *data, t_cmd *new_node)
 {

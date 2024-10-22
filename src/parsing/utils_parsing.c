@@ -32,6 +32,7 @@ void    ft_cut_cont(char *str, t_data *data)
         i++;
     }
 }
+
 void ft_handle_heredoc(char *delimiter)
 {
     int pipefd[2];

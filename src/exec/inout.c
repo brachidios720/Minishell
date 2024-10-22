@@ -14,15 +14,13 @@
 //manipule les decripteurs de fichiers entree / sortie suivant 2 conditions
 void	handle_redir_in_out(t_cmd *cmd)
 {
+	
 	int	fd_in;
 	int	fd_out;
-	printf("n\n");
 	if (cmd->infile)
 	{
-		printf ("infile : %s\n", cmd->infile);
 		fd_in = open(cmd->infile, O_RDONLY);
-		printf ("infile open : %s\n", cmd->infile);
-		if (fd_in < 0)
+		if (fd_in == -1)
 		{
 			perror("Erreur ouverture fichier d'entrée");
 			exit(EXIT_FAILURE);
@@ -32,7 +30,6 @@ void	handle_redir_in_out(t_cmd *cmd)
 	}
 	if (cmd->outfile)
 	{
-		printf ("outfile : %s\n", cmd->outfile);
 		if (cmd->append)
 		{
 			fd_out = open(cmd->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
@@ -43,7 +40,7 @@ void	handle_redir_in_out(t_cmd *cmd)
 			fd_out = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 			printf ("outfile 2 : %s\n", cmd->outfile);
 		}
-		if (fd_out < 0)
+		if (fd_out == -1)
 		{
 			perror("Erreur ouverture fichier de sortie");
 			exit(EXIT_FAILURE);

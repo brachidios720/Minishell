@@ -43,6 +43,9 @@ src = 	src/utils.c \
 		src/parsing/ft_utils_cmd.c \
 		src/parsing/option.c \
 		src/parsing/parsing2.c \
+		src/redirection/redirection.c \
+		src/builtins/utils_builtins.c \
+
 
 srco = $(src:.c=.o)
 

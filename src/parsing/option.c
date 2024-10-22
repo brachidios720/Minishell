@@ -28,9 +28,6 @@ char     *ft_check_dash(char *str)
     int y = 0;
     int x = 0;
     char *find;
-    int y = 0;
-    int x = 0;
-    char *find;
     while(str[i])
     {
         if((str[i] == '-' || str[i] == '/') && ft_isalpha(str[i + 1]))
@@ -51,7 +48,6 @@ char     *ft_check_dash(char *str)
         }        
         i++;
     }
-    return(NULL);
     return(NULL);
 }
     
