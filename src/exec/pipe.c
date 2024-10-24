@@ -59,7 +59,7 @@
 // }
 
 
-// void	exec_pipe_chain(t_data *data, t_cmd *cmd)
+// void	exec_pipe_chain(t_data *data, t_cmd *cmd, t_env **env)
 // {
 // 	while (cmd != NULL && cmd->next != NULL)
 // 	{
@@ -70,12 +70,12 @@
 // 		}
 // 		else if(cmd->next)
 // 		{
-// 			exec_cmd(data, cmd);
+// 			exec_cmd(data, cmd, env);
 // 			cmd = cmd->next;
 // 		}
 // 		else
 // 		{
-// 			exec_cmd(data, cmd);
+// 			exec_cmd(data, cmd, env);
 // 			cmd = cmd->next;
 // 		}
 // 	}

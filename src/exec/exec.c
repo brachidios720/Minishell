@@ -93,8 +93,8 @@ void exec_cmd(t_data *data, t_cmd *cmd, t_env **env)
 	{
         handle_redir_in_out(cmd);
         execute_command_or_builtin(cmd, env, data); 
-        perror("Erreur d'exécution de la commande");
-        exit(EXIT_FAILURE);
+        //perror("Erreur d'exécution de la commande");
+        exit(EXIT_SUCCESS);
     } 
 	else 
 	{

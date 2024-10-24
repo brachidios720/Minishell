@@ -90,7 +90,7 @@ void ft_handle_pipe_with_heredoc(t_cmd *cmd, char *delimiter, t_data *data, t_en
         close(pipefd[0]);
         close(pipefd[1]);
         execute_command_or_builtin(cmd, env, data);  // Exécuter la première commande (par exemple, `ls`)
-        perror("execve_cmd");  // Si execve échoue
+        //perror("execve_cmd");  // Si execve échoue
         exit(EXIT_FAILURE);
     }
     if (cmd -> next)
@@ -119,12 +119,12 @@ void ft_handle_pipe_with_heredoc(t_cmd *cmd, char *delimiter, t_data *data, t_en
                     free(line);
                 }
             }
+            close(pipefd[0]);  // Fermer le pipe une fois le heredoc injecté
+            execute_command_or_builtin(cmd->next, env, data);  // Exécuter la deuxième commande (par exemple, `cat`)
         }
 
-        close(pipefd[0]);  // Fermer le pipe une fois le heredoc injecté
-        execute_command_or_builtin(cmd->next, env, data);  // Exécuter la deuxième commande (par exemple, `cat`)
-        perror("execve_cmd");  // Si execve échoue
-        exit(EXIT_FAILURE);
+        //perror("execve_cmd");  // Si execve échoue
+        //exit(EXIT_FAILURE);
     }
     // Parent - Fermer les deux côtés du pipe après le fork
     close(pipefd[0]);
@@ -138,27 +138,28 @@ void ft_handle_pipe_with_heredoc(t_cmd *cmd, char *delimiter, t_data *data, t_en
 }
 
 
-void execute_pipeline(t_cmd *cmd_list, t_env **env, t_data *data)
-{
-    int pipe_fds[2];
-    pid_t pid;
-    int fd_in = 0; // Entrée du prochain processus
+// void execute_pipeline(t_cmd *cmd_list, t_env **env, t_data *data)
+// {
+//     int pipe_fds[2];
+//     pid_t pid;
+//     int fd_in = 0; // Entrée du prochain processus
 
-    while (cmd_list) {
-        pipe(pipe_fds); // Crée un pipe pour chaque commande
+//     printf("f\n");
+//     while (cmd_list) {
+//         pipe(pipe_fds); // Crée un pipe pour chaque commande
 
-        if ((pid = fork()) == 0) { // Processus enfant
-            dup2(fd_in, STDIN_FILENO); // Rediriger l'entrée du processus
-            if (cmd_list->next)
-                dup2(pipe_fds[1], STDOUT_FILENO); // Si pas dernière commande, rediriger sortie vers pipe
-            close(pipe_fds[0]);
-            execute_command_or_builtin(cmd_list, env, data); // Exécute la commande (builtin ou execve)
-        }
-        else { // Processus parent
-            wait(NULL); // Attendre l'enfant
-            close(pipe_fds[1]);
-            fd_in = pipe_fds[0]; // Pour la prochaine commande
-            cmd_list = cmd_list->next;
-        }
-    }
-}
+//         if ((pid = fork()) == 0) { // Processus enfant
+//             dup2(fd_in, STDIN_FILENO); // Rediriger l'entrée du processus
+//             if (cmd_list->next)
+//                 dup2(pipe_fds[1], STDOUT_FILENO); // Si pas dernière commande, rediriger sortie vers pipe
+//             close(pipe_fds[0]);
+//             execute_command_or_builtin(cmd_list, env, data); // Exécute la commande (builtin ou execve)
+//         }
+//         else { // Processus parent
+//             wait(NULL); // Attendre l'enfant
+//             close(pipe_fds[1]);
+//             fd_in = pipe_fds[0]; // Pour la prochaine commande
+//             cmd_list = cmd_list->next;
+//         }
+//     }
+// }

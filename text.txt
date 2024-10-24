@@ -1,0 +1,8 @@
+include
+LIBFT
+makefile
+Minishell
+src
+test
+text.txt
+txt.txt

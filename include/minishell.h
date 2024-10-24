@@ -133,7 +133,7 @@ bool	exec(t_data *data, t_cmd **cmd);
 void	handle_redir_in_out(t_cmd *cmd);
 //pipe.c
 void	handle_pipe(t_cmd *cmd1, t_cmd *cmd2);
-void	exec_pipe_chain(t_data *data, t_cmd *cmd);
+void	exec_pipe_chain(t_data *data, t_cmd *cmd, t_env **env);
 //path.c
 char	*find_command_path(char *cmd);
 

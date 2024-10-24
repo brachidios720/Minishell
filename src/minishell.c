@@ -38,5 +38,5 @@ int main(int ac, char **av, char **envp)
     free(cmd);
     free(data);
 
-    return (0);
+    return(0);
 }
