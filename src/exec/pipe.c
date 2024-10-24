@@ -12,72 +12,72 @@
 #include "../../include/minishell.h"
 
 //gere l exec de 2 commandes reliees par un pipe
-void handle_pipe(t_cmd *cmd1, t_cmd *cmd2)
-{
-    int pipefd[2];
-    pid_t pid1, pid2;
+// void handle_pipe(t_cmd *cmd1, t_cmd *cmd2)
+// {
+//     int pipefd[2];
+//     pid_t pid1, pid2;
 
-    // Création du pipe
-    if (pipe(pipefd) == -1) {
-        perror("Erreur de création du pipe");
-        exit(EXIT_FAILURE);
-    }
-    pid1 = fork();
-    if (pid1 == -1) {
-        perror("Erreur de fork pour cmd1");
-        exit(EXIT_FAILURE);
-    }
-    if (pid1 == 0) 
-	{
-        dup2(pipefd[1], STDOUT_FILENO);
-        close(pipefd[0]);  // On ferme la lecture du pipe
-        close(pipefd[1]);  // On ferme l'écriture du pipe après dup2
-        handle_redir_in_out(cmd1);
-        execve_cmd(NULL, cmd1);
-        perror("Erreur d'exécution cmd1");
-        exit(EXIT_FAILURE);
-    }
-    pid2 = fork();
-    if (pid2 == -1) {
-        perror("Erreur de fork pour cmd2");
-        exit(EXIT_FAILURE);
-    }
-    if (pid2 == 0) 
-	{
-        dup2(pipefd[0], STDIN_FILENO);
-        close(pipefd[1]);
-        close(pipefd[0]);
-        handle_redir_in_out(cmd2);
-        execve_cmd(NULL, cmd2);
-        perror("Erreur d'exécution cmd2");
-        exit(EXIT_FAILURE);
-    }
-    close(pipefd[0]);
-    close(pipefd[1]);
-    waitpid(pid1, NULL, 0);
-    waitpid(pid2, NULL, 0);
-}
+//     // Création du pipe
+//     if (pipe(pipefd) == -1) {
+//         perror("Erreur de création du pipe");
+//         exit(EXIT_FAILURE);
+//     }
+//     pid1 = fork();
+//     if (pid1 == -1) {
+//         perror("Erreur de fork pour cmd1");
+//         exit(EXIT_FAILURE);
+//     }
+//     if (pid1 == 0) 
+// 	{
+//         dup2(pipefd[1], STDOUT_FILENO);
+//         close(pipefd[0]);  // On ferme la lecture du pipe
+//         close(pipefd[1]);  // On ferme l'écriture du pipe après dup2
+//         handle_redir_in_out(cmd1);
+//         execve_cmd(NULL, cmd1);
+//         perror("Erreur d'exécution cmd1");
+//         exit(EXIT_FAILURE);
+//     }
+//     pid2 = fork();
+//     if (pid2 == -1) {
+//         perror("Erreur de fork pour cmd2");
+//         exit(EXIT_FAILURE);
+//     }
+//     if (pid2 == 0) 
+// 	{
+//         dup2(pipefd[0], STDIN_FILENO);
+//         close(pipefd[1]);
+//         close(pipefd[0]);
+//         handle_redir_in_out(cmd2);
+//         execve_cmd(NULL, cmd2);
+//         perror("Erreur d'exécution cmd2");
+//         exit(EXIT_FAILURE);
+//     }
+//     close(pipefd[0]);
+//     close(pipefd[1]);
+//     waitpid(pid1, NULL, 0);
+//     waitpid(pid2, NULL, 0);
+// }
 
 
-void	exec_pipe_chain(t_data *data, t_cmd *cmd)
-{
-	while (cmd != NULL && cmd->next != NULL)
-	{
-		if (cmd->next && cmd->next->next)
-		{
-			handle_pipe(cmd, cmd->next->next);
-			cmd = cmd->next->next;
-		}
-		else if(cmd->next)
-		{
-			exec_cmd(data, cmd);
-			cmd = cmd->next;
-		}
-		else
-		{
-			exec_cmd(data, cmd);
-			cmd = cmd->next;
-		}
-	}
-}
+// void	exec_pipe_chain(t_data *data, t_cmd *cmd)
+// {
+// 	while (cmd != NULL && cmd->next != NULL)
+// 	{
+// 		if (cmd->next && cmd->next->next)
+// 		{
+// 			handle_pipe(cmd, cmd->next->next);
+// 			cmd = cmd->next->next;
+// 		}
+// 		else if(cmd->next)
+// 		{
+// 			exec_cmd(data, cmd);
+// 			cmd = cmd->next;
+// 		}
+// 		else
+// 		{
+// 			exec_cmd(data, cmd);
+// 			cmd = cmd->next;
+// 		}
+// 	}
+// }
 

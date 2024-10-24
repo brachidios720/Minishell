@@ -75,7 +75,7 @@ void parse_redirection(char **matrice, t_cmd *cmd)
 void ft_handle_pipe_with_heredoc(t_cmd *cmd, char *delimiter, t_data *data, t_env **env)
 {
     int pipefd[2];
-    pid_t pid1, pid2;
+    pid_t pid1, pid2 = 0;
 
     if (pipe(pipefd) == -1)
     {
@@ -103,24 +103,28 @@ void ft_handle_pipe_with_heredoc(t_cmd *cmd, char *delimiter, t_data *data, t_en
             dup2(pipefd[0], STDIN_FILENO);  // Rediriger l'entrée standard de cmd2 depuis le pipe
 
             // Injecter le heredoc dans le pipe
-            char *line;
-            while (1)
-            {
-                line = readline(" > ");
-                if (!line || strcmp(line, delimiter) == 0)
+           if(ft_strcmp(cmd->str, "<<") == 0)
+           {
+                char *line;
+                while (1)
                 {
+                    line = readline(" > ");
+                    if (!line || strcmp(line, delimiter) == 0)
+                    {
+                        free(line);
+                        break;
+                    }
+                    write(STDIN_FILENO, line, strlen(line));  // Écrire dans stdin
+                    write(STDIN_FILENO, "\n", 1);  // Ajouter un saut de ligne
                     free(line);
-                    break;
                 }
-                write(STDIN_FILENO, line, strlen(line));  // Écrire dans stdin
-                write(STDIN_FILENO, "\n", 1);  // Ajouter un saut de ligne
-                free(line);
             }
-            close(pipefd[0]);  // Fermer le pipe une fois le heredoc injecté
-            execve_cmd(NULL, cmd->next);  // Exécuter la deuxième commande (par exemple, `cat`)
-            perror("execve_cmd");  // Si execve échoue
-            exit(EXIT_FAILURE);
         }
+
+        close(pipefd[0]);  // Fermer le pipe une fois le heredoc injecté
+        execute_command_or_builtin(cmd->next, env, data);  // Exécuter la deuxième commande (par exemple, `cat`)
+        perror("execve_cmd");  // Si execve échoue
+        exit(EXIT_FAILURE);
     }
     // Parent - Fermer les deux côtés du pipe après le fork
     close(pipefd[0]);
@@ -128,7 +132,9 @@ void ft_handle_pipe_with_heredoc(t_cmd *cmd, char *delimiter, t_data *data, t_en
     // Attendre les deux processus enfants
     waitpid(pid1, NULL, 0);
     if (cmd->next)
+    {
         waitpid(pid2, NULL, 0);
+    }
 }
 
 

@@ -1,0 +1,4 @@
+echo "hello" > test1.txt
+s
+"hello" > test1.txt
+[?2004h[36mMinishell> [0m^Z[?2004l

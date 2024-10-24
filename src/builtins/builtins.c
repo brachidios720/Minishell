@@ -46,9 +46,10 @@ void exec_builtin(t_cmd *cmd, t_env **env, t_data *data)
 
 void exec_external(t_cmd *cmd, t_env **env)
 {
+     // Convertir env en tableau pour execve
     char *cmd_path;
     char **envp;
-    envp = env_list_to_array(env); // Convertir env en tableau pour execve
+    envp = env_list_to_array(env);
     cmd_path = find_command_path(cmd->matrice[0]);  // Trouver le chemin complet de la commande
 
     if (cmd_path == NULL) {
@@ -56,20 +57,15 @@ void exec_external(t_cmd *cmd, t_env **env)
         printf("b\n");
         exit(EXIT_FAILURE);
     }
-    if (execve(cmd_path, cmd->matrice, envp) == -1) {
-        perror("Erreur execve");
-        free(cmd_path);
-        free(envp);
-        printf("z\n");
-        exit(EXIT_FAILURE);
-    }
+    printf ("22222\n");
+    execve(cmd_path, cmd->matrice, envp);
 }
 
 void execute_command_or_builtin(t_cmd *cmd, t_env **env, t_data *data)
 {    // Redirections et exécution des builtins ou commandes externes
     handle_redirections(cmd);
 
-    printf("%s\n", cmd->str);
+    //printf("%s\n", cmd->str);
     if (is_builtin(cmd->str) == 1)  // Si c'est un builtin
     {
         printf("s\n");
@@ -94,8 +90,7 @@ void process_commands(t_data *data, t_env **env, t_cmd *cmd)
     }
     else
     {
-        // Si pas de pipe, exécuter la commande (builtin ou externe)
-        execute_command_or_builtin(cmd, env, data);
+        exec_cmd(data, cmd, env);// Si pas de pipe, exécuter la commande (builtin ou externe)
     }
 }
 
