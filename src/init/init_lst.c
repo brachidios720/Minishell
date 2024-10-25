@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 //ajoute un nouveau noeud en fin de liste chainee
 void	ft_lstadd_back_list(t_env **env, t_env *new_node)//ptr sur ptr de liste / ptr nouv noeud

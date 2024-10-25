@@ -1,0 +1,74 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    test_def_heredoc                                       :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: spagliar <marvin@42.fr>                    +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/10/24 17:05:56 by spagliar          #+#    #+#              #
+#    Updated: 2024/10/24 17:05:58 by spagliar         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+Un Here Document / heredoc
+--------------------------
+Document en ligne : manière de déclarer une chaîne de caractères dans les interpréteurs de commandes
+ex : les shells Unix + langages de programmation ou de script comme Perl, PHP, Python, Ruby et JCL. 
+- Il conserve tous les sauts de lignes
+- Espaces dans le texte, indentation comprise. 
+Certains langages permettent l'interprétation de variable dans la chaîne.
+
+syntaxe la plus courante : paire de chevrons << suivie d'un délimiteur : 
+- une chaîne de caractères alphanumériques
+- suivi sur la ligne suivante de la première ligne du heredoc -> clos à la fin par le délimiteur
+= la même chaîne de caractère, sur sa propre ligne.
+
+Si la paire de chevrons est immédiatement suivie d'un tiret <<- :
+les tabulations et espaces en début de ligne du heredoc seront éliminées lors de l'interprétation de la commande. 
+Ceci permet d'indenter le contenu du heredoc par rapport au reste du script et d'en assurer une meilleure lisibilité.
+
+TESTS :
+-------
+CMD :	ls | cat << END	//on utlise les fichiers listes par ls et on redirige ds une autres commande
+TERM :	Ajout	I HATE YOU //on ajoute le texte
+TERM	Ajout	END //on ajoute le delimiteur
+Affiche :	I HATE YOU 
+//le fait de mettre un pipe permet de jouer avec les commandes
+
+
+CMD : cat <<HEREDOC
+TERM : Ajout pag
+TERM : HEREDOC
+Affiche : pag 
+
+cat <<HERE <<DOC
+oi
+HERE
+time
+DOC
+
+cat <<HERE | ls
+oi
+HERE
+
+cat <<HERE
+$USER
+oi
+HERE
+
+cat <minishell.h <<HERE <missing | ls
+HERE
+
+cat <minishell.h <<HERE | cat
+HERE
+
+cat <minishell.h <<HERE <missing <<DOC | echo oi
+HERE
+DOC
+
+cat << $
+oi
+$
+
+<< echo oi
+echo

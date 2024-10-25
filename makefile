@@ -19,30 +19,31 @@ RM = rm -rf
 LIBFT_PATH = ./LIBFT
 LIBFT = $(LIBFT_PATH)/libft.a
 
-src = 	src/utils.c \
-		src/utils_env.c \
-		src/minishell.c \
-		src/read_line.c \
-		src/builtins/builtins.c \
-		src/builtins/pwd.c \
-		src/builtins/env.c \
+src = 	src/builtins/builtins.c \
 		src/builtins/cd.c \
 		src/builtins/echo.c \
+		src/builtins/env.c \
 		src/builtins/export.c \
+		src/builtins/pwd.c \
 		src/builtins/unset.c \
-		src/init.c \
-		src/init_lst.c\
-		src/free.c \
 		src/ctrl/ctrl.c \
 		src/exec/exec.c \
 		src/exec/inout.c \
 		src/exec/path.c \
 		src/exec/pipe.c \
-		src/parsing/utils_parsing.c \
-		src/parsing/parsing1.c \
+		src/heredoc/heredoc.c\
+		src/init/init_lst.c\
+		src/init/init.c\
 		src/parsing/ft_utils_cmd.c \
 		src/parsing/option.c \
+		src/parsing/parsing1.c \
 		src/parsing/parsing2.c \
+		src/parsing/utils_parsing.c \
+		src/free.c \
+		src/minishell.c \
+		src/read_line.c \
+		src/utils_env.c\
+		src/utils.c\
 
 srco = $(src:.c=.o)
 

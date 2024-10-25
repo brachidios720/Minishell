@@ -11,74 +11,68 @@
 /* ************************************************************************** */
 #include "../../include/minishell.h"
 
-//gere l exec de 2 commandes reliees par un pipe
-void	handle_pipe(t_cmd *cmd1, t_cmd *cmd2)
+void	ft_pipe_first_cmd(int pipe_fd[2], t_cmd *cmd)
 {
-	int		pipefd[2]; //2int = 2 extremites du pipe
-	pid_t	pid1;
-	pid_t	pid2;
+	pipe(pipe_fd); // Crée un pipe pour la première commande
+	if (cmd->infile != STDIN_FILENO)
+		dup2(cmd->infile, STDIN_FILENO);  // Redirige l'entrée standard si un fichier est spécifié
+	dup2(pipe_fd[1], STDOUT_FILENO);      // Redirige la sortie vers le pipe
+	close(pipe_fd[0]);                    // Ferme l’extrémité de lecture du pipe
+}
 
-	if (pipe(pipefd) == -1)
-	{
-		perror("pipe");
-		return ;
-	}
-	pid1 = fork();
-	if (pid1 == -1)
-	{
-		perror("error de fork pour cmd1");
-		exit(EXIT_FAILURE);
-	}
-	if (pid1 == 0)
-	{
-		dup2(pipefd[1], STDOUT_FILENO);
-		close(pipefd[0]);
-		close(pipefd[1]);
-		execve_cmd(NULL, cmd1);
-	}
-	pid2 = fork();
-	
-	if (pid2 == -1)
-	{
-		perror("error de fork pour cmd2");
-		exit(EXIT_FAILURE);
-	}
-	if (pid2 == 0)
-	{
-		dup2(pipefd[0], STDIN_FILENO);
-		close(pipefd[1]);
-		close(pipefd[0]);
-		execve_cmd(NULL, cmd2);
-	}
-	close(pipefd[0]);
-	close(pipefd[1]);
-	waitpid(pid1, NULL, 0);
-	waitpid(pid2, NULL, 0);
+void	ft_pipe_last_cmd(int pipe_fd[2], t_cmd *cmd)
+{
+	dup2(pipe_fd[0], STDIN_FILENO);       // Redirige l'entrée depuis le pipe
+	if (cmd->outfile != STDOUT_FILENO)
+		dup2(cmd->outfile, STDOUT_FILENO); // Redirige la sortie si un fichier de sortie est spécifié
+	close(pipe_fd[1]);                    // Ferme l’extrémité d’écriture du pipe
+}
+
+void	ft_pipe_middle_cmd(int pipe_fd[2], t_cmd *cmd)
+{
+	dup2(pipe_fd[0], STDIN_FILENO);       // Redirige l'entrée depuis le pipe précédent
+	close(pipe_fd[1]);                    // Ferme l’extrémité d’écriture actuelle du pipe
+
+	pipe(pipe_fd);                        // Crée un nouveau pipe pour cette commande
+	dup2(pipe_fd[1], STDOUT_FILENO);      // Redirige la sortie vers le nouveau pipe
+}
+
+void	ft_pipe(t_data *data, t_cmd *cmd, int pipe_fd[2])
+{
+	if (data->cmd == cmd)              // Première commande
+		ft_pipe_first_cmd(pipe_fd, cmd);
+	else if (cmd->next == NULL)        // Dernière commande
+		ft_pipe_last_cmd(pipe_fd, cmd);
+	else                               // Commande intermédiaire
+		ft_pipe_middle_cmd(pipe_fd, cmd);
 }
 
 void	exec_pipe_chain(t_data *data, t_cmd *cmd)
 {
-	printf("a\n");
-	while (cmd != NULL && cmd->next != NULL)
+	pid_t pid;
+	int pipe_fd[2] = {-1, -1};  // Pipe utilisé pour les redirections de chaque commande
+
+	while (cmd != NULL)
 	{
-		printf("n\n");
-		if (cmd->next && cmd->next->next)
+		pipe(pipe_fd);           // Crée un pipe pour chaque commande
+
+		pid = fork();
+		if (pid == -1)
 		{
-			printf("cmd->num : %d\n", cmd->num);
-			handle_pipe(cmd, cmd->next->next);
-			cmd = cmd->next->next;
+			perror("Fork error");
+			exit(EXIT_FAILURE);
 		}
-		else if(cmd->next)
+		else if (pid == 0)        // Processus enfant
 		{
-			printf("cmd->num2 : %d\n", cmd->num);
-			exec_cmd(data, cmd);
-			cmd = cmd->next;
+			ft_pipe(data, cmd, pipe_fd);  // Configure les pipes en fonction de la position
+			execve_cmd(data, cmd);        // Exécute la commande
+			exit(EXIT_SUCCESS);
 		}
-		else
+		else                      // Processus parent
 		{
-			exec_cmd(data, cmd);
-			cmd = cmd->next;
+			close(pipe_fd[1]);    // Ferme l’extrémité d’écriture pour le parent
+			waitpid(pid, NULL, 0);// Attend la fin du processus enfant
 		}
+		cmd = cmd->next;
 	}
 }
-
