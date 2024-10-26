@@ -89,7 +89,7 @@ void ft_handle_pipe_with_heredoc(t_cmd *cmd, char *delimiter, t_data *data, t_en
         dup2(pipefd[1], STDOUT_FILENO);  // Rediriger la sortie de cmd1 vers le pipe
         close(pipefd[0]);
         close(pipefd[1]);
-        execute_command_or_builtin(cmd, env, data);  // Exécuter la première commande (par exemple, `ls`)
+        execute_command_or_builtin(&cmd, env, data);  // Exécuter la première commande (par exemple, `ls`)
         //perror("execve_cmd");  // Si execve échoue
         exit(EXIT_FAILURE);
     }
@@ -120,7 +120,7 @@ void ft_handle_pipe_with_heredoc(t_cmd *cmd, char *delimiter, t_data *data, t_en
                 }
             }
             close(pipefd[0]);  // Fermer le pipe une fois le heredoc injecté
-            execute_command_or_builtin(cmd->next, env, data);  // Exécuter la deuxième commande (par exemple, `cat`)
+            execute_command_or_builtin(&cmd->next, env, data);  // Exécuter la deuxième commande (par exemple, `cat`)
         }
 
         //perror("execve_cmd");  // Si execve échoue
@@ -163,3 +163,29 @@ void ft_handle_pipe_with_heredoc(t_cmd *cmd, char *delimiter, t_data *data, t_en
 //         }
 //     }
 // }
+
+
+void ft_handle_pipe_with_heredoc(t_cmd *cmd, char *delimiter, t_data *data, t_env **env)
+{
+    pid_t pid;
+    int pipfd[2];
+
+    while(cmd != NULL)
+    {
+        if(pipe(pipfd) == -1)
+        {
+            perror("pipe");
+            return;
+        }
+        pid = fork();
+        if(pid == 0)
+        {
+            dup2(pipefd[1], STDOUT_FILENO);  // Rediriger la sortie de cmd1 vers le pipe
+            close(pipefd[0]);
+            close(pipefd[1]);
+            execute_command_or_builtin(&cmd, env, data);
+        }
+
+        cmd = cmd->next; 
+    }
+}

@@ -127,13 +127,13 @@ void    ft_cd(t_env **env, char **target_dir);
 char    **prepare_argv(t_cmd *cmd, char *cmd_path);
 void    exec_with_env_and_redir(t_cmd *cmd, t_data *data);
 void    execve_cmd(t_data *data, t_cmd *cmd);
-void	exec_cmd(t_data *data, t_cmd *cmd, t_env **env);
+void	exec_cmd(t_data *data, t_cmd **cmd, t_env **env);
 bool	exec(t_data *data, t_cmd **cmd);
 //inout.c
-void	handle_redir_in_out(t_cmd *cmd);
+void	handle_redir_in_out(t_cmd **cmd);
 //pipe.c
 void	handle_pipe(t_cmd *cmd1, t_cmd *cmd2);
-void	exec_pipe_chain(t_data *data, t_cmd *cmd, t_env **env);
+void	exec_pipe_chain(t_data *data, t_cmd **cmd, t_env **env);
 //path.c
 char	*find_command_path(char *cmd);
 
@@ -168,8 +168,9 @@ void    exec_builtin(t_cmd *cmd, t_env **env, t_data *data);
 void    execute_pipeline(t_cmd *cmd_list, t_env **env, t_data *data);
 int     is_builtin(char *cmd);
 void    exec_external(t_cmd *cmd, t_env **env);
-void    execute_command_or_builtin(t_cmd *cmd, t_env **env, t_data *data);
+void    execute_command_or_builtin(t_cmd **cmd, t_env **env, t_data *data);
 void    handle_redirections(t_cmd *cmd);
-void    process_commands(t_data *data, t_env **env, t_cmd *cmd);
+void    process_commands(t_data *data, t_env **env, t_cmd **cmd);
+int	    ft_llstsize(t_cmd *cmd);
 
 #endif

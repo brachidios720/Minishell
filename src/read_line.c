@@ -34,7 +34,7 @@ void ft_check_line(char **av, char **envp, t_data *data, t_cmd **cmd, t_env **en
     }
     else
     {
-        process_commands(data, env, *cmd);
+        process_commands(data, env, cmd);
         ft_free(line, cmd);
         ft_check_line(av, envp, data, cmd, env);
     }

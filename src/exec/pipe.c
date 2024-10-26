@@ -59,25 +59,31 @@
 // }
 
 
-// void	exec_pipe_chain(t_data *data, t_cmd *cmd, t_env **env)
-// {
-// 	while (cmd != NULL && cmd->next != NULL)
-// 	{
-// 		if (cmd->next && cmd->next->next)
-// 		{
-// 			handle_pipe(cmd, cmd->next->next);
-// 			cmd = cmd->next->next;
-// 		}
-// 		else if(cmd->next)
-// 		{
-// 			exec_cmd(data, cmd, env);
-// 			cmd = cmd->next;
-// 		}
-// 		else
-// 		{
-// 			exec_cmd(data, cmd, env);
-// 			cmd = cmd->next;
-// 		}
-// 	}
-// }
+void	exec_pipe_chain(t_data *data, t_cmd **cmd, t_env **env)
+{
+
+    t_cmd *tmp;
+
+    tmp = *cmd;
+    int i = 0;
+	while (tmp != NULL)
+	{
+		if (tmp->next)
+		{
+            printf("2\n");
+			ft_handle_pipe_with_heredoc(tmp, tmp->matrice[i], data, env);
+			tmp = tmp->next->next;
+		}
+		// else if(tmp->next)
+		// {
+		// 	ft_handle_pipe_with_heredoc(tmp, tmp->matrice[i], data, env);
+		// 	tmp = tmp->next;
+		// }
+		else
+		{
+            printf("1\n");
+			exec_cmd(data, &tmp, env);
+		}
+	}
+}
 

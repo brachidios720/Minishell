@@ -79,20 +79,28 @@
 //     exec_with_env_and_redir(cmd, data);
 // }
 
-void exec_cmd(t_data *data, t_cmd *cmd, t_env **env)
+void exec_cmd(t_data *data, t_cmd **cmd, t_env **env)
 {
     pid_t pid;
     int status;
+    int pidt[2];
+    t_cmd *tmp;
 
+    tmp = *cmd;
     pid = fork();
-    if (pid == -1) {
+    if (pid == -1) 
+    {
         perror("Erreur de fork");
         return;
     }
     if (pid == 0) 
 	{
-        handle_redir_in_out(cmd);
-        execute_command_or_builtin(cmd, env, data); 
+       // printf("zzzz\n");
+        handle_redir_in_out(&tmp);
+        dup2(pidt[1], STDOUT_FILENO);  // Rediriger la sortie de cmd1 vers le pipe
+        close(pidt[0]);
+        close(pidt[1]);
+        execute_command_or_builtin(&tmp, env, data); 
         //perror("Erreur d'exécution de la commande");
         exit(EXIT_SUCCESS);
     } 

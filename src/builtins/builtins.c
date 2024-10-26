@@ -59,30 +59,30 @@ void exec_external(t_cmd *cmd, t_env **env)
     execve(cmd_path, cmd->matrice, envp);
 }
 
-void execute_command_or_builtin(t_cmd *cmd, t_env **env, t_data *data)
+void execute_command_or_builtin(t_cmd **cmd, t_env **env, t_data *data)
 {    // Redirections et exécution des builtins ou commandes externes
-    handle_redirections(cmd);
+    t_cmd *tmp = *cmd;
+    handle_redirections(tmp);
 
-    //printf("%s\n", cmd->str);
-    if (is_builtin(cmd->str) == 1)  // Si c'est un builtin
+    //printf("%s\n", tmp->str);
+    if (is_builtin(tmp->str) == 1)  // Si c'est un builtin
     {
-        exec_builtin(cmd, env, data);  // Terminer l'enfant après avoir exécuté le builtin
+        exec_builtin(tmp, env, data);  // Terminer l'enfant après avoir exécuté le builtin
     }
     else
     {
-        exec_external(cmd, env);  // Exécuter une commande externe via execve
+        exec_external(tmp, env);  // Exécuter une commande externe via execve
     }
 }
 
 
-void process_commands(t_data *data, t_env **env, t_cmd *cmd)
+void process_commands(t_data *data, t_env **env, t_cmd **cmd)
 {
-    int i = 0;
     // Vérifier s'il y a des pipes dans les commandes
     if (count_pipe(data->line))
     {
         // Appeler la fonction qui gère l'exécution des commandes pipées
-        ft_handle_pipe_with_heredoc(cmd, cmd->matrice[i], data, env);
+        exec_pipe_chain(data, cmd, env);
     }
     else
     {

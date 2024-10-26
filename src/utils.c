@@ -99,6 +99,18 @@ char	*ft_strncpy(char *s1, char *s2, int n)
 	return (s2);
 }
 
+int	ft_llstsize(t_cmd *cmd)
+{
+	int	i;
+
+	i = 0;
+	while (cmd)
+	{
+		cmd = cmd->next;
+		i++;
+	}
+	return (i);
+}
 
 // int		ft_check_if_its_builtins(char *str)
 // {
