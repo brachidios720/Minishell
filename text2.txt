@@ -1,4 +1,0 @@
-echo "hello" > text2.txt
-s
-"hello" > text2.txt
-[?2004h[36mMinishell> [0m^Z[?2004l
