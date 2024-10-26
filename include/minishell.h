@@ -42,10 +42,10 @@
 typedef struct s_cmd
 {
 	char            *str;//stock 1 chaine de car (ex : ls)
-    int             infile; //fichier pour la redirection d'entree pour les pipes
-    int             outfile; //fichier pour la redirection de sortie pour les pipes
-    char            *infile_path; //idem pour les fichiers
-    char            *outfile_path; //idem pour les fichers
+    int             output; //variable pour la redirection d'entree cf pipe.c
+    int             input; //variable pour la redirection de sortie cf pipe.c
+    char            *infile_path; //idem pour les fichiers cf inout
+    char            *outfile_path; //idem pour les fichers cf inout
     int             num; // numero de token 
     char            *option; // option cmd (ex-l) 
     int             append; //ajout a la fin >> -> 1 sinon 0
@@ -61,19 +61,21 @@ typedef struct s_env
 }	t_env;
 typedef struct s_data //donnees principales
 {
-    t_env *copy_env;
-    char *path;
-    char *pwd;
-    char *old_pwd;
-    char *line;
-    char **matrice;
-    char *mat;
-    bool    real; 
-    char **cut_matrice;
-    int  pipe;//int pour creation de pipeline
-    int last_exit_status; //int pour stocker le dernier code de retour cf echo $ 
-    struct t_cmd *cmd;
-    int flag;
+    t_env           *copy_env;
+    char            *path;
+    char            *pwd;
+    char            *old_pwd;
+    char            *line;
+    char            **matrice;
+    char            *mat;
+    bool            real; 
+    char            **cut_matrice;
+    int             pip; //pour la creation de pipe cf exec
+    int             pipe_fd[2];//int pour creation de pipeline [0]lire [1]ecrire
+    int             read_fd_cmd;//lecture du fd envoye 
+    int             last_exit_status; //int pour stocker le dernier code de retour cf echo $ 
+    int             flag;//index
+    struct t_cmd    *cmd;
 
 } t_data;
 
@@ -123,17 +125,17 @@ void	handle_redir_in_out(t_cmd *cmd);
 //path.c
 char	*find_command_path(char *cmd);
 //pipe.c
-void	ft_pipe_first_cmd(int pipe_fd[2], t_cmd *cmd);
-void	ft_pipe_last_cmd(int pipe_fd[2], t_cmd *cmd);
-void	ft_pipe_middle_cmd(int pipe_fd[2], t_cmd *cmd);
-void	ft_pipe(t_data *data, t_cmd *cmd, int pipe_fd[2]);
+void	ft_pipe_first_cmd(t_data *data, t_cmd *cmd);
+void	ft_pipe_last_cmd(t_data *data, t_cmd *cmd);
+void	ft_pipe_middle_cmd(t_data *data, t_cmd *cmd);
+void	ft_pipe(t_data *data, t_cmd *cmd);
 void	exec_pipe_chain(t_data *data, t_cmd *cmd);
 //HEREDOC
 //---------------------------------------------------------------------------------
 //heredoc.c
-void ft_exec_first_cmd_with_pipe(t_cmd *cmd, int pipefd[2]);
-void ft_exec_second_cmd_with_heredoc(t_cmd *cmd, char *delimiter, int pipefd[2]);
-void ft_handle_pipe_with_heredoc(t_cmd *cmd, char *delimiter);
+void ft_exec_second_cmd_with_heredoc(t_cmd *cmd, char *delimiter, t_data *data);
+void ft_exec_second_cmd_with_heredoc(t_cmd *cmd, char *delimiter, t_data *data);
+void ft_handle_pipe_with_heredoc(t_cmd *cmd, char *delimiter, t_data *data);
 //INIT
 //-------------------------------------------------------------------------------
 // init.c

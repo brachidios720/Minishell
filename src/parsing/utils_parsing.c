@@ -19,7 +19,7 @@ int count_pipe(char *str)
 void    ft_cut_cont(char *str, t_data *data)
 {
     int i = 0;
-    data->pipe = count_pipe(str);
+    data->pip = count_pipe(str);
     if((ft_check_pipe(str)) == 1 && (count_pipe(str) >= 1))
         data->cut_matrice = ft_split(str, '|');
     else

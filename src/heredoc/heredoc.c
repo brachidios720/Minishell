@@ -34,7 +34,7 @@ void ft_handle_read_in_stdin(t_cmd *cmd, int pipefd[2])
         waitpid(pid1, NULL, 0);
 }
 //injecion du heredoc + exec 2nd cmd
-void ft_exec_second_cmd_with_heredoc(t_cmd *cmd, char *delimiter, int pipefd[2])
+void ft_exec_second_cmd_with_heredoc(t_cmd *cmd, char *delimiter, t_data *data)
 {
     pid_t pid2;
 
@@ -42,9 +42,9 @@ void ft_exec_second_cmd_with_heredoc(t_cmd *cmd, char *delimiter, int pipefd[2])
     if (pid2 == 0)
     {
         //ferme le cote ecriture du pipe cf au dessus
-        close (pipefd[1]);
+        close (data->pipe_fd[1]);
         // Rediriger l'entrée standard depuis le pipe
-        dup2(pipefd[0], STDIN_FILENO);
+        dup2(data->pipe_fd[0], STDIN_FILENO);
         // Injecter le heredoc dans l'entrée standard
         char *line;
         while(1)
@@ -59,7 +59,7 @@ void ft_exec_second_cmd_with_heredoc(t_cmd *cmd, char *delimiter, int pipefd[2])
             write(STDIN_FILENO, "\n", 1);
             free(line);
         }
-        close(pipefd[0]); //fermer le pipe apres injection du heredoc
+        close(data->pipe_fd[0]); //fermer le pipe apres injection du heredoc
         //execute la 2nd cmd
         execve_cmd(NULL, cmd);
         perror("execve_cmd");
@@ -69,7 +69,7 @@ void ft_exec_second_cmd_with_heredoc(t_cmd *cmd, char *delimiter, int pipefd[2])
     waitpid(pid2, NULL,0);
 }
 //apl les deux fonctions pour gerer l"utilisation globale du pipeline
-void ft_handle_pipe_with_heredoc(t_cmd *cmd, char *delimiter)
+void ft_handle_pipe_with_heredoc(t_cmd *cmd, char *delimiter, t_data *data)
 {
     (void)delimiter;
     int pipefd[2];
@@ -80,11 +80,11 @@ void ft_handle_pipe_with_heredoc(t_cmd *cmd, char *delimiter)
         return;
     }
     // apl 1re commande avec redirection de la sortie dans le pipe
-    ft_pipe_first_cmd(pipefd, cmd);
+    ft_pipe_first_cmd(data, cmd);
     // Si une cmd suit->gestion du heredeoc
     if (cmd->next)
     {
-        ft_pipe_last_cmd(pipefd, cmd);
+        ft_pipe_last_cmd(data, cmd);
     }
 
     // Fermer les descripteurs du pipe dans le parent

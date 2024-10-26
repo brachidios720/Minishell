@@ -103,21 +103,42 @@ void	exec_cmd(t_data *data, t_cmd *cmd)
 		data->last_exit_status = WEXITSTATUS(status);
 	}
 }
-//gestion globale de l execution des commandes et des pipes
+// Gestion globale de l'exécution des commandes et des pipes
 bool	exec(t_data *data, t_cmd **cmd)
 {
 	t_cmd	*tmp;
-	int		pip[2];
 
 	tmp = *cmd;
-	if (tmp && tmp->str)
+	while (tmp != NULL && tmp->str != NULL)
 	{
-		if (data->pipe)
+		// Crée un pipe si nécessaire pour les commandes intermédiaires
+		if (data->pip && tmp->next != NULL)
 		{
-			if (pipe(pip) == -1)
+			if (pipe(data->pipe_fd) == -1)
 				return (false);
 		}
+
+		// Gestion de la position de la commande
+		if (tmp == *cmd) // Première commande
+			ft_pipe_first_cmd(data, tmp);
+		else if (tmp->next == NULL) // Dernière commande
+			ft_pipe_last_cmd(data, tmp);
+		else // Commande intermédiaire
+			ft_pipe_middle_cmd(data, tmp);
+
+		// Exécute la commande actuelle
 		exec_cmd(data, tmp);
+
+		// Fermeture des descripteurs de pipe inutilisés
+		if (data->pip)
+		{
+			close(data->pipe_fd[1]); // Ferme l'extrémité d'écriture après exécution
+			data->read_fd_cmd = data->pipe_fd[0]; // Prépare la lecture pour la prochaine commande
+		}
+
+		tmp = tmp->next; // Passe à la commande suivante
 	}
 	return (true);
 }
+
+
