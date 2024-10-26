@@ -12,7 +12,6 @@
 
 #include "../../include/minishell.h"
 
-
 void ft_handle_read_in_stdin(t_cmd *cmd, int pipefd[2])
 {
     pid_t pid1;
@@ -72,6 +71,7 @@ void ft_exec_second_cmd_with_heredoc(t_cmd *cmd, char *delimiter, int pipefd[2])
 //apl les deux fonctions pour gerer l"utilisation globale du pipeline
 void ft_handle_pipe_with_heredoc(t_cmd *cmd, char *delimiter)
 {
+    (void)delimiter;
     int pipefd[2];
     // Créer un pipe
     if (pipe(pipefd) == -1)
@@ -80,11 +80,11 @@ void ft_handle_pipe_with_heredoc(t_cmd *cmd, char *delimiter)
         return;
     }
     // apl 1re commande avec redirection de la sortie dans le pipe
-    ft_exec_first_cmd_with_pipe(cmd, pipefd);
+    ft_pipe_first_cmd(pipefd, cmd);
     // Si une cmd suit->gestion du heredeoc
     if (cmd->next)
     {
-        ft_exec_second_cmd_with_heredoc(cmd->next, delimiter, pipefd);
+        ft_pipe_last_cmd(pipefd, cmd);
     }
 
     // Fermer les descripteurs du pipe dans le parent

@@ -18,7 +18,7 @@ t_cmd	*ft_lsttnew(t_data *data, int i)
     newnode->option = ft_check_dash(newnode->str);
 	newnode->next = NULL;
     parse_redirection(newnode->matrice, newnode);
-    printf("%s\n", newnode->infile);
+    printf("%d\n", newnode->infile);
 	return (newnode);
 }
 

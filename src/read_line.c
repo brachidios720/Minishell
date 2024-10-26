@@ -22,13 +22,13 @@ void parse_redirection(char **matrice, t_cmd *cmd)
     {
         //si fichier d 'entree = le fichier d apres -> ds infile
         if (!ft_strcmp(matrice[i], "<"))
-        {cmd->infile = matrice[i+1];
+        {cmd->infile_path = matrice[i+1];
             i++; //passe a l element suivant apres le fichier d entree
         //sinon fichier de sortie = fichier d apres -> ds outfile 
         }
         else if (!ft_strcmp(matrice[i], ">"))
         {
-            cmd->outfile = matrice[i+1];
+            cmd->outfile_path = matrice[i+1];
             //mise a jour = fichier ecrase
             cmd->append = 0;
             i++; //passe au suivant
@@ -36,7 +36,7 @@ void parse_redirection(char **matrice, t_cmd *cmd)
         //sinon si fichier de sortie avec ajout au fichier existant -> ds outfile + 1
         else if(!ft_strcmp(matrice[i], ">>"))
         {
-            cmd->outfile = matrice[i+1];
+            cmd->outfile_path = matrice[i+1];
             cmd->append = 1;
             i++;
         }

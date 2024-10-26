@@ -42,8 +42,10 @@
 typedef struct s_cmd
 {
 	char            *str;//stock 1 chaine de car (ex : ls)
-    int             infile; //fichier pour la redirection d'entree
-    int             outfile; //fichier pour la redirection de sortie
+    int             infile; //fichier pour la redirection d'entree pour les pipes
+    int             outfile; //fichier pour la redirection de sortie pour les pipes
+    char            *infile_path; //idem pour les fichiers
+    char            *outfile_path; //idem pour les fichers
     int             num; // numero de token 
     char            *option; // option cmd (ex-l) 
     int             append; //ajout a la fin >> -> 1 sinon 0
@@ -71,7 +73,7 @@ typedef struct s_data //donnees principales
     int  pipe;//int pour creation de pipeline
     int last_exit_status; //int pour stocker le dernier code de retour cf echo $ 
     struct t_cmd *cmd;
-    
+    int flag;
 
 } t_data;
 

@@ -30,6 +30,7 @@ void	ft_pipe_last_cmd(int pipe_fd[2], t_cmd *cmd)
 
 void	ft_pipe_middle_cmd(int pipe_fd[2], t_cmd *cmd)
 {
+	(void)cmd;
 	dup2(pipe_fd[0], STDIN_FILENO);       // Redirige l'entrée depuis le pipe précédent
 	close(pipe_fd[1]);                    // Ferme l’extrémité d’écriture actuelle du pipe
 
@@ -39,8 +40,11 @@ void	ft_pipe_middle_cmd(int pipe_fd[2], t_cmd *cmd)
 
 void	ft_pipe(t_data *data, t_cmd *cmd, int pipe_fd[2])
 {
-	if (data->cmd == cmd)              // Première commande
+	if (data->flag == 1)              // Première commande
+	{
 		ft_pipe_first_cmd(pipe_fd, cmd);
+		data->flag = 0;
+	}
 	else if (cmd->next == NULL)        // Dernière commande
 		ft_pipe_last_cmd(pipe_fd, cmd);
 	else                               // Commande intermédiaire
@@ -64,6 +68,7 @@ void	exec_pipe_chain(t_data *data, t_cmd *cmd)
 		}
 		else if (pid == 0)        // Processus enfant
 		{
+			handle_redir_in_out(cmd);
 			ft_pipe(data, cmd, pipe_fd);  // Configure les pipes en fonction de la position
 			execve_cmd(data, cmd);        // Exécute la commande
 			exit(EXIT_SUCCESS);
