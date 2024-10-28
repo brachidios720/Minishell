@@ -52,12 +52,20 @@ void exec_external(t_cmd *cmd, t_env **env)
     envp = env_list_to_array(env);
     cmd_path = find_command_path(cmd->matrice[0]);  // Trouver le chemin complet de la commande
 
-    for (int i = 0; cmd->matrice[i] != NULL; i++) {
-        printf("Argument %d: %s\n", i, cmd->matrice[i]);
-    }
+    // for (int i = 0; cmd->matrice[i] != NULL; i++) {
+    //    // printf("Argument %d: %s\n", i, cmd->matrice[i]);
+    // }
+
     if (cmd_path == NULL) {
         perror("Commande non trouvée");
         exit(EXIT_FAILURE);
+    }
+    printf("cmd_path = %s\n", cmd_path);
+    int i = 0;
+    while(cmd->matrice[i])
+    {
+        printf("matrice = %s\n", cmd->matrice[i]);
+        i++;
     }
     execve(cmd_path, cmd->matrice, envp);
 }
@@ -101,7 +109,7 @@ void process_commands(t_data *data, t_env **env, t_cmd **cmd)
 //     tmp = *cmd;
 //     if(line == NULL || line[0] == '\0' || tmp == NULL || tmp->str == NULL)
 //         return;
-//     handle_redir_in_out(tmp);
+//     //handle_redir_in_out(tmp);
 //     if(ft_strncmp(tmp->str, "env", ft_strlen("env")) == 0)
 //         ft_env(env);
 //     else if(ft_strncmp(tmp->str, "pwd", ft_strlen("pwd")) == 0)

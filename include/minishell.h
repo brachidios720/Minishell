@@ -178,8 +178,9 @@ int	    ft_llstsize(t_cmd *cmd);
 
 
 void	ft_pipe(t_data *data, t_cmd *cmd, int pipe_fd[2]);
-void	ft_pipe_middle_cmd(int pipe_fd[2], t_cmd *cmd);
+//void	ft_pipe_middle_cmd(int pipe_fd[2], t_cmd *cmd);
 void	ft_pipe_last_cmd(int pipe_fd[2], t_cmd *cmd);
 void	ft_pipe_first_cmd(int pipe_fd[2], t_cmd *cmd);
+void	ft_pipe_middle_cmd(int prev_fd, int pipe_fd[2], t_cmd *cmd);
 
 #endif
