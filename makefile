@@ -45,6 +45,7 @@ src = 	src/utils.c \
 		src/parsing/parsing2.c \
 		src/redirection/redirection.c \
 		src/builtins/utils_builtins.c \
+		src/steph/steph.c
 
 
 srco = $(src:.c=.o)

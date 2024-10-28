@@ -52,6 +52,9 @@ void exec_external(t_cmd *cmd, t_env **env)
     envp = env_list_to_array(env);
     cmd_path = find_command_path(cmd->matrice[0]);  // Trouver le chemin complet de la commande
 
+    for (int i = 0; cmd->matrice[i] != NULL; i++) {
+        printf("Argument %d: %s\n", i, cmd->matrice[i]);
+    }
     if (cmd_path == NULL) {
         perror("Commande non trouvée");
         exit(EXIT_FAILURE);
@@ -62,7 +65,7 @@ void exec_external(t_cmd *cmd, t_env **env)
 void execute_command_or_builtin(t_cmd **cmd, t_env **env, t_data *data)
 {    // Redirections et exécution des builtins ou commandes externes
     t_cmd *tmp = *cmd;
-    handle_redirections(tmp);
+    //handle_redirections(tmp);
 
     //printf("%s\n", tmp->str);
     if (is_builtin(tmp->str) == 1)  // Si c'est un builtin

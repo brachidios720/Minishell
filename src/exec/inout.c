@@ -20,7 +20,7 @@ void	handle_redir_in_out(t_cmd **cmd)
 	t_cmd *tmp = *cmd;
 	if (tmp->infile)
 	{
-		fd_in = open(tmp->infile, O_RDONLY);
+		fd_in = open(tmp->infile_path, O_RDONLY);
 		if (fd_in == -1)
 		{
 			printf("ffff\n");
@@ -34,13 +34,13 @@ void	handle_redir_in_out(t_cmd **cmd)
 	{
 		if (tmp->append)
 		{
-			fd_out = open(tmp->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
-			printf ("outfile 1 : %s\n", tmp->outfile);
+			fd_out = open(tmp->outfile_path, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			//printf ("outfile 1 : %s\n", tmp->outfile);
 		}
 		else
 		{
-			fd_out = open(tmp->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			printf ("outfile 2 : %s\n", tmp->outfile);
+			fd_out = open(tmp->outfile_path, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			//printf ("outfile 2 : %s\n", tmp->outfile);
 		}
 		if (fd_out == -1)
 		{

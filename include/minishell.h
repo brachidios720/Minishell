@@ -44,8 +44,10 @@ typedef struct s_cmd
 	char            *str;//stock 1 chaine de car (ex : ls)
     int             num; // numero de token 
     char            *option; // option cmd (ex-l) 
-    char            *infile; //fichier pour la redirection d'entree <
-    char            *outfile; //fichier pour la redirection de sortie > ou >> ajout
+    int            infile; //fichier pour la redirection d'entree <
+    int            outfile; //fichier pour la redirection de sortie > ou >> ajout
+    char            *infile_path;
+    char            *outfile_path;
     int             append; //ajout a la fin >> -> 1 sinon 0
     char            **matrice;
     char            **incmd;
@@ -67,6 +69,7 @@ typedef struct s_data //donnees principales
     char **matrice;
     char *mat; 
     char **cut_matrice;
+    bool     rien;
     int  pipe;//int pour creation de pipeline
     int last_exit_status; //int pour stocker le dernier code de retour cf echo $ 
     struct t_cmd *cmd;
@@ -172,5 +175,11 @@ void    execute_command_or_builtin(t_cmd **cmd, t_env **env, t_data *data);
 void    handle_redirections(t_cmd *cmd);
 void    process_commands(t_data *data, t_env **env, t_cmd **cmd);
 int	    ft_llstsize(t_cmd *cmd);
+
+
+void	ft_pipe(t_data *data, t_cmd *cmd, int pipe_fd[2]);
+void	ft_pipe_middle_cmd(int pipe_fd[2], t_cmd *cmd);
+void	ft_pipe_last_cmd(int pipe_fd[2], t_cmd *cmd);
+void	ft_pipe_first_cmd(int pipe_fd[2], t_cmd *cmd);
 
 #endif

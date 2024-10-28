@@ -28,7 +28,6 @@ int main(int ac, char **av, char **envp)
         perror("Erreur d'allocation mémoire pour data");
         return (1);
     }
-
     env = init_env(envp);  // Initialiser les variables d'environnement
     init_pwd(&env);
     // Boucle principale du shell

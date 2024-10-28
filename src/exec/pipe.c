@@ -59,31 +59,31 @@
 // }
 
 
-void	exec_pipe_chain(t_data *data, t_cmd **cmd, t_env **env)
-{
+// void	exec_pipe_chain(t_data *data, t_cmd **cmd, t_env **env)
+// {
 
-    t_cmd *tmp;
+//     t_cmd *tmp;
 
-    tmp = *cmd;
-    int i = 0;
-	while (tmp != NULL)
-	{
-		if (tmp->next)
-		{
-            printf("2\n");
-			ft_handle_pipe_with_heredoc(tmp, tmp->matrice[i], data, env);
-			tmp = tmp->next->next;
-		}
-		// else if(tmp->next)
-		// {
-		// 	ft_handle_pipe_with_heredoc(tmp, tmp->matrice[i], data, env);
-		// 	tmp = tmp->next;
-		// }
-		else
-		{
-            printf("1\n");
-			exec_cmd(data, &tmp, env);
-		}
-	}
-}
+//     tmp = *cmd;
+//     int i = 0;
+// 	while (tmp != NULL)
+// 	{
+// 		if (tmp->next)
+// 		{
+//             printf("2\n");
+// 			ft_handle_pipe_with_heredoc(tmp, tmp->matrice[i], data, env);
+// 			tmp = tmp->next->next;
+// 		}
+// 		// else if(tmp->next)
+// 		// {
+// 		// 	ft_handle_pipe_with_heredoc(tmp, tmp->matrice[i], data, env);
+// 		// 	tmp = tmp->next;
+// 		// }
+// 		else
+// 		{
+//             printf("1\n");
+// 			exec_cmd(data, &tmp, env);
+// 		}
+// 	}
+// }
 
