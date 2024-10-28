@@ -58,7 +58,7 @@ void exec_with_env_and_redir(t_cmd *cmd, t_data *data)
 void execve_cmd(t_data *data, t_cmd *cmd)
 {
     // Trouver le chemin complet de la commande et le stocker dans `data->path`
-    data->path = find_command_path(cmd->matrice[0]);
+    data->path = find_command_path(data, cmd);
 	printf ("valeur :%s\n", data->path);
     if (!data->path)
     {

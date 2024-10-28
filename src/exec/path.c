@@ -13,28 +13,27 @@
 #include "../../include/minishell.h"
 
 //cherche la valeur de path, ajoute "/"
-char	*find_command_path(char *cmd)
+char	*find_command_path(t_data *data, t_cmd *cmd)
 {
-	char	*path;
-	char	**paths;
-	char	*full_path;
 	int		i;
 
-	path = getenv("PATH");
-	paths = ft_split(path, ':');
+	data->path = getenv("PATH");
+	data->paths = ft_split(data->path, ':');
 	i = 0;
-	while (paths[i])
+	while (data->paths[i])
 	{
-		full_path = ft_strjoin(paths[i], "/");
-		//printf("avec / : %s\n", full_path);
-		full_path = ft_strjoin(full_path, cmd);
-		//printf("cmd : %s\n", full_path);
-		if (access(full_path, X_OK) == 0)
+		data->full_path = ft_strjoin(data->full_path, "/");
+		if (!data->full_path)
 		{
-			//printf("valeur 1 :%s\n", full_path);
-			return (full_path);
+			ft_free_split(data->paths);
+			return (NULL);
 		}
+		data->full_path = ft_strjoin(data->full_path, cmd->str);
+		if (access(data->full_path, X_OK) == 0)
+			return (data->full_path);
+		free(data->full_path);
 		i++;
 	}
+	ft_free_split(data->paths);
 	return (NULL);
 }

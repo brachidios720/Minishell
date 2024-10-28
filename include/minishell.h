@@ -62,7 +62,9 @@ typedef struct s_env
 typedef struct s_data //donnees principales
 {
     t_env           *copy_env;
-    char            *path;
+    char            *path; //chaîne de car pour stocker la valeur de la variable d'environnement
+    char            **paths; //in tab de chaine pour stocker les # repertoires de PATH
+    char            *full_path; //chaine qui comtient le chemin complet de la cmd
     char            *pwd;
     char            *old_pwd;
     char            *line;
@@ -123,7 +125,7 @@ bool	exec(t_data *data, t_cmd **cmd);
 //inout_files.c
 void	handle_redir_in_out(t_cmd *cmd);
 //path.c
-char	*find_command_path(char *cmd);
+char	*find_command_path(t_data *data, t_cmd *cmd);
 //pipe.c
 void	ft_pipe_first_cmd(t_data *data, t_cmd *cmd);
 void	ft_pipe_last_cmd(t_data *data, t_cmd *cmd);
@@ -169,6 +171,7 @@ int     ft_check_one_quote(char *str);
 char *ft_find_path(char *commande);
 //free.c
 void	ft_free_tab(char **av);
+void    ft_free_split(char **av);
 //read_line.c
 void    parse_redirection(char **matrice, t_cmd *cmd);
 void    ft_check_line(char **av, char **envp, t_data *data, t_cmd **cmd, t_env **env);

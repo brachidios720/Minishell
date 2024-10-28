@@ -10,31 +10,57 @@
 /*                                                                            */
 /* ************************************************************************** */
 //ECHO :
-//----
+//-----------------------------------------------------------------------------
 
-C    echo "hello"                       // 2 lignes "hello"
-R    hello
+C	echo "hello"
+T	hello
+M	//OK
 
-C    echo -n "hello"                    //ok meme ligne
-R    hello
+C	echo -n "hello"		//ok meme ligne
+T	hello
+M	//OK
 
-C    echo "hello" "world"               // 1 ligne "hello"
-R    hello world                        // 1 ligne "hello" "world"
+C	echo "hello" "world"	
+T	hello world	
+M	//OK
 
-C    echo $                             //$ + 1 ligne
+C	echo $	
+T    	$
+M	//OK
+
+C	echo -nn		
+T	(rien)
+M	//OK
+
+C	echo ---n
+T	---n
+M	//OK
+
+C    echo -n $			
 R    $
 
-C    echo -nn                           //rien
-R    (rien)
+// $ :
+//-----------------------------------------------------------------------------
 
-C    echo ---n                          //2lignes ---n
-R    ---n
+C	echo $?+$?
+T	0+0
+M	//OK
 
-C    echo -n $                          //pas bon
-R    $
+C	echo $USER                        
+T	Affiche la valeur de la variable d'environnement USER -> spagliar
+M
 
-C    echo $?+$?                         //pas bon
-R    0+0
+C	echo $?                          //ok affiche le code retour de la derniere commande
+T	Affiche le code de retour de la dernière commande.
+M	
+    
+C	echo $NONEXISTANT               //ok chaine vide + code de retour et mess d erreur
+T	Si la variable d'environnement n'existe pas, afficher une chaîne vide ou ignorer cet argument.
+M
+
+
+
+
 
 //REDIRECTION :
 //-------------
@@ -51,19 +77,6 @@ R	laisse les elements et ajoute les nouveaux elements dans test1.txt //"hello" >
 C	 ls > output.txt
 R	//cette fonction redirigerait la sortie de la commande ls vers le fichier output.txt au lieu de l'afficher sur l'écran.
 
-// $ :
-//----
-
-C	echo $USER                        //OK affiche la veleur et aussi le code de retour 1 
-R	Affiche la valeur de la variable d'environnement USER. //mess : Erreur ouverture fichier d'entrée: Bad address
-    spagliar
-
-C   echo $?                          //ok affiche le code retour de la derniere commande
-R	Affiche le code de retour de la dernière commande. //mes : Erreur ouverture fichier d'entrée: Bad address
-    0
-    
-C	echo $NONEXISTANT               //ok chaine vide + code de retour et mess d erreur
-R	Si la variable d'environnement n'existe pas, afficher une chaîne vide ou ignorer cet argument.
 
 //HEREDOC
 //-------
