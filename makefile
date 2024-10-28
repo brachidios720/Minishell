@@ -28,7 +28,7 @@ src = 	src/builtins/builtins.c \
 		src/builtins/unset.c \
 		src/ctrl/ctrl.c \
 		src/exec/exec.c \
-		src/exec/inout.c \
+		src/exec/inout_files.c \
 		src/exec/path.c \
 		src/exec/pipe.c \
 		src/heredoc/heredoc.c\

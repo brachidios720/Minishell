@@ -120,7 +120,7 @@ void    exec_with_env_and_redir(t_cmd *cmd, t_data *data);
 void    execve_cmd(t_data *data, t_cmd *cmd);
 void	exec_cmd(t_data *data, t_cmd *cmd);
 bool	exec(t_data *data, t_cmd **cmd);
-//inout.c
+//inout_files.c
 void	handle_redir_in_out(t_cmd *cmd);
 //path.c
 char	*find_command_path(char *cmd);

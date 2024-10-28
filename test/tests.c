@@ -78,18 +78,37 @@ R	//la fonction redirigerait l'entrée du fichier input.txt pour que cat lise ce
 C	echo "hello" >> log.txt
 R	//la sortie serait ajoutée à la fin du fichier log.txt sans en effacer le contenu existant.
 
-//export
-//------
+
+// controler le mode d ouverture des fichiers cf inout_files
+//------------------------------------------------------------
+- Creer un fichier txt avec une phrase
+C echo "Première ligne" > fichier_test.txt
+C echo "Ligne sans append" > fichier_test.txt
+R : Résultat attendu : Le fichier fichier_test.txt ne devrait contenir que Ligne 
+sans append, car le contenu précédent aura été écrasé.
+
+- echo "Ligne avec append" >> fichier_test.txt
+R : Résultat attendu : Le fichier fichier_test.txt devrait maintenant
+ contenir les lignes suivantes : 
+Ligne sans append
+Ligne avec append
 
 
-ma
 
 
 
 
 
 
-COMMANDES POUR GIT
+
+
+
+
+
+
+
+
+
 
 
 

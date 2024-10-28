@@ -93,6 +93,7 @@ void	exec_cmd(t_data *data, t_cmd *cmd)
 	else if (pid == 0)
 	{
 		handle_redir_in_out(cmd);
+		
 		execve_cmd(data, cmd);
 		perror("erreur d execution de commande");
 		exit(EXIT_FAILURE);
