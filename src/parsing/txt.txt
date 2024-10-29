@@ -4,16 +4,16 @@
 echo bonjour |;
 //echo bonjour ; ls
 echo bonjour > test\ 1
-cd $HOME/Documents
-echo "\s" & echo "\s"
+//cd $HOME/Documents
+//echo "\s" & echo "\s"
 echo >
 echo -n -n -nnnn -nnnnm
 cat /dev/random | head -n 1 | cat -e
 unset var1 # with undefined var1
 export "" et unset ""
 echo test > file test1
-$
-not_cmd bonjour > salut
+//$
+//not_cmd bonjour > salut
 env puis export puis env # vars aren't sorted
 cat Makefile | grep pr | head -n 5 | cd test (mybin) # check status code
 cat Makefile | grep pr | head -n 5 | cat test (bin) # check status code

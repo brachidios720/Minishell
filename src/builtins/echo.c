@@ -20,17 +20,18 @@ bool	echo_n(char *argv)
 	{
 		return (false);
 	}
-	i = 1;
+	i = 0;
 	while (argv[i])
 	{
-		if (argv[i] != 'n')
-		{
+		if (argv[i] == '-' && argv[i + 1] == 'n')
+			return (true);
+		if (argv[i] == '-' && argv[i + 1] == '-')
 			return (false);
-		}
 		i++;
 	}
 	return (true);
 }
+
 char	*ft_itoa_m(int n)
 {
 	char	buff[12];
@@ -63,7 +64,6 @@ char *expand_variable(char *arg, t_data *data)
 {
     if (arg[0] == '$') 
 	{
-		printf("s\n");
         if (arg[1] == '?') 
             return (ft_itoa_m(data->last_exit_status)); 
 		else 

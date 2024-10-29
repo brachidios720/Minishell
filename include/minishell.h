@@ -44,8 +44,10 @@ typedef struct s_cmd
 	char            *str;//stock 1 chaine de car (ex : ls)
     int             num; // numero de token 
     char            *option; // option cmd (ex-l) 
-    char            *infile; //fichier pour la redirection d'entree <
-    char            *outfile; //fichier pour la redirection de sortie > ou >> ajout
+    int            infile; //fichier pour la redirection d'entree <
+    int            outfile; //fichier pour la redirection de sortie > ou >> ajout
+    char            *infile_path;
+    char            *outfile_path;
     int             append; //ajout a la fin >> -> 1 sinon 0
     char            **matrice;
     char            **incmd;
@@ -65,9 +67,9 @@ typedef struct s_data //donnees principales
     char *old_pwd;
     char *line;
     char **matrice;
-    char *mat;
-    bool    real; 
+    char *mat; 
     char **cut_matrice;
+    bool     rien;
     int  pipe;//int pour creation de pipeline
     int last_exit_status; //int pour stocker le dernier code de retour cf echo $ 
     struct t_cmd *cmd;
@@ -98,7 +100,7 @@ int     ft_check_pipe(char *str);
 
 // utils 
 void	ft_exit(int i);
-int		ft_strcmp(char *s1, char *s2);
+int		ft_strcmp(const char *s1, const char *s2);
 void	print_minishell(void);
 char	**ft_strdup_tab(char **env);
 char    *ft_strcpy(char *s1 , char *s2);
@@ -113,7 +115,7 @@ void    ft_update_env(t_env **env, char *old_pwd, char *new_pwd);
 char    *ft_get_target_dir(char *target_dir, t_env **env);
 void    init_pwd(t_env **env);
 //utils_env
-char	**env_list_to_array(t_env *env_list);
+char	**env_list_to_array(t_env **env_list);
 //char	*ft_strchr_env(const char *s, int c);
 //int   ft_strncmp_env(const char *s1, const char *s2, size_t n);
 
@@ -128,13 +130,13 @@ void    ft_cd(t_env **env, char **target_dir);
 char    **prepare_argv(t_cmd *cmd, char *cmd_path);
 void    exec_with_env_and_redir(t_cmd *cmd, t_data *data);
 void    execve_cmd(t_data *data, t_cmd *cmd);
-void	exec_cmd(t_data *data, t_cmd *cmd);
+void	exec_cmd(t_data *data, t_cmd **cmd, t_env **env);
 bool	exec(t_data *data, t_cmd **cmd);
 //inout.c
-void	handle_redir_in_out(t_cmd *cmd);
+void	handle_redir_in_out(t_cmd **cmd);
 //pipe.c
 void	handle_pipe(t_cmd *cmd1, t_cmd *cmd2);
-void	exec_pipe_chain(t_data *data, t_cmd *cmd);
+void	exec_pipe_chain(t_data *data, t_cmd **cmd, t_env **env);
 //path.c
 char	*find_command_path(char *cmd);
 
@@ -158,8 +160,27 @@ void	ft_free_tab(char **av);
 void    ft_free(char *str, t_cmd **cmd);
 
 //read_line.c
-void    ft_handle_pipe_with_heredoc(t_cmd *cmd, char *delimiter);
+void    ft_handle_pipe_with_heredoc(t_cmd *cmd, char *delimiter, t_data *data, t_env **env);
 void    parse_redirection(char **matrice, t_cmd *cmd);
 void    ft_check_line(char **av, char **envp, t_data *data, t_cmd **cmd, t_env **env);
+
+
+
+void    execute_command(t_cmd *cmd, t_env **env);
+void    exec_builtin(t_cmd *cmd, t_env **env, t_data *data);
+void    execute_pipeline(t_cmd *cmd_list, t_env **env, t_data *data);
+int     is_builtin(char *cmd);
+void    exec_external(t_cmd *cmd, t_env **env);
+void    execute_command_or_builtin(t_cmd **cmd, t_env **env, t_data *data);
+void    handle_redirections(t_cmd *cmd);
+void    process_commands(t_data *data, t_env **env, t_cmd **cmd);
+int	    ft_llstsize(t_cmd *cmd);
+
+
+void	ft_pipe(t_data *data, t_cmd *cmd, int pipe_fd[2]);
+//void	ft_pipe_middle_cmd(int pipe_fd[2], t_cmd *cmd);
+void	ft_pipe_last_cmd(int pipe_fd[2], t_cmd *cmd);
+void	ft_pipe_first_cmd(int pipe_fd[2], t_cmd *cmd);
+void	ft_pipe_middle_cmd(int prev_fd, int pipe_fd[2], t_cmd *cmd);
 
 #endif

@@ -11,37 +11,36 @@
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-//manipule les descripteurs de fichiers entree / sortie suivant 2 conditions
-void	handle_redir_in_out(t_cmd *cmd)
+//manipule les decripteurs de fichiers entree / sortie suivant 2 conditions
+void	handle_redir_in_out(t_cmd **cmd)
 {
+	
 	int	fd_in;
 	int	fd_out;
-	printf("n\n");
-	if (cmd->infile)
+	t_cmd *tmp = *cmd;
+	if (tmp->infile)
 	{
-		//printf ("infile : %s\n", cmd->infile);
-		fd_in = open(cmd->infile, O_RDONLY);
-		printf ("infile open : %s\n", cmd->infile);
+		fd_in = open(tmp->infile_path, O_RDONLY);
 		if (fd_in == -1)
 		{
+			printf("ffff\n");
 			perror("Erreur ouverture fichier d'entrée");
 			exit(EXIT_FAILURE);
 		}
 		dup2(fd_in, STDIN_FILENO);
 		close(fd_in);
 	}
-	if (cmd->outfile)
+	if (tmp->outfile)
 	{
-		printf ("outfile : %s\n", cmd->outfile);
-		if (cmd->append)
+		if (tmp->append)
 		{
-			fd_out = open(cmd->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
-			printf ("outfile 1 : %s\n", cmd->outfile);
+			fd_out = open(tmp->outfile_path, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			//printf ("outfile 1 : %s\n", tmp->outfile);
 		}
 		else
 		{
-			fd_out = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			printf ("outfile 2 : %s\n", cmd->outfile);
+			fd_out = open(tmp->outfile_path, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			//printf ("outfile 2 : %s\n", tmp->outfile);
 		}
 		if (fd_out == -1)
 		{

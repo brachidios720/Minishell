@@ -12,10 +12,10 @@
 
 #include "../include/minishell.h"
 
-char	**env_list_to_array(t_env *env_list)
+char	**env_list_to_array(t_env **env_list)
 {
     int     size = 0;
-    t_env   *temp = env_list;
+    t_env   *temp = *env_list;
     char    **env_array;
     int     i = 0;
 
@@ -32,7 +32,7 @@ char	**env_list_to_array(t_env *env_list)
         return (NULL);
 
     // Remplir le tableau avec les variables d'environnement
-    temp = env_list;
+    temp = *env_list;
     while (temp)
     {
         env_array[i] = ft_strdup(temp->content); // Copie chaque élément de la liste dans le tableau
