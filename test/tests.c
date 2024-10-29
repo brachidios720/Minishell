@@ -36,6 +36,9 @@ R    $
 C    echo $?+$?                         //pas bon
 R    0+0
 
+//REDIRECTION :
+//-------------
+
 C   echo "hello" < test1.txt          //Erreur ouverture fichier d'entrée: No such file or directory
 R   bash: test1.txt: No such file or directory //"hello" < test1.txt 
 
@@ -44,6 +47,12 @@ R   ecrase les elements de test1 et remplace cf test1.txt
 
 C   echo "hello" >> test1.txt         //pas bon
 R	laisse les elements et ajoute les nouveaux elements dans test1.txt //"hello" >> test1.txt 
+
+C	 ls > output.txt
+R	//cette fonction redirigerait la sortie de la commande ls vers le fichier output.txt au lieu de l'afficher sur l'écran.
+
+// $ :
+//----
 
 C	echo $USER                        //OK affiche la veleur et aussi le code de retour 1 
 R	Affiche la valeur de la variable d'environnement USER. //mess : Erreur ouverture fichier d'entrée: Bad address
@@ -61,14 +70,19 @@ R	Si la variable d'environnement n'existe pas, afficher une chaîne vide ou igno
 C	ls | cat << END	//on utlise les fichiers listes par ls et on redirige ds une autres commande
 Ajout	I HATE YOU //on ajoute le texte
 Ajout	END //on ajoute le delimiteur
+Affiche:I HATE YOU
 //le fait de mettre un pipe permet de jouer avec les commandes
-
+	
+C	 cat < input.txt, 
+R	//la fonction redirigerait l'entrée du fichier input.txt pour que cat lise ce fichier au lieu de lire les entrées du clavier.
+C	echo "hello" >> log.txt
+R	//la sortie serait ajoutée à la fin du fichier log.txt sans en effacer le contenu existant.
 
 //export
 //------
 
 
-
+ma
 
 
 

@@ -8,8 +8,6 @@ int     ft_check_option(t_data *data)
         int j = 0;
         while(data->cut_matrice[i])
         {
-            if(ft_check_dash(data->cut_matrice[i]) == 1)
-                return(1);
             j = ft_check_one_quote(data->cut_matrice[i]);
             if(j % 2 == 1)
             {
@@ -27,15 +25,32 @@ int     ft_check_option(t_data *data)
     return(0);
 }
 
-int     ft_check_dash(char *str)
+char    *ft_check_dash(char *str)
 {
     int i = 0;
+    int y = 0;
+    int x = 0;
+    char *find;
     while(str[i])
     {
-        if(str[i] == '-' && str[i + 1] == '-')
-            return(1);
+        if((str[i] == '-' || str[i] == '/') && ft_isalpha(str[i + 1]))
+        {
+            y = i;
+            i++;
+            while(str[i] >= 'a' && str[i] <= 'z')
+                i++;
+            find = malloc(sizeof(char *) * ((i - y) + 1));
+            while(y < i)
+            {
+                find[x] = str[y];
+                y++;
+                x++;
+            }
+            find[x] = '\0';
+            return(find);
+        }
         i++;
     }
-    return(0);
+    return(NULL);
 }
     
