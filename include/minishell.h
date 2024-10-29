@@ -6,7 +6,7 @@
 /*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 15:12:37 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/10/29 10:33:24 by pag              ###   ########.fr       */
+/*   Updated: 2024/10/29 10:42:04 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ typedef struct s_cmd
     char            *outfile_path; //idem pour les fichers cf inout
     int             num; // numero de token 
     char            *option; // option cmd (ex-l) 
-    int            infile; //fichier pour la redirection d'entree <
-    int            outfile; //fichier pour la redirection de sortie > ou >> ajout
+    int             infile; //fichier pour la redirection d'entree <
+    int             outfile; //fichier pour la redirection de sortie > ou >> ajout
     char            *infile_path;
     char            *outfile_path;
     int             append; //ajout a la fin >> -> 1 sinon 0
@@ -65,17 +65,17 @@ typedef struct s_env
 }	t_env;
 typedef struct s_data //donnees principales
 {
-    t_env *copy_env;
-    char *path;
-    char *pwd;
-    char *old_pwd;
-    char *line;
-    char **matrice;
-    char *mat; 
-    char **cut_matrice;
-    bool     rien;
-    int  pipe;//int pour creation de pipeline
-    int last_exit_status; //int pour stocker le dernier code de retour cf echo $ 
+    t_env   *copy_env;
+    char    *path;
+    char    *pwd;
+    char    *old_pwd;
+    char    *line;
+    char    **matrice;
+    char    *mat; 
+    char    **cut_matrice;
+    bool    rien;
+    int     pipe;//int pour creation de pipeline
+    int     last_exit_status; //int pour stocker le dernier code de retour cf echo $ 
     struct t_cmd *cmd;
     
 
