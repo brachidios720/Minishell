@@ -19,7 +19,7 @@ void	ft_exit(int i)
 	exit(0);
 }
 
-int	ft_strcmp(char *s1, char *s2)
+int	ft_strcmp(const char *s1, const char *s2)
 {
 	int	i;
 
@@ -98,3 +98,21 @@ char	*ft_strncpy(char *s1, char *s2, int n)
 	s2[i] = '\0';
 	return (s2);
 }
+
+int	ft_llstsize(t_cmd *cmd)
+{
+	int	i;
+
+	i = 0;
+	while (cmd)
+	{
+		cmd = cmd->next;
+		i++;
+	}
+	return (i);
+}
+
+// int		ft_check_if_its_builtins(char *str)
+// {
+
+// }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: spagliar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 14:45:23 by spagliar          #+#    #+#             */
-/*   Updated: 2024/09/09 14:45:25 by spagliar         ###   ########.fr       */
+/*   Updated: 2024/10/29 10:36:29 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +20,18 @@ bool	echo_n(char *argv)
 	{
 		return (false);
 	}
-	i = 1;
+	i = 0;
 	while (argv[i])
 	{
-		if (argv[i] != 'n')
-		{
+		if (argv[i] == '-' && argv[i + 1] == 'n')
+			return (true);
+		if (argv[i] == '-' && argv[i + 1] == '-')
 			return (false);
-		}
 		i++;
 	}
 	return (true);
 }
-//conversion pour $
+
 char	*ft_itoa_m(int n)
 {
 	char	buff[12];
@@ -63,27 +63,14 @@ char	*ft_itoa_m(int n)
 //gestion $?
 char *expand_variable(char *arg, t_data *data)
 {
-    char *result = malloc(1100); // taille pour resultat
-    int i = 0;
-    int j = 0;
-    
-    while (arg[i])
-    {
-        if (arg[i] == '$' && arg[i + 1] == '?')
-        {
-            // Insére la valeur de data->last_exit_status à la place de "$?"
-            char *status_str = ft_itoa_m(data->last_exit_status);
-            strcpy(&result[j], status_str);
-            j += strlen(status_str);
-            i += 2; // avance de deux caractères pour sauter "$?"
-        }
-        else
-        {
-            result[j++] = arg[i++];
-        }
+    if (arg[0] == '$') 
+	{
+        if (arg[1] == '?') 
+            return (ft_itoa_m(data->last_exit_status)); 
+		else 
+            return (getenv(arg + 1));  // Cherche la variable d'environnement sans le '$'
     }
-    result[j] = '\0';
-    return result;
+    return (arg);  // Retourner l'argument tel quel s'il ne s'agit pas d'une variable
 }
 
 void	ft_echo(char **argv, t_data *data)

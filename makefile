@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: raphaelcarbonnel <raphaelcarbonnel@stud    +#+  +:+       +#+         #
+#    By: pag <pag@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/03 18:39:18 by raphaelcarb       #+#    #+#              #
-#    Updated: 2024/09/11 16:12:01 by raphaelcarb      ###   ########.fr        #
+#    Updated: 2024/10/29 10:35:06 by pag              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,12 +38,10 @@ src = 	src/builtins/builtins.c \
 		src/parsing/option.c \
 		src/parsing/parsing1.c \
 		src/parsing/parsing2.c \
-		src/parsing/utils_parsing.c \
-		src/free.c \
-		src/minishell.c \
-		src/read_line.c \
-		src/utils_env.c\
-		src/utils.c\
+		src/redirection/redirection.c \
+		src/builtins/utils_builtins.c \
+		src/steph/steph.c
+
 
 srco = $(src:.c=.o)
 

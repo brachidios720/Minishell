@@ -3,103 +3,87 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: spagliar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:02:35 by spagliar          #+#    #+#             */
-/*   Updated: 2024/10/16 15:02:37 by spagliar         ###   ########.fr       */
+/*   Updated: 2024/10/29 10:37:33 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "../../include/minishell.h"
 
-void	ft_pipe_first_cmd(t_data *data, t_cmd *cmd)
-{
-	pipe(data->pipe_fd); //creation pipe avec les descripteurs [0]lire et [1]ecrire
-	if (cmd->input != STDIN_FILENO)
-		data->read_fd_cmd = cmd->input;//chanmgement si redirection
-	else
-		data->read_fd_cmd = dup(STDIN_FILENO);//duplication si sortie standard
-	if (cmd->output != STDOUT_FILENO)
-	{
-		close(data->pipe_fd[1]);
-		data->pipe_fd[1] = cmd->output;
-	}		               // Ferme l’extrémité de lecture du pipe
-}
 
-void	ft_pipe_last_cmd(t_data *data, t_cmd *cmd)
-{
-	close(data->read_fd_cmd);
-	if (cmd->input != STDIN_FILENO)
-	{
-		close(data->pipe_fd[0]);
-		data->read_fd_cmd = cmd->input;
-	}
-	else
-		data->read_fd_cmd = cmd->input;
-	close(data->pipe_fd[1]);
-	if (cmd->output != STDOUT_FILENO)
-		data->pipe_fd[1] = cmd->output;
-	else
-		data->pipe_fd[1] = dup(STDOUT_FILENO);
-}
+//gere l exec de 2 commandes reliees par un pipe
+// void handle_pipe(t_cmd *cmd1, t_cmd *cmd2)
+// {
+//     int pipefd[2];
+//     pid_t pid1, pid2;
 
-void	ft_pipe_middle_cmd(t_data *data, t_cmd *cmd)
-{
-	close(data->read_fd_cmd);
-	if (cmd->input != STDIN_FILENO)
-	{
-		close(data->pipe_fd[0]);
-		data->read_fd_cmd = cmd->input;
-	}
-	else
-		data->read_fd_cmd = data->pipe_fd[0];
-	close(data->pipe_fd[1]);
-	pipe(data->pipe_fd);
-	if (cmd->output != STDOUT_FILENO)
-	{
-		close(data->pipe_fd[1]);
-		data->pipe_fd[1] = cmd->output;
-	}
-}
+//     // Création du pipe
+//     if (pipe(pipefd) == -1) {
+//         perror("Erreur de création du pipe");
+//         exit(EXIT_FAILURE);
+//     }
+//     pid1 = fork();
+//     if (pid1 == -1) {
+//         perror("Erreur de fork pour cmd1");
+//         exit(EXIT_FAILURE);
+//     }
+//     if (pid1 == 0) 
+// 	{
+//         dup2(pipefd[1], STDOUT_FILENO);
+//         close(pipefd[0]);  // On ferme la lecture du pipe
+//         close(pipefd[1]);  // On ferme l'écriture du pipe après dup2
+//         handle_redir_in_out(cmd1);
+//         execve_cmd(NULL, cmd1);
+//         perror("Erreur d'exécution cmd1");
+//         exit(EXIT_FAILURE);
+//     }
+//     pid2 = fork();
+//     if (pid2 == -1) {
+//         perror("Erreur de fork pour cmd2");
+//         exit(EXIT_FAILURE);
+//     }
+//     if (pid2 == 0) 
+// 	{
+//         dup2(pipefd[0], STDIN_FILENO);
+//         close(pipefd[1]);
+//         close(pipefd[0]);
+//         handle_redir_in_out(cmd2);
+//         execve_cmd(NULL, cmd2);
+//         perror("Erreur d'exécution cmd2");
+//         exit(EXIT_FAILURE);
+//     }
+//     close(pipefd[0]);
+//     close(pipefd[1]);
+//     waitpid(pid1, NULL, 0);
+//     waitpid(pid2, NULL, 0);
+// }
 
-void	ft_pipe(t_data *data, t_cmd *cmd)
-{
-	if (data->flag == 1)              // Première commande
-	{
-		ft_pipe_first_cmd(data, cmd);
-		data->flag = 0;
-	}
-	else if (cmd->next == NULL)        // Dernière commande
-		ft_pipe_last_cmd(data, cmd);
-	else                               // Commande intermédiaire
-		ft_pipe_middle_cmd(data, cmd);
-}
 
-void	exec_pipe_chain(t_data *data, t_cmd *cmd)
-{
-	pid_t pid;
+// void	exec_pipe_chain(t_data *data, t_cmd **cmd, t_env **env)
+// {
 
-	while (cmd != NULL)
-	{
-		pipe(data->pipe_fd);           // Crée un pipe pour chaque commande
+//     t_cmd *tmp;
 
-		pid = fork();
-		if (pid == -1)
-		{
-			perror("Fork error");
-			exit(EXIT_FAILURE);
-		}
-		else if (pid == 0)        // Processus enfant
-		{
-			handle_redir_in_out(cmd);
-			ft_pipe(data, cmd);  // Configure les pipes en fonction de la position
-			execve_cmd(data, cmd);        // Exécute la commande
-			exit(EXIT_SUCCESS);
-		}
-		else                      // Processus parent
-		{
-			close(data->pipe_fd[1]);    // Ferme l’extrémité d’écriture pour le parent
-			waitpid(pid, NULL, 0);// Attend la fin du processus enfant
-		}
-		cmd = cmd->next;
-	}
-}
+//     tmp = *cmd;
+//     int i = 0;
+// 	while (tmp != NULL)
+// 	{
+// 		if (tmp->next)
+// 		{
+//             printf("2\n");
+// 			ft_handle_pipe_with_heredoc(tmp, tmp->matrice[i], data, env);
+// 			tmp = tmp->next->next;
+// 		}
+// 		// else if(tmp->next)
+// 		// {
+// 		// 	ft_handle_pipe_with_heredoc(tmp, tmp->matrice[i], data, env);
+// 		// 	tmp = tmp->next;
+// 		// }
+// 		else
+// 		{
+//             printf("1\n");
+// 			exec_cmd(data, &tmp, env);
+// 		}
+// 	}
+// }
+
