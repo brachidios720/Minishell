@@ -6,7 +6,7 @@
 #    By: pag <pag@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/03 18:39:18 by raphaelcarb       #+#    #+#              #
-#    Updated: 2024/10/29 10:35:06 by pag              ###   ########.fr        #
+#    Updated: 2024/10/29 15:23:59 by pag              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,21 +26,24 @@ src = 	src/builtins/builtins.c \
 		src/builtins/export.c \
 		src/builtins/pwd.c \
 		src/builtins/unset.c \
+		src/builtins/utils_builtins.c \
 		src/ctrl/ctrl.c \
 		src/exec/exec.c \
-		src/exec/inout_files.c \
+		src/exec/inout.c \
 		src/exec/path.c \
-		src/exec/pipe.c \
-		src/heredoc/heredoc.c\
 		src/init/init_lst.c\
 		src/init/init.c\
 		src/parsing/ft_utils_cmd.c \
 		src/parsing/option.c \
 		src/parsing/parsing1.c \
 		src/parsing/parsing2.c \
-		src/redirection/redirection.c \
-		src/builtins/utils_builtins.c \
-		src/steph/steph.c
+		src/parsing/utils_parsing.c \
+		src/steph/steph.c \
+		src/free.c \
+		src/minishell.c \
+		src/read_line.c \
+		src/utils_env.c \
+		src/utils.c \
 
 
 srco = $(src:.c=.o)

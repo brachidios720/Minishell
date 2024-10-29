@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: raphaelcarbonnel <raphaelcarbonnel@stud    +#+  +:+       +#+        */
+/*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 18:08:16 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/09/09 18:09:22 by raphaelcarb      ###   ########.fr       */
+/*   Updated: 2024/10/29 15:10:12 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,3 @@ void    ft_free_tab(char **av)
     free(av);
 }
 
-void ft_free_split(char **av)
-{
-    int i;
-
-    i = 0;
-    while(av[i])
-    {
-        free(av[i]);
-        i++;
-    }
-    free(av);
-}

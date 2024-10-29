@@ -6,11 +6,43 @@
 /*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 15:53:41 by spagliar          #+#    #+#             */
-/*   Updated: 2024/10/29 10:36:50 by pag              ###   ########.fr       */
+/*   Updated: 2024/10/29 14:55:51 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+void exec_cmd(t_data *data, t_cmd **cmd, t_env **env)
+{
+    pid_t pid;
+    int status;
+    int pidt[2];
+    t_cmd *tmp;
+
+    tmp = *cmd;
+    pid = fork();
+    if (pid == -1) 
+    {
+        perror("Erreur de fork");
+        return;
+    }
+    if (pid == 0) 
+	{
+       // printf("zzzz\n");
+        handle_redir_in_out(&tmp);
+        dup2(pidt[1], STDOUT_FILENO);  // Rediriger la sortie de cmd1 vers le pipe
+        close(pidt[0]);
+        close(pidt[1]);
+        execute_command_or_builtin(&tmp, env, data); 
+        //perror("Erreur d'exécution de la commande");
+        exit(EXIT_SUCCESS);
+    } 
+	else 
+	{
+        waitpid(pid, &status, 0);
+        data->last_exit_status = WEXITSTATUS(status);
+    }
+}
 
 //prepare le tableau argv en fonction des infos donnees dans cmd
 // char **prepare_argv(t_cmd *cmd, char *cmd_path)
@@ -79,37 +111,6 @@
 //     exec_with_env_and_redir(cmd, data);
 // }
 
-void exec_cmd(t_data *data, t_cmd **cmd, t_env **env)
-{
-    pid_t pid;
-    int status;
-    int pidt[2];
-    t_cmd *tmp;
-
-    tmp = *cmd;
-    pid = fork();
-    if (pid == -1) 
-    {
-        perror("Erreur de fork");
-        return;
-    }
-    if (pid == 0) 
-	{
-       // printf("zzzz\n");
-        handle_redir_in_out(&tmp);
-        dup2(pidt[1], STDOUT_FILENO);  // Rediriger la sortie de cmd1 vers le pipe
-        close(pidt[0]);
-        close(pidt[1]);
-        execute_command_or_builtin(&tmp, env, data); 
-        //perror("Erreur d'exécution de la commande");
-        exit(EXIT_SUCCESS);
-    } 
-	else 
-	{
-        waitpid(pid, &status, 0);
-        data->last_exit_status = WEXITSTATUS(status);
-    }
-}
 
 
 // bool	exec(t_data *data, t_cmd **cmd)
