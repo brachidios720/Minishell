@@ -12,17 +12,19 @@
 
 #include "../../include/minishell.h"
 
-//ajoute un nouveau noeud en fin de liste chainee
-void	ft_lstadd_back_list(t_env **env, t_env *new_node)//ptr sur ptr de liste / ptr nouv noeud
+//ajoute un nouveau noeud en fin de liste chainee de type t_env
+//l23->si la liste est vide alors new_node devient le 1er element
+//l27->si pas vide on init endnode avec le premier element
+void	ft_lstadd_back_list(t_env **env, t_env *new_node)
 {
 	t_env	*endnode;
 
-	if (*env == NULL) //si vide
+	if (*env == NULL)
 	{
-		*env = new_node; //new_node devient le 1er element 
+		*env = new_node;
 		return ;
 	}
-	endnode = *env;//si pas vide on init endnode avec le premier element
+	endnode = *env;
 	while (endnode->next) //parcourt tant qu on est pas a endnode
 	{
 		endnode = endnode->next;

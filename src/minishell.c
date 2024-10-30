@@ -12,30 +12,64 @@
 
 #include "../include/minishell.h"
 
-int main(int ac, char **av, char **envp)
+/*
+affiche l'invite perso du shell
+utilise les codes d'echappemt pour les couelurs av et apres pour init
+*/
+
+void	print_minishell(void)
 {
-    t_data *data = NULL;
-    t_cmd *cmd = NULL;
-    t_env *env = NULL;
-    (void)ac;
+	printf("\033[32m ##   ##    ##                ##\
+	              ###                ###      ###        ###    ####\033[0m\n");
+	printf("\033[32m ### ###                        \
+	              ##                 ##       ##       ####   ##  ##\033[0m\n");
+	printf("\033[32m #######   ###     #####     ### \
+	     #####    ##       ####      ##       ##      ## ##       ##\033[0m\n");
+	printf("\033[32m #######    ##     ##  ##     ## \
+	    ##        #####   ##  ##     ##       ##     ##  ##     ###\033[0m\n");
+	printf("\033[32m ## # ##    ##     ##  ##     ## \
+	    #####    ##  ##  ######     ##       ##     #######   ##\033[0m\n");
+	printf("\033[32m ##   ##    ##     ##  ##     ## \
+	       ##   ##  ##  ##         ##       ##         ##   ##  ##\033[0m\n");
+	printf("\033[32m ##   ##   ####    ##  ##    ####\
+	  ######   ###  ##   #####    ####     ####        ##   ######\033[0m\n");
+}
 
-    print_minishell();  // Affiche l'invite du shell
+/*
+Ce fichier constitue la base de l’interface de boucle du shell
+gestion : les données clés, l'affichage, et la libération de mémoire avant la sortie. 
+l17->struct principale du shell
+l18->struct pour les cmd
+l19->stuct pour les var d'env
+l22->affiche l'invite de commande
+l24->allocation memoire
+l31->initialise les var d'env en fonction de envp cf tab de var d'env init env
+l32->on ajoute pwd pour configurer le repertoire de travail initial
+l33->apl de la fonction qui prend la boucle principale d'execution du shell
+l34->free cmd et data
+*/
 
-    // Allocation et initialisation des données
-    data = malloc(sizeof(t_data));
-    if (data == NULL)
-    {
-        perror("Erreur d'allocation mémoire pour data");
-        return (1);
-    }
-    env = init_env(envp);  // Initialiser les variables d'environnement
-    init_pwd(&env);
-    // Boucle principale du shell
-    ft_check_line(av, envp, data, &cmd, &env);
+int	main(int ac, char **av, char **envp)//nbr d'argument + var d'env
+{
+	t_data	*data;
+	t_cmd	*cmd;
+	t_env	*env;
 
-    // Libérer la mémoire avant de quitter
-    free(cmd);
-    free(data);
-
-    return(0);
+	data = NULL;
+	cmd = NULL;
+	env = NULL;
+	(void)ac;
+	print_minishell();
+	data = malloc(sizeof(t_data));
+	if (data == NULL)
+	{
+		perror("Erreur d'allocation mémoire pour data");
+		return (1);
+	}
+	env = init_env(envp);
+	init_pwd(&env);
+	ft_check_line(av, envp, data, &cmd, &env);
+	free (cmd);
+	free (data);
+	return (0);
 }
