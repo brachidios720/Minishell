@@ -6,7 +6,7 @@
 /*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 15:12:37 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/10/29 15:14:34 by pag              ###   ########.fr       */
+/*   Updated: 2024/10/31 11:22:40 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,10 @@ typedef struct s_cmd
 	char	*str;	  // stock 1 chaine de car (ex : ls)
 	int		num;	  // numero de token
 	char	*option; // option cmd (ex-l)
-	int		infile;	  // fichier pour la redirection d'entree <
-	int		outfile;  // fichier pour la redirection de sortie > ou >> ajout
-	char	*infile_path;
-	char	*outfile_path;
+	int		*input_redir; // fichier pour la redirection d'entree <
+	int		*output_redir;  // fichier pour la redirection de sortie > 
+	char	**input_files; //liste des chemins de fichiers pour la redirection d entree
+	char	**output_files; //liste des chemins de fichiers pour la redirection de sortie
 	int		append; // ajout a la fin >> -> 1 sinon 0
 	char	**matrice;
 	char	**incmd;
@@ -127,8 +127,6 @@ void	ft_handlequit(int b);
 //---------------------------------------------------------------------------
 //	exec.c
 void 	exec_cmd(t_data *data, t_cmd **cmd, t_env **env);
-// inout.c
-void	handle_redir_in_out(t_cmd **cmd);
 // path.c
 char	*find_command_path(char *cmd);
 
@@ -168,15 +166,29 @@ void	ft_cut_cont(char *str, t_data *data);
 void	ft_handle_heredoc(char *delimiter);
 int		ft_check_one_quote(char *str);
 
+// redirection
+//-----------------------------------------------------------------
+//->heredoc.c
+bool read_in_stdin(t_data *data, int fd, char *word);
+int here_doc(t_data *data, char *word);
+//->inoutput.c
+int count_nb_redir_input(t_cmd *cmd);
+int handle_redir_input(t_cmd *cmd, t_data *data);
+int count_nb_redir_output(t_cmd *cmd);
+int handle_redir_output(t_cmd *cmd);
+
 //STEPH
 //steph.c
-void	ft_pipe_first_cmd(int pipe_fd[2], t_cmd *cmd);
-void	ft_pipe_last_cmd(int pipe_fd[2], t_cmd *cmd);
+void	ft_pipe_first_cmd(int pipe_fd[2], t_cmd *cmd, t_data *data);
+void	ft_pipe_last_cmd(int pipe_fd[2], t_cmd *cmd, t_data *data);
 void	ft_pipe_middle_cmd(int prev_fd, int pipe_fd[2], t_cmd *cmd);
 void	exec_pipe_chain(t_data *data, t_cmd **cmd, t_env **env);
 
 // free
 void ft_free_tab(char **av);
+
+//minishell
+void	print_minishell(void);
 
 // read_line.c
 void ft_check_line(char **av, char **envp, t_data *data, t_cmd **cmd, t_env **env);
@@ -187,7 +199,6 @@ char	**env_list_to_array(t_env **env_list);
 // utils
 void	ft_exit(int i);
 int		ft_strcmp(const char *s1, const char *s2);
-void	print_minishell(void);
 char	**ft_strdup_tab(char **env);
 char	*ft_strcpy(char *s1, char *s2);
 char	*ft_strncpy(char *s1, char *s2, int n);

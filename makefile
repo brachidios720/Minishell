@@ -6,7 +6,7 @@
 #    By: pag <pag@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/03 18:39:18 by raphaelcarb       #+#    #+#              #
-#    Updated: 2024/10/29 15:23:59 by pag              ###   ########.fr        #
+#    Updated: 2024/10/31 10:11:08 by pag              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,6 @@ src = 	src/builtins/builtins.c \
 		src/builtins/utils_builtins.c \
 		src/ctrl/ctrl.c \
 		src/exec/exec.c \
-		src/exec/inout.c \
 		src/exec/path.c \
 		src/init/init_lst.c\
 		src/init/init.c\
@@ -38,6 +37,8 @@ src = 	src/builtins/builtins.c \
 		src/parsing/parsing1.c \
 		src/parsing/parsing2.c \
 		src/parsing/utils_parsing.c \
+		src/redirection/heredoc.c \
+		src/redirection/inoutput.c \
 		src/steph/steph.c \
 		src/free.c \
 		src/minishell.c \

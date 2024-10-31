@@ -1,9 +1,22 @@
 #include "../../include/minishell.h"
 
-void	ft_pipe_first_cmd(int pipe_fd[2], t_cmd *cmd)
+void	ft_pipe_first_cmd(int pipe_fd[2], t_cmd *cmd, t_data *data)
 {
-	if (cmd->infile != STDIN_FILENO) {
-		if (dup2(cmd->infile, STDIN_FILENO) == -1) {
+    int infile_fd;
+
+    // Utilisation de handle_redir_input pour obtenir le dernier descripteur d'entrée
+    infile_fd = handle_redir_input(cmd, data);
+
+    if (infile_fd == -1)
+    {
+        perror("Erreur de redirection d'entrée");
+        exit(EXIT_FAILURE);
+    }
+
+	if (infile_fd != STDIN_FILENO) 
+    {
+		if (dup2(infile_fd, STDIN_FILENO) == -1)
+        {
 			perror("Erreur redirection d'entrée");
 			exit(EXIT_FAILURE);
 		}
@@ -14,37 +27,39 @@ void	ft_pipe_first_cmd(int pipe_fd[2], t_cmd *cmd)
 		perror("Erreur redirection sortie");
 		exit(EXIT_FAILURE);
 	}
-	//printf("dup2 pour sortie réussi\n");
+	//printf("dup2 pour sortie réussi\n");x
 
-	// Ne fermez ici que l'extrémité de lecture
+	// Ne ferme ici que l'extrémité de lecture
 	close(pipe_fd[0]);  // Ferme l’extrémité de lecture du pipe
-
-	// Laissez `pipe_fd[1]` ouvert pour que `wc` puisse lire à partir du pipe
-	// `pipe_fd[1]` sera fermé dans le processus parent après utilisation
-
-	// if (cmd->infile != STDIN_FILENO)
-	// 	dup2(cmd->infile, STDIN_FILENO);
-	// printf("dddddd\n");								  // Redirige l'entrée standard si un fichier est spécifié
-	// dup2(pipe_fd[1], STDOUT_FILENO);      // Redirige la sortie vers le pipe
-	// printf("ssss\n");
-	// close(pipe_fd[0]);                    // Ferme l’extrémité de lecture du pipe
-	// close(pipe_fd[1]);
+     if (infile_fd != STDIN_FILENO)
+        close(infile_fd);  // Ferme le descripteur d'entrée si ouvert spécifiquement
 }
 
-void ft_pipe_last_cmd(int pipe_fd[2], t_cmd *cmd)
+void ft_pipe_last_cmd(int pipe_fd[2], t_cmd *cmd, t_data *data)
 {
-    if (cmd->infile != STDIN_FILENO)  // Si un fichier d'entrée est spécifié
+    int infile_fd;
+
+    // Appel de handle_redir_input pour obtenir le descripteur d'entrée
+    infile_fd = handle_redir_input(cmd, data);
+    if (infile_fd == -1) 
     {
-        dup2(cmd->infile, STDIN_FILENO);
-        close(cmd->infile);
-    }
-    else  // Sinon, redirige depuis l'extrémité de lecture du pipe précédent
-    {
-        dup2(pipe_fd[0], STDIN_FILENO);
+        perror("Erreur de redirection d'entrée");
+        exit(EXIT_FAILURE);
     }
 
-    // Ferme les extrémités inutilisées
+    // Redirection de l'entrée standard vers le dernier fichier d'entrée spécifié
+    if (dup2(infile_fd, STDIN_FILENO) == -1) 
+    {
+        perror("Erreur de redirection d'entrée");
+        exit(EXIT_FAILURE);
+    }
+
     close(pipe_fd[0]);  // Ferme l'extrémité de lecture du pipe après redirection
+
+    if (infile_fd != STDIN_FILENO) 
+    {
+        close(infile_fd);  // Ferme le descripteur d'entrée si ouvert spécifiquement
+    }
 }
 
 void	ft_pipe_middle_cmd(int prev_fd, int pipe_fd[2], t_cmd *cmd)
@@ -131,12 +146,12 @@ void exec_pipe_chain(t_data *data, t_cmd **cmd, t_env **env)
             if (command_index == 0)  // Première commande
             {
                 //printf("Première commande - redirection de sortie vers pipe\n");
-                ft_pipe_first_cmd(pipe_fd, tmp);
+                ft_pipe_first_cmd(pipe_fd, tmp, data);
             }
             else if (tmp->next == NULL)  // Dernière commande
             {
                 //printf("Dernière commande - redirection de lecture depuis pipe\n");
-                ft_pipe_last_cmd((int[2]){prev_fd, pipe_fd[1]}, tmp);
+                ft_pipe_last_cmd((int[2]){prev_fd, pipe_fd[1]}, tmp, data);
             }
             if (tmp->next != NULL && tmp != *cmd) // Commande intermédiaire
 			{
