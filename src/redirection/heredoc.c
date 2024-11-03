@@ -12,7 +12,8 @@ bool read_in_stdin(t_data *data, int fd, char *word)
         if (!line) // Gestion de la fin de l'entrée
             return (false);       
         // Comparaison de la ligne avec le mot de fin
-        if (strcmp(line, word) == 0) {
+        if (strcmp(line, word) == 0)
+        {
             free(line);
             break;
         }
@@ -23,15 +24,17 @@ bool read_in_stdin(t_data *data, int fd, char *word)
     }
     return (true);
 }
+
 // Fonction de gestion du heredoc en créant un fichier temporaire
 int here_doc(t_data *data, char *word) 
 {
     int fd;
-    char *tmp_file = "/tmp/heredoc_tmp.txt"; // Fichier temporaire pour le heredoc
+     // Fichier temporaire pour le heredoc
+    char *tmp_file = "/tmp/heredoc_tmp.txt";
     // Ouvre un fichier temporaire en écriture
     fd = open(tmp_file, O_WRONLY | O_CREAT | O_TRUNC, 0600);
     if (fd == -1) {
-        perror("Error opening heredoc temporary file");
+        perror("Erreur d'ouverture du fichier temporaire pour heredoc");
         return (-1);
     }
     // Lecture du stdin et écriture dans le fichier temporaire

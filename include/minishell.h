@@ -6,22 +6,23 @@
 /*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 15:12:37 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/10/31 11:22:40 by pag              ###   ########.fr       */
+/*   Updated: 2024/11/03 20:23:58 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include <stdio.h>
-# include <unistd.h>
+# include <stdio.h> //perror
+# include <unistd.h> //dup2 close
 # include <stdlib.h>
 # include <sys/types.h>
 # include <sys/wait.h> //wexitstatus
+# include <fcntl.h> //pour les constantes  O_WRONLY, O_CREAT, O_TRUNC, O_APPEND 
 # include <stdlib.h>
 # include <signal.h>
 # include <termios.h>
-# include <limits.h>
+# include <limits.h> //path_max
 # include <curses.h>
 # include <term.h>
 # include <stdbool.h>
@@ -40,18 +41,32 @@
 #define CYAN "\033[36m"
 #define RESET "\033[0m"
 
+#define NO_REDIR 0        // Aucun type de redirection
+#define INPUT_FILE 1      // Redirection d'entrée depuis un fichier (<)
+#define HEREDOC 2         // Redirection d'entrée via heredoc (<<)
+#define OUTPUT_FILE 3     // Redirection de sortie vers un fichier (>)
+#define APPEND 4          // Redirection de sortie en mode append (>>)
+
+
+
 typedef struct s_cmd
 {
 	char	*str;	  // stock 1 chaine de car (ex : ls)
 	int		num;	  // numero de token
 	char	*option; // option cmd (ex-l)
-	int		*input_redir; // fichier pour la redirection d'entree <
-	int		*output_redir;  // fichier pour la redirection de sortie > 
-	char	**input_files; //liste des chemins de fichiers pour la redirection d entree
-	char	**output_files; //liste des chemins de fichiers pour la redirection de sortie
-	int		append; // ajout a la fin >> -> 1 sinon 0
 	char	**matrice;
 	char	**incmd;
+	char	**input_files; //liste des chemins de fichiers pour la redirection d entree
+	char	**output_files; //liste des chemins de fichiers pour la redirection de sortie
+	int		*input_redir; // fichier pour la redirection d'entree <
+	int		*output_redir;  // fichier pour la redirection de sortie >
+	int		input_redir_type; // stock le type de redirection d'entree 
+	int		output_redir_type;  // stock le type de redirection de sortie
+	int		input_fd; //utilise pour stocker le descripteur de fichier associe a la redirection d entree
+	int		output_fd; //utilisee pour stocker le descripteur de fichier associe a la redirection de sortie
+	int		append; // ajout a la fin >> -> 1 sinon 0
+	char	*delimiter; //heredoc cf utils parsing line
+	char	*filename; //nom du fichier 
 	struct s_cmd *next;
 } t_cmd;
 
@@ -71,6 +86,7 @@ typedef struct s_data // donnees principales
 	char	*mat;
 	char	**cut_matrice;
 	bool	rien;
+	int		nb_cmd;
 	int		pipe;			  // int pour creation de pipeline
 	int		last_exit_status; // int pour stocker le dernier code de retour cf echo $
 	struct t_cmd *cmd;
@@ -159,8 +175,13 @@ void	ft_do_all(char *str, t_cmd **cmd, t_data *data, t_cmd *new_node);
 //->parsing2.c
 int		ft_check_pipe(char *str);
 
-//->utils_parsing.c
+//->utils_parsing_line
+int ft_isspace(char c);
+const char *get_filename_start(t_cmd *cmd, t_data *data, int redir_type);
+const char *stock_filename(t_cmd *cmd, const char *start, int redir_type);
+char *extract_delimiter(t_cmd *cmd, t_data *data);
 
+//->utils_parsing.c
 int		count_pipe(char *str);
 void	ft_cut_cont(char *str, t_data *data);
 void	ft_handle_heredoc(char *delimiter);
@@ -176,6 +197,7 @@ int count_nb_redir_input(t_cmd *cmd);
 int handle_redir_input(t_cmd *cmd, t_data *data);
 int count_nb_redir_output(t_cmd *cmd);
 int handle_redir_output(t_cmd *cmd);
+//void handle_redir_inoutput(t_cmd *cmd, t_data *data);
 
 //STEPH
 //steph.c
@@ -191,6 +213,7 @@ void ft_free_tab(char **av);
 void	print_minishell(void);
 
 // read_line.c
+void detect_redirections_and_heredoc(t_cmd *cmd, t_data *data);
 void ft_check_line(char **av, char **envp, t_data *data, t_cmd **cmd, t_env **env);
 
 // utils_env
