@@ -11,151 +11,141 @@
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-//manipule les decripteurs de fichiers entree / sortie suivant 2 conditions
 
-//nb de redirection d'entree
-int count_nb_redir_input(t_cmd *cmd)
+//gère une seule redirection d'entrée.
+//vérifie le type de redirection (1 pour fichier, 2 pour heredoc).
+int handle_single_input_redir(t_cmd *cmd, t_data *data)
 {
-	int i;
-	if (!cmd->input_files || !cmd->input_files[0])
-		return (0);
+	int	i;
+    int fd;
+    
 	i = 0;
-	while(cmd->input_files[i])
-	{
-		i++;
+	//pour fichier -> elle ouvre le fichier en lecture seule.
+    if (cmd->input_redir[i] == 1)
+        fd = open(cmd->input_files[i], O_RDONLY);
+	//pour heredoc -> apl la fonction here_doc
+    else if (cmd->input_redir[i] == 2)
+    {
+        printf("redir heredoc detectee pour le fichier : %s\n", cmd->input_files[i]);
+        fd = here_doc(data, cmd->input_files[i]);
+    }
+	//si le type est inconnu -> erreur
+    else
+    {
+        // Gestion d'erreur pour un type de redirection inconnu
+        fprintf(stderr, "Type de redirection inconnu\n");
+        return -1;
+    }
+    //verif si l ouverture du fichier a reussi
+    if (fd == -1)
+    {
+		perror("Erreur d'ouverture de fichier pour redir input");
+		return (-1);
 	}
-	return (i);
+   	//retourne le descripteur
+	return (fd);
 }
-//gestion des redirections d'entree suivant le type
+
+//gere les redirections d'entree suivant le type de redirection pour une cmd
 int handle_redir_input(t_cmd *cmd, t_data *data)
 {
-	int nb;
-	int i;
-	int tmp;
-	int last_fd;
-	
-	i = 0;
-	last_fd = STDIN_FILENO;  // Initialiser à STDIN_FILENO par défaut
-	//si o -> aucune redir ->terminal
-	 if (!cmd->input_redir || !cmd->input_redir[0])
+    int nb;
+    int i;
+    int tmp;
+    int last_fd;
+    
+    i = 0;
+    last_fd = STDIN_FILENO;
+	//verif si presence des redirections d'entrée.
+    if (!cmd->input_redir || !cmd->input_redir[0])
+        
 		return (STDIN_FILENO);
-	nb = count_nb_redir_input(cmd);
-	while (i < nb )
-	{
-		//si redirection standard ->ouvre le fichier en lecture
-		if (cmd->input_redir[i] == 1)
-			tmp = open(cmd->input_files[i], O_RDONLY);
-		//si redirection heredoc ->gestion avec apl de fonction
-		else if (cmd->input_redir[i] == 2) //redirection heredoc
-		{
-			printf("redir heredoc detectee pour le fichier : %s\n", cmd->input_files[i]);
-			tmp = here_doc(data, cmd->input_files[i]);
-		}
-		//des erreurs au moment de l ouverture
-		if (tmp == -1)
-		{
-			perror ("erreor d ouevrture de fichier pour redir input");
-			if (last_fd != -1 && last_fd != STDIN_FILENO)
+	//apl la fonction pour compter le nb de redirections d entree
+    nb = count_nb_redir_input(cmd);
+    while (i < nb)
+    {
+		//Pour chaque redirection -> apl de fonction
+        tmp = handle_single_input_redir(cmd, data);
+        if (tmp == -1)
+        {
+            if (last_fd != -1 && last_fd != STDIN_FILENO)
                 close(last_fd);
             return (-1);
         }
-        // Redirige STDIN_FILENO vers le descripteur actuel
+		//rediriger l'entrée standard vers le fichier ouvert.
         if (dup2(tmp, STDIN_FILENO) == -1)
-		{
+        {
+			//gere les erreurs et ferme le descripteir
             perror("Erreur de redirection d'entrée avec dup2 vers stdin");
             close(tmp);
             if (last_fd != -1 && last_fd != STDIN_FILENO)
                 close(last_fd);
             return (-1);
         }
-		close (tmp); //FERME TMP APRES DUP2
-        // Ferme le descripteur précédent (sauf pour STDIN_FILENO)
+        close(tmp);
         if (last_fd != -1 && last_fd != STDIN_FILENO)
             close(last_fd);
-        // Sauvegarde le descripteur actuel pour la prochaine boucle
         last_fd = tmp;
         i++;
     }
-    // Retourne le dernier descripteur redirigé
+	//retourne le dernier descripteur de fichier utilisé.
     return (last_fd);
 }
-int count_nb_redir_output(t_cmd *cmd)
+
+int handle_single_output_redir(t_cmd *cmd, int index)
 {
-	int i;
-	if (!cmd->output_files || !cmd->output_files[0])
-		return (0); //pas de fichiers de sortie
-	i = 0;
-	while(cmd->output_files[i])
-	{
-		i++;
-	}
-	return (i);
+    int fd;
+    
+    if (cmd->output_redir[index] == 1)
+        fd = open(cmd->output_files[index], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+    else if (cmd->output_redir[index] == 2)
+        fd = open(cmd->output_files[index], O_WRONLY | O_CREAT | O_APPEND, 0777);
+    else
+    {
+        // Gestion d'erreur pour un type de redirection inconnu
+        fprintf(stderr, "Type de redirection de sortie inconnu\n");
+        return -1;
+    }
+    
+    if (fd == -1)
+        perror("Erreur d'ouverture de fichier pour redir de sortie");
+    return fd;
 }
 
-//gestion des redirections d'entree suivant le type
 int handle_redir_output(t_cmd *cmd)
 {
-	int nb;
-	int i;
-	int tmp;
-	int last_fd;
-	
-	i = 0;
-	last_fd = STDOUT_FILENO;
-	//si o -> aucune redir ->terminal
-	if (!cmd->output_redir || !cmd->output_redir[0])
-		return (STDOUT_FILENO);
-	nb = count_nb_redir_output(cmd);//compte le nbre de redirections de sortie
-	while (i < nb )
-	{
-		//souvre le fichier en fonction du type de redirection
-		if (cmd->output_redir[i] == 1)//redir standard (ecrasement)
-			tmp = open(cmd->output_files[i], O_WRONLY | O_CREAT | O_TRUNC,0777);
-		//si redirection heredoc																				
-		else if (cmd->output_redir[i] == 2)//redirection avec ajout append
-			tmp = open(cmd->output_files[i], O_WRONLY | O_CREAT | O_APPEND,0777);
-		//si erreur au moment de l ouverture
-		if (tmp == -1)
-		{
-			perror ("erreur d ouverture de fichier pour redir de sortie");
-			if (last_fd != -1 && last_fd!= STDOUT_FILENO)
+    int nb;
+    int i;
+    int tmp;
+    int last_fd;
+    
+    i = 0;
+    last_fd = STDOUT_FILENO;
+    
+    if (!cmd->output_redir || !cmd->output_redir[0])
+        return (STDOUT_FILENO);
+    nb = count_nb_redir_output(cmd);
+    while (i < nb)
+    {
+        tmp = handle_single_output_redir(cmd, i);
+        if (tmp == -1)
+        {
+            if (last_fd != -1 && last_fd != STDOUT_FILENO)
                 close(last_fd);
             return (-1);
         }
-        // Redirige STDOUT_FILENO vers le descripteur actuel
         if (dup2(tmp, STDOUT_FILENO) == -1)
-		{
+        {
             perror("Erreur de redirection de sortie avec dup2");
             close(tmp);
             if (last_fd != -1 && last_fd != STDOUT_FILENO)
                 close(last_fd);
             return (-1);
         }
-        // Ferme le descripteur précédent
         if (last_fd != STDOUT_FILENO)
             close(last_fd);
-        // Sauvegarde le descripteur actuel pour la prochaine boucle
         last_fd = tmp;
         i++;
     }
-    // Retourne le dernier descripteur redirigé
     return (last_fd);
 }
-/*
-//gestion des redirections d entree et sortie pour une commande
-void handle_redir_inoutput(t_cmd *cmd, t_data *data)
-{
-	cmd->input_fd = handle_redir_input(cmd, data);
-	cmd->output_fd = handle_redir_output(cmd);
-	if (cmd->input_fd == -1 && cmd->output_fd != -1)
-	{
-		if (cmd->input_fd != STDIN_FILENO)
-			close (cmd->input_fd);
-	}
-	if (cmd->output_fd == -1 && cmd->input_fd != -1)
-	{
-		if (cmd->output_fd != STDOUT_FILENO)
-			close (cmd -> output_fd);
-	}
-}
-*/

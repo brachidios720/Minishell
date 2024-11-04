@@ -194,11 +194,12 @@ bool read_in_stdin(t_data *data, int fd, char *word);
 int here_doc(t_data *data, char *word);
 //->inoutput.c
 int count_nb_redir_input(t_cmd *cmd);
-int handle_redir_input(t_cmd *cmd, t_data *data);
 int count_nb_redir_output(t_cmd *cmd);
+int handle_single_output_redir(t_cmd *cmd, int index);
 int handle_redir_output(t_cmd *cmd);
-//void handle_redir_inoutput(t_cmd *cmd, t_data *data);
-
+//utils_redir.c
+int handle_single_input_redir(t_cmd *cmd, t_data *data);
+int handle_redir_input(t_cmd *cmd, t_data *data);
 //STEPH
 //steph.c
 void	ft_pipe_first_cmd(int pipe_fd[2], t_cmd *cmd, t_data *data);

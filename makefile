@@ -40,6 +40,7 @@ src = 	src/builtins/builtins.c \
 		src/parsing/utils_parsing.c \
 		src/redirection/heredoc.c \
 		src/redirection/inoutput.c \
+		src/redirection/utils_redir.c \
 		src/steph/steph.c \
 		src/free.c \
 		src/minishell.c \

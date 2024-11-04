@@ -14,7 +14,7 @@
 
 /*
 affiche l'invite perso du shell
-utilise les codes d'echappemt pour les couelurs av et apres pour init
+utilise les codes d'echappement pour les couleurs av et apres pour init
 */
 
 void	print_minishell(void)
@@ -38,15 +38,15 @@ void	print_minishell(void)
 /*
 Ce fichier constitue la base de l’interface de boucle du shell
 gestion : les données clés, l'affichage, et la libération de mémoire avant la sortie. 
-l17->struct principale du shell
-l18->struct pour les cmd
-l19->stuct pour les var d'env
-l22->affiche l'invite de commande
-l24->allocation memoire
-l31->initialise les var d'env en fonction de envp cf tab de var d'env init env
-l32->on ajoute pwd pour configurer le repertoire de travail initial
-l33->apl de la fonction qui prend la boucle principale d'execution du shell
-l34->free cmd et data
+l54->struct principale du shell
+l55->struct pour les cmd
+l56->stuct pour les var d'env
+l62->affiche l'invite de commande
+l63->allocation memoire
+l69->initialise les var d'env en fonction de envp cf tab de var d'env init env
+l70->on ajoute pwd pour configurer le repertoire de travail initial
+l71->apl de la fonction qui prend la boucle principale d'execution du shell
+l72->free cmd et data
 */
 
 int	main(int ac, char **av, char **envp)//nbr d'argument + var d'env
