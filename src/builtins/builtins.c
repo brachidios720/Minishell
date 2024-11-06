@@ -56,16 +56,10 @@ void exec_external(t_cmd *cmd, t_env **env)
     //    // printf("Argument %d: %s\n", i, cmd->matrice[i]);
     // }
 
-    if (cmd_path == NULL) {
+    if (cmd_path == NULL) 
+    {
         perror("Commande non trouvée");
         exit(EXIT_FAILURE);
-    }
-    printf("cmd_path = %s\n", cmd_path);
-    int i = 0;
-    while(cmd->matrice[i])
-    {
-        printf("matrice = %s\n", cmd->matrice[i]);
-        i++;
     }
     execve(cmd_path, cmd->matrice, envp);
 }

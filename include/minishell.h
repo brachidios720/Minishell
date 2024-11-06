@@ -183,4 +183,12 @@ void	ft_pipe_last_cmd(int pipe_fd[2], t_cmd *cmd);
 void	ft_pipe_first_cmd(int pipe_fd[2], t_cmd *cmd);
 void	ft_pipe_middle_cmd(int prev_fd, int pipe_fd[2], t_cmd *cmd);
 
+int	    ft_verifcharr(char c, char set);
+char	*ft_strdupsizee(const char *s, int size);
+int	    ft_nbredemott(char const*s, char c);
+char	**ft_splitt(char const *s, char c);
+
+int     ft_is_in_quote(char *str, int i);
+int     ft_is_in_doublequote(char *str, int i);
+
 #endif
