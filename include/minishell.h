@@ -3,24 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: spagliar <spagliar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 15:12:37 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/11/03 20:23:58 by pag              ###   ########.fr       */
+/*   Updated: 2024/11/07 19:16:24 by spagliar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
+# ifndef MINISHELL_H
 # define MINISHELL_H
 
 # include <stdio.h> //perror
+# include <string.h> //sizeof
 # include <unistd.h> //dup2 close
 # include <stdlib.h>
 # include <sys/types.h>
 # include <sys/wait.h> //wexitstatus
 # include <fcntl.h> //pour les constantes  O_WRONLY, O_CREAT, O_TRUNC, O_APPEND 
 # include <stdlib.h>
-# include <signal.h>
+# include <signal.h> //strcut sigaction
 # include <termios.h>
 # include <limits.h> //path_max
 # include <curses.h>
@@ -45,13 +46,14 @@
 #define INPUT_FILE 1      // Redirection d'entrée depuis un fichier (<)
 #define HEREDOC 2         // Redirection d'entrée via heredoc (<<)
 #define OUTPUT_FILE 3     // Redirection de sortie vers un fichier (>)
-#define APPEND 4          // Redirection de sortie en mode append (>>)
+#define APPEND 4          // Redirection de sortie en mode append (ajout) (>>)
 
-
+extern int	g_signal;		//variable globale pour gestion des signaux
 
 typedef struct s_cmd
 {
 	char	*str;	  // stock 1 chaine de car (ex : ls)
+	char	*delimiter; //identfier pour le heredoc
 	int		num;	  // numero de token
 	char	*option; // option cmd (ex-l)
 	char	**matrice;
@@ -65,7 +67,6 @@ typedef struct s_cmd
 	int		input_fd; //utilise pour stocker le descripteur de fichier associe a la redirection d entree
 	int		output_fd; //utilisee pour stocker le descripteur de fichier associe a la redirection de sortie
 	int		append; // ajout a la fin >> -> 1 sinon 0
-	char	*delimiter; //heredoc cf utils parsing line
 	char	*filename; //nom du fichier 
 	struct s_cmd *next;
 } t_cmd;
@@ -134,10 +135,6 @@ int		ft_unset(t_env **env, char **args);
 //	utils_builtins.c
 int		is_builtin(char *cmd);
 
-// ctrl.c
-//---------------------------------------------------------------------------
-void	ft_handler(int a);
-void	ft_handlequit(int b);
 
 // EXEC
 //---------------------------------------------------------------------------
@@ -176,30 +173,42 @@ void	ft_do_all(char *str, t_cmd **cmd, t_data *data, t_cmd *new_node);
 int		ft_check_pipe(char *str);
 
 //->utils_parsing_line
-int ft_isspace(char c);
-const char *get_filename_start(t_cmd *cmd, t_data *data, int redir_type);
-const char *stock_filename(t_cmd *cmd, const char *start, int redir_type);
-char *extract_delimiter(t_cmd *cmd, t_data *data);
+int			ft_isspace(char c);
+const char	*get_filename_start(t_cmd *cmd, t_data *data, int redir_type);
+const char	*stock_filename(t_cmd *cmd, const char *start, int redir_type);
+char		*ft_extract_delimiter(t_cmd *cmd, t_data *data);
 
 //->utils_parsing.c
 int		count_pipe(char *str);
 void	ft_cut_cont(char *str, t_data *data);
-void	ft_handle_heredoc(char *delimiter);
 int		ft_check_one_quote(char *str);
 
 // redirection
 //-----------------------------------------------------------------
 //->heredoc.c
-bool read_in_stdin(t_data *data, int fd, char *word);
-int here_doc(t_data *data, char *word);
+bool	read_in_stdin(t_data *data, int fd, t_cmd *cmd);
+int ft_handle_heredoc(t_cmd *cmd, t_data *data);
+//int		ft_heredoc(t_data *data, t_cmd *cmd);
+//->utils_heredoc.c
+void	configure_heredoc_signals(struct sigaction *old_int, struct sigaction *old_quit);
+void	read_input_with_heredoc(int tmp_fd, t_cmd *cmd);
 //->inoutput.c
-int count_nb_redir_input(t_cmd *cmd);
-int count_nb_redir_output(t_cmd *cmd);
-int handle_single_output_redir(t_cmd *cmd, int index);
-int handle_redir_output(t_cmd *cmd);
+int		handle_single_input_redir(t_cmd *cmd, t_data *data);
+int		handle_redir_input(t_cmd *cmd, t_data *data);
+int		handle_single_output_redir(t_cmd *cmd, int index);
+int		handle_redir_output(t_cmd *cmd);
 //utils_redir.c
-int handle_single_input_redir(t_cmd *cmd, t_data *data);
-int handle_redir_input(t_cmd *cmd, t_data *data);
+int		count_nb_redir_input(t_cmd *cmd);
+void	read_input_with_heredoc(int tmp_fd, t_cmd *cmd);
+int		count_nb_redir_output(t_cmd *cmd);
+// signals
+//---------------------------------------------------------------------------
+//parse_signal.c
+void	ft_handler_sig(int signal);
+void	ft_handlequit(int b);
+void	ft_handler_sig_cmd(int signal);
+void	ft_handler_sig_hd(int signal);
+void	change_signal(int pos);
 //STEPH
 //steph.c
 void	ft_pipe_first_cmd(int pipe_fd[2], t_cmd *cmd, t_data *data);
@@ -208,14 +217,15 @@ void	ft_pipe_middle_cmd(int prev_fd, int pipe_fd[2], t_cmd *cmd);
 void	exec_pipe_chain(t_data *data, t_cmd **cmd, t_env **env);
 
 // free
-void ft_free_tab(char **av);
+void	ft_free_tab(char **av);
 
 //minishell
 void	print_minishell(void);
 
 // read_line.c
-void detect_redirections_and_heredoc(t_cmd *cmd, t_data *data);
-void ft_check_line(char **av, char **envp, t_data *data, t_cmd **cmd, t_env **env);
+void	ft_check_line(char **av, char **envp, t_data *data, t_cmd **cmd, t_env **env);
+void	detect_input_redirection(t_cmd *cmd, t_data *data);
+void	detect_output_redirection(t_cmd *cmd, t_data *data);
 
 // utils_env
 char	**env_list_to_array(t_env **env_list);

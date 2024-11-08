@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   inoutput.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: spagliar <spagliar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 14:38:18 by spagliar          #+#    #+#             */
-/*   Updated: 2024/11/03 09:55:04 by pag              ###   ########.fr       */
+/*   Updated: 2024/11/08 18:32:01 by spagliar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 //vérifie le type de redirection (1 pour fichier, 2 pour heredoc).
 int handle_single_input_redir(t_cmd *cmd, t_data *data)
 {
+    (void)data;
 	int	i;
     int fd;
     
@@ -27,13 +28,13 @@ int handle_single_input_redir(t_cmd *cmd, t_data *data)
     else if (cmd->input_redir[i] == 2)
     {
         printf("redir heredoc detectee pour le fichier : %s\n", cmd->input_files[i]);
-        fd = here_doc(data, cmd->input_files[i]);
+        fd = ft_handle_heredoc(cmd, data);
     }
-	//si le type est inconnu -> erreur
+	//si le type est inconnu -> erreurarg
     else
     {
         // Gestion d'erreur pour un type de redirection inconnu
-        fprintf(stderr, "Type de redirection inconnu\n");
+        ft_printf("Type de redirection inconnu cfsingle input\n");
         return -1;
     }
     //verif si l ouverture du fichier a reussi
@@ -44,6 +45,26 @@ int handle_single_input_redir(t_cmd *cmd, t_data *data)
 	}
    	//retourne le descripteur
 	return (fd);
+}
+//gere une seule redirection de sortie
+int handle_single_output_redir(t_cmd *cmd, int index)
+{
+    int fd;
+    
+    if (cmd->output_redir[index] == 1)
+        fd = open(cmd->output_files[index], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+    else if (cmd->output_redir[index] == 2)
+        fd = open(cmd->output_files[index], O_WRONLY | O_CREAT | O_APPEND, 0777);
+    else
+    {
+        // Gestion d'erreur pour un type de redirection inconnu
+        ft_printf("Type de redirection de sortie inconnu cfsingle ouput\n");
+        return -1;
+    }
+    
+    if (fd == -1)
+        perror("Erreur d'ouverture de fichier pour redir de sortie");
+    return fd;
 }
 
 //gere les redirections d'entree suivant le type de redirection pour une cmd
@@ -57,9 +78,8 @@ int handle_redir_input(t_cmd *cmd, t_data *data)
     i = 0;
     last_fd = STDIN_FILENO;
 	//verif si presence des redirections d'entrée.
-    if (!cmd->input_redir || !cmd->input_redir[0])
-        
-		return (STDIN_FILENO);
+    //if (!cmd->input_redir || !cmd->input_redir[0])
+	//	return (STDIN_FILENO);
 	//apl la fonction pour compter le nb de redirections d entree
     nb = count_nb_redir_input(cmd);
     while (i < nb)
@@ -91,27 +111,7 @@ int handle_redir_input(t_cmd *cmd, t_data *data)
 	//retourne le dernier descripteur de fichier utilisé.
     return (last_fd);
 }
-
-int handle_single_output_redir(t_cmd *cmd, int index)
-{
-    int fd;
-    
-    if (cmd->output_redir[index] == 1)
-        fd = open(cmd->output_files[index], O_WRONLY | O_CREAT | O_TRUNC, 0777);
-    else if (cmd->output_redir[index] == 2)
-        fd = open(cmd->output_files[index], O_WRONLY | O_CREAT | O_APPEND, 0777);
-    else
-    {
-        // Gestion d'erreur pour un type de redirection inconnu
-        fprintf(stderr, "Type de redirection de sortie inconnu\n");
-        return -1;
-    }
-    
-    if (fd == -1)
-        perror("Erreur d'ouverture de fichier pour redir de sortie");
-    return fd;
-}
-
+//gere les redirections de sortie suivant le type de redirection pour une cmd
 int handle_redir_output(t_cmd *cmd)
 {
     int nb;

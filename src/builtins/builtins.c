@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: spagliar <spagliar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:35:56 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/11/03 20:40:48 by pag              ###   ########.fr       */
+/*   Updated: 2024/11/08 18:30:26 by spagliar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,40 +66,51 @@ void exec_external(t_cmd *cmd, t_env **env)
         printf("matrice = %s\n", cmd->matrice[i]);
         i++;
     }
-    execve(cmd_path, cmd->matrice, envp);
+    free(cmd->matrice[0]);
+    cmd->matrice[0] = ft_strdup(cmd_path);
+    //if (cmd->input_redir_type == HEREDOC)
+        //execve(cmd_path, &cmd->matrice[1], envp);   
+    //else
+        execve(cmd_path, cmd->matrice, envp);
 }
 
 //decider si la commande est builtin ou externe
 void execute_command_or_builtin(t_cmd **cmd, t_env **env, t_data *data)
-{    // Redirections et exécution des builtins ou commandes externes
+{
     t_cmd *tmp = *cmd;
-    // Détecter redirections et heredocs
-    detect_redirections_and_heredoc(tmp, data);
-
     //printf("%s\n", tmp->str);
     if (is_builtin(tmp->str) == 1)  // Si c'est un builtin
-    {
         exec_builtin(tmp, env, data);  // Terminer l'enfant après avoir exécuté le builtin
-    }
     else
-    {
         exec_external(tmp, env);  // Exécuter une commande externe via execve
-    }
 }
 
 //traiter une commande (pipe ou non)
 void process_commands(t_data *data, t_env **env, t_cmd **cmd)
 {
     // Détection des redirections et heredocs pour la commande actuelle
-    detect_redirections_and_heredoc(*cmd, data);
+    detect_input_redirection(*cmd, data);
+    detect_output_redirection(*cmd, data);
+    if ((*cmd)->input_redir_type == HEREDOC)
+    {
+        // Vérification que le délimiteur est bien défini
+        if (!(*cmd)->delimiter) 
+        {
+            ft_printf("le délimiteur du heredoc n'est pas défini cf process command.\n");
+            return;
+        }
+        // Appel de ft_handle_heredoc après confirmation du délimiteur
+        if (ft_handle_heredoc(*cmd, data) == -1)
+        {
+            ft_printf("Erreur lors de la configuration du heredoc cf process command\n");
+            return;
+        }
+    }
     if (count_pipe(data->line))
     {
         // Appeler la fonction qui gère l'exécution des commandes pipées
         exec_pipe_chain(data, cmd, env);    
     }
-    
     else
-    {
         exec_cmd(data, cmd, env);// Si pas de pipe, exécuter la commande (builtin ou externe)
-    }
 }

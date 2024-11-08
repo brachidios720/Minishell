@@ -1,6 +1,5 @@
 #include "../../include/minishell.h"
 
-
 t_cmd	*ft_lsttnew(t_data *data, int i)
 {
 	t_cmd	*newnode;
@@ -17,8 +16,8 @@ t_cmd	*ft_lsttnew(t_data *data, int i)
     newnode->num = i;
     newnode->matrice = ft_split(newnode->str, ' ');
     newnode->option = ft_check_dash(newnode->str);
-	newnode->next = NULL;
-    //parse_redirection(newnode->matrice, newnode);
+	//newnode->delimiter = NULL;
+    newnode->next = NULL;
 	return (newnode);
 }
 

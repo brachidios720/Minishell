@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: raphaelcarbonnel <raphaelcarbonnel@stud    +#+  +:+       +#+        */
+/*   By: spagliar <spagliar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 13:32:34 by spagliar          #+#    #+#             */
-/*   Updated: 2024/09/04 16:20:45 by raphaelcarb      ###   ########.fr       */
+/*   Updated: 2024/11/06 20:45:04 by spagliar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *s)
+/*size_t	ft_strlen(const char *s)
 {
 	int	i;
 
@@ -20,7 +20,7 @@ size_t	ft_strlen(const char *s)
 	while (s[i] != '\0')
 		i++;
 	return (i);
-}
+}*/
 
 char	*ft_gnl_strjoin(char *carstock, char *buff)
 {
@@ -46,7 +46,7 @@ char	*ft_gnl_strjoin(char *carstock, char *buff)
 	return (result);
 }
 
-char	*ft_strchr(const char *s, int c)
+/*char	*ft_strchr(const char *s, int c)
 {
 	int			i;
 
@@ -62,4 +62,4 @@ char	*ft_strchr(const char *s, int c)
 	if (!s[i])
 		return (NULL);
 	return ((char *)s);
-}
+}*/

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_redir.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: spagliar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: spagliar <spagliar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 10:22:05 by spagliar          #+#    #+#             */
-/*   Updated: 2024/11/04 10:22:08 by spagliar         ###   ########.fr       */
+/*   Updated: 2024/11/06 19:42:38 by spagliar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int count_nb_redir_input(t_cmd *cmd)
 	//retourne le nbre total de fichiers d'entrée spécifiés dans cmd->input_files.
 	return (i);
 }
+
 //compte le nombre de redirections de sortie pour une commande spécifique.
 int count_nb_redir_output(t_cmd *cmd)
 {

@@ -94,7 +94,7 @@ const char *stock_filename(t_cmd *cmd, const char *start, int redir_type)
 }
 
 // Fonction pour extraire le délimiteur du heredoc
-char *extract_delimiter(t_cmd *cmd, t_data *data)
+char *ft_extract_delimiter(t_cmd *cmd, t_data *data)
 {
     char *pos;
     char *start;
@@ -110,7 +110,6 @@ char *extract_delimiter(t_cmd *cmd, t_data *data)
     // Ignore les espaces apres <<
     while (*pos && ft_isspace(*pos))
         pos++;
-
     // determmine le début et la fin du délimiteur
     start = pos;
 
@@ -124,8 +123,9 @@ char *extract_delimiter(t_cmd *cmd, t_data *data)
     if (!cmd->delimiter)
         return NULL;
 
-    ft_strncpy(cmd->delimiter,(char *)start, len);
-    cmd->delimiter[len] = '\0';
+    //ft_strncpy(cmd->delimiter,(char *)start, len);
+    cmd->delimiter = ft_substr(start, 0, len);
+    //cmd->delimiter[len] = '\0';
 
     return (cmd->delimiter);
 }

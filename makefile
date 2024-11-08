@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pag <pag@student.42.fr>                    +#+  +:+       +#+         #
+#    By: spagliar <spagliar@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/03 18:39:18 by raphaelcarb       #+#    #+#              #
-#    Updated: 2024/11/03 19:29:53 by pag              ###   ########.fr        #
+#    Updated: 2024/11/08 13:18:00 by spagliar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,6 @@ src = 	src/builtins/builtins.c \
 		src/builtins/pwd.c \
 		src/builtins/unset.c \
 		src/builtins/utils_builtins.c \
-		src/ctrl/ctrl.c \
 		src/exec/exec.c \
 		src/exec/path.c \
 		src/init/init_lst.c\
@@ -40,8 +39,10 @@ src = 	src/builtins/builtins.c \
 		src/parsing/utils_parsing.c \
 		src/redirection/heredoc.c \
 		src/redirection/inoutput.c \
+		src/redirection/utils_heredoc.c \
 		src/redirection/utils_redir.c \
-		src/steph/steph.c \
+		src/signals/parse_signal.c \
+		src/pipe/pipe.c \
 		src/free.c \
 		src/minishell.c \
 		src/read_line.c \

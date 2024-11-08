@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: spagliar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: spagliar <spagliar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 18:13:49 by spagliar          #+#    #+#             */
-/*   Updated: 2023/06/13 18:13:50 by spagliar         ###   ########.fr       */
+/*   Updated: 2024/11/06 20:44:33 by spagliar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ size_t	ft_strlenn(const char *s)
 // 	return (result);
 // }
 
-char	*ft_strchr(const char *s, int c)
+/*char	*ft_strchr(const char *s, int c)
 {
 	int			i;
 
@@ -62,4 +62,4 @@ char	*ft_strchr(const char *s, int c)
 	if (!s[i])
 		return (NULL);
 	return ((char *)s);
-}
+}*/

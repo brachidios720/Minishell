@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipe.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: spagliar <spagliar@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/08 13:14:51 by spagliar          #+#    #+#             */
+/*   Updated: 2024/11/08 13:14:52 by spagliar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/minishell.h"
 
 void	ft_pipe_first_cmd(int pipe_fd[2], t_cmd *cmd, t_data *data)
@@ -19,19 +31,16 @@ void	ft_pipe_first_cmd(int pipe_fd[2], t_cmd *cmd, t_data *data)
             exit(EXIT_FAILURE);
         }
     }
-
     if (handle_redir_output(cmd) == -1)  // Redirige la sortie vers fichier si spécifié
     {
         perror("Erreur redirection de sortie");
         exit(EXIT_FAILURE);
     }
-
 	if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)  // Redirige sortie vers le pipe
     {
         perror("Erreur redirection sortie");
         exit(EXIT_FAILURE);
     }
-
 	close(pipe_fd[0]);  // Ferme l’extrémité de lecture du pipe
     if (infile_fd != STDIN_FILENO)
         close(infile_fd);  // Ferme le descripteur d'entrée si ouvert spécifiquement
@@ -47,19 +56,16 @@ void ft_pipe_last_cmd(int pipe_fd[2], t_cmd *cmd, t_data *data)
         perror("Erreur de redirection d'entrée");
         exit(EXIT_FAILURE);
     }
-
     if (dup2(infile_fd, STDIN_FILENO) == -1) 
     {
         perror("Erreur de redirection d'entrée");
         exit(EXIT_FAILURE);
     }
-
     if (handle_redir_output(cmd) == -1)  // Redirige la sortie vers fichier si spécifié
     {
         perror("Erreur redirection de sortie");
         exit(EXIT_FAILURE);
     }
-
     close(pipe_fd[0]);  // Ferme l'extrémité de lecture du pipe
     if (infile_fd != STDIN_FILENO)
         close(infile_fd);  // Ferme le descripteur d'entrée si ouvert spécifiquement
