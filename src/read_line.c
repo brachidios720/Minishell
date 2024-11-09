@@ -6,7 +6,7 @@
 /*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 19:17:57 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/11/09 20:53:57 by pag              ###   ########.fr       */
+/*   Updated: 2024/11/09 21:37:02 by almarico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,10 +82,11 @@ void detect_input_redirection(t_cmd *cmd, t_data *data)
 
 void detect_output_redirection(t_cmd *cmd, t_data *data)
 {
-	const char *filename_start;
+	const char	*filename_start;
 	int	i;
 	
 	i = 0;
+	filename_start = NULL;
 	while (data->line[i])
 	{
 		if (data->line[i] == '>')

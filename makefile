@@ -3,15 +3,15 @@
 #                                                         :::      ::::::::    #
 #    makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pag <pag@student.42.fr>                    +#+  +:+       +#+         #
+#    By: almarico <almarico@student.42lehavre.fr>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/03 18:39:18 by raphaelcarb       #+#    #+#              #
-#    Updated: 2024/11/09 17:44:04 by pag              ###   ########.fr        #
+#    Updated: 2024/11/09 20:57:45 by almarico         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = clang
-CFLAGS = -Wall -Werror -Wextra -g3
+CFLAGS = -Wall -Werror -Wextra -g3 -gdwarf-4
 LDFLAGS = -lreadline -ltinfo
 EXE = Minishell
 RM = rm -rf
