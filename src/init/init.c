@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: almarico <almarico@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:53:56 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/10/29 15:27:54 by pag              ###   ########.fr       */
+/*   Updated: 2024/11/09 18:26:59 by almarico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void    init_data(t_data *data)
     data->pwd = getcwd(NULL, PATH_MAX);
     data->old_pwd = &data->pwd;
     data->mat = NULL;
+	data->rien = TRUE;
 }
 /*
 char    *search_in_env(t_data *data, char *name)
