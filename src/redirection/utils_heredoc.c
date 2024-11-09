@@ -6,7 +6,7 @@
 /*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 19:42:12 by spagliar          #+#    #+#             */
-/*   Updated: 2024/11/09 17:48:36 by pag              ###   ########.fr       */
+/*   Updated: 2024/11/09 20:00:15 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,26 +52,30 @@ void read_input_with_heredoc(int tmp_fd, t_cmd *cmd)
     //apl de fction pour sauvegarder les signaux actuels et configure les nveaux pour le heredoc
     configure_heredoc_signals();
 
-    //Lit l'entrée ligne par ligne jusqu'à rencontrer le délimiteur, écrivant chaque ligne dans le fichier temporaire.
-    ft_putstr_fd("> ", STDOUT_FILENO);
-    buffer = get_next_line(STDIN_FILENO);
-    while (buffer && ft_strcmp(buffer, cmd->delimiter) != 0)
+    while(1)
     {
-        ft_putstr_fd(buffer, tmp_fd);
-        free(buffer);
-        ft_putstr_fd("> ", STDOUT_FILENO);
-        buffer = get_next_line(STDIN_FILENO);
-    }
-    //Gère le cas où la fin du fichier est atteinte sans rencontrer le délimiteur.
-    if (buffer)
-        free(buffer);
-    //Restaure les gestionnaires de signaux d'origine à la fin de la fonction.
-    else
-        ft_putstr_fd("delimiter fin de fichier\n", STDERR_FILENO);
+        buffer = readline("> ");
+        //pas de fichier
+        if(!buffer)
+        {
+            ft_putstr_fd("fin\n", STDIN_FILENO);
+        }
+        //verif ligne = delimiteur
+        if (ft_strcmp(buffer, cmd->delimiter) == 0)
+        {
+            free (buffer);
+            break;
+        }
+        ft_putstr_fd (buffer, tmp_fd);
+        ft_putstr_fd ("\n", tmp_fd);
 
-    // Restauration des signaux d'origine
-    sigaction(SIGINT, &old_int, NULL);
-    sigaction(SIGQUIT, &old_quit, NULL);
+        free (buffer);
+    }
+    //restaure les signaux d origine
+    if ((sigaction(SIGINT, &old_int, NULL)== -1) || sigaction(SIGQUIT, &old_quit, NULL)== -1)
+    {
+        perror("erreur de restauration de signaux\n");
+    }
 }
 /*Ces fonctions permettent de gérer proprement les signaux pendant la lecture d'un 
 here-document, en s'assurant que SIGINT a un comportement par défaut 

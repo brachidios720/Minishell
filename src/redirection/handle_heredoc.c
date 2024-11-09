@@ -6,7 +6,7 @@
 /*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 15:14:10 by spagliar          #+#    #+#             */
-/*   Updated: 2024/11/09 17:46:26 by pag              ###   ########.fr       */
+/*   Updated: 2024/11/09 19:30:15 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 //gère une seule redirection d'entrée.
 //vérifie le type de redirection (1 pour fichier en lecture seule, 2 pour heredoc).
-//retourne un dexcipteur de fichier ou -1 si erreur
+//retourne un descripteur de fichier ou -1 si erreur
 int handle_single_input_redir(t_cmd *cmd, t_data *data)
 {
     (void)data;
@@ -48,10 +48,10 @@ int handle_single_input_redir(t_cmd *cmd, t_data *data)
    	//retourne le descripteur
 	return (fd);
 }
-//gere plusieurs redirectin d entree pour une cmd
+//gere plusieurs redirection d entree pour une cmd
 //apl count_nb_redir_imput -> pour compter les redirections
 //gere chaque redir en utilisant open ou ft_heredoc
-//retourne le dernier dexcripteur ouvert ou -1
+//retourne le dernier descripteur ouvert ou -1
 int handle_redir_input(t_cmd *cmd, t_data *data)
 {
     int nb; //nbre de redirection
@@ -100,7 +100,6 @@ int handle_single_output_redir(t_cmd *cmd, int index)
         ft_printf("Type de redirection de sortie inconnu cfsingle ouput\n");
         return -1;
     }
-    
     if (fd == -1)
         perror("Erreur d'ouverture de fichier pour redir de sortie");
     return fd;
