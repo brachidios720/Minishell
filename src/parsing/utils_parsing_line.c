@@ -62,7 +62,7 @@ const char *stock_filename(t_cmd *cmd, const char *start, int redir_type)
     if (!filename)
         return NULL;
 
-    ft_strncpy(filename, (char *)start, len);
+    ft_strncpy((char *)start, filename, len);
     filename[len] = '\0';
 
     // Stocke le nom du fichier dans cmd selon le type de redirection
