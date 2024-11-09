@@ -6,7 +6,7 @@
 /*   By: almarico <almarico@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 14:16:43 by spagliar          #+#    #+#             */
-/*   Updated: 2024/11/09 20:06:51 by almarico         ###   ########.fr       */
+/*   Updated: 2024/11/09 20:11:03 by almarico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,5 @@ int	ft_heredoc(t_cmd *cmd, t_data *data)
 	}
 	read_input_with_heredoc(tmp_fd, cmd);
 	close(tmp_fd);
-	if (replace_matrice_with_heredoc_file(cmd) == -1)
-		return (-1);
-	return (0);
+	return (replace_matrice_with_heredoc_file(cmd));
 }
