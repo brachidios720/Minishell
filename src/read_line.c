@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   read_line.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almarico <almarico@student.42lehavre.fr>   +#+  +:+       +#+        */
+/*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 19:17:57 by raphaelcarb       #+#    #+#             */
 /*   Updated: 2024/11/09 21:37:02 by almarico         ###   ########.fr       */
@@ -16,6 +16,10 @@
 void ft_check_line(char **av, char **envp, t_data *data, t_cmd **cmd, t_env **env)
 {
 	t_cmd *new_node;
+	signal(SIGINT, ft_handler_sig);
+	signal(SIGINT, ft_handler_sig_cmd);
+	signal(SIGINT, ft_handler_sig_hd);
+    signal(SIGQUIT, ft_handlequit);
 	char *line;
 	
 	new_node = NULL;
