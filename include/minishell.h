@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: spagliar <spagliar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 15:12:37 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/11/09 15:37:18 by spagliar         ###   ########.fr       */
+/*   Updated: 2024/11/09 17:40:18 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,24 +185,28 @@ char		*ft_extract_delimiter(t_cmd *cmd, t_data *data);
 int		count_pipe(char *str);
 void	ft_cut_cont(char *str, t_data *data);
 int		ft_check_one_quote(char *str);
-
+//pipe
+//pipe.c
+void	ft_pipe_first_cmd(int pipe_fd[2], t_cmd *cmd, t_data *data);
+void	ft_pipe_last_cmd(int pipe_fd[2], t_cmd *cmd, t_data *data);
+void	ft_pipe_middle_cmd(int prev_fd, int pipe_fd[2], t_cmd *cmd);
+void	exec_pipe_chain(t_data *data, t_cmd **cmd, t_env **env);
 // redirection
 //-----------------------------------------------------------------
-//->heredoc.c
-int		ft_heredoc(t_cmd *cmd, t_data *data);
-bool	read_in_stdin(t_data *data, int fd, t_cmd *cmd);
-int		ft_handle_heredoc(t_cmd *cmd, t_data *data);
-//->utils_heredoc.c
-void	configure_heredoc_signals(struct sigaction *old_int, struct sigaction *old_quit);
-void	read_input_with_heredoc(int tmp_fd, t_cmd *cmd);
-//->inoutput.c
+//->handle_heredoc.c
 int		handle_single_input_redir(t_cmd *cmd, t_data *data);
 int		handle_redir_input(t_cmd *cmd, t_data *data);
 int		handle_single_output_redir(t_cmd *cmd, int index);
 int		handle_redir_output(t_cmd *cmd);
+//->heredoc_file.c
+int		ft_heredoc(t_cmd *cmd, t_data *data);
+//->read_heredoc.c
+bool read_in_stdin(t_data *data, int fd, t_cmd *cmd);
+//->utils_heredoc.c
+void	configure_heredoc_signals();
+void	read_input_with_heredoc(int tmp_fd, t_cmd *cmd);
 //utils_redir.c
 int		count_nb_redir_input(t_cmd *cmd);
-void	read_input_with_heredoc(int tmp_fd, t_cmd *cmd);
 int		count_nb_redir_output(t_cmd *cmd);
 // signals
 //---------------------------------------------------------------------------
@@ -212,12 +216,6 @@ void	ft_handlequit(int b);
 void	ft_handler_sig_cmd(int signal);
 void	ft_handler_sig_hd(int signal);
 void	change_signal(int pos);
-//STEPH
-//steph.c
-void	ft_pipe_first_cmd(int pipe_fd[2], t_cmd *cmd, t_data *data);
-void	ft_pipe_last_cmd(int pipe_fd[2], t_cmd *cmd, t_data *data);
-void	ft_pipe_middle_cmd(int prev_fd, int pipe_fd[2], t_cmd *cmd);
-void	exec_pipe_chain(t_data *data, t_cmd **cmd, t_env **env);
 
 // free
 void	ft_free_tab(char **av);

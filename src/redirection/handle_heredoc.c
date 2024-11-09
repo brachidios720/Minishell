@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_heredoc.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: spagliar <spagliar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 15:14:10 by spagliar          #+#    #+#             */
-/*   Updated: 2024/11/09 15:35:51 by spagliar         ###   ########.fr       */
+/*   Updated: 2024/11/09 17:46:26 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int handle_single_input_redir(t_cmd *cmd, t_data *data)
     else if (cmd->input_redir[i] == 2)
     {
         printf("redir heredoc detectee pour le fichier : %s\n", cmd->input_files[i]);
-        fd = ft_handle_heredoc(cmd, data);
+        fd = ft_heredoc(cmd, data);
     }
 	//si le type est inconnu -> erreurarg
     else

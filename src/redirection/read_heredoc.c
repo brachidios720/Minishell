@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_heredoc.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: spagliar <spagliar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 15:11:39 by spagliar          #+#    #+#             */
-/*   Updated: 2024/11/09 15:28:43 by spagliar         ###   ########.fr       */
+/*   Updated: 2024/11/09 17:47:40 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 // ecrit chaque ligne dans un fichier tant que le delimiteur n est pas atteint
 bool read_in_stdin(t_data *data, int fd, t_cmd *cmd)
 {
+    (void)data;
     char    *line;
 
     while (1)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_line.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: spagliar <spagliar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 19:17:57 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/11/08 17:29:55 by spagliar         ###   ########.fr       */
+/*   Updated: 2024/11/09 17:33:46 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,35 +79,43 @@ void detect_input_redirection(t_cmd *cmd, t_data *data)
 void detect_output_redirection(t_cmd *cmd, t_data *data)
 {
 	const char *filename_start;
+	int	i;
 	
-	if (ft_strnstr(data->line, ">>", ft_strlen(data->line)))
+	i = 0;
+	while (data->line[i])
 	{
-		cmd->output_redir_type = APPEND;
-		filename_start = get_filename_start(cmd, data, APPEND);  // Trouve le début du nom de fichier
-		if (filename_start)
+		if (data->line[i] == '>')
 		{
-			if (!stock_filename(cmd, filename_start, APPEND))  // Extrait et stocke le nom de fichier
+			if (data->line[i + 1] == '>')
 			{
-				ft_printf("Erreur: impossible de stocker le fichier en mode append -> >>\n");
-				return;
+				cmd->output_redir_type = APPEND;
+				filename_start = get_filename_start(cmd, data, APPEND);  // Trouve le début du nom de fichier
+				if (filename_start)
+				{
+					if (!stock_filename(cmd, filename_start, APPEND))  // Extrait et stocke le nom de fichier
+					{
+						ft_printf("Erreur: impossible de stocker le fichier en mode append -> >>\n");
+						return;
+					}
+				}
+			}
+			else
+			{
+				cmd->output_redir_type = OUTPUT_FILE;
+				filename_start = get_filename_start(cmd, data, OUTPUT_FILE);  // Trouve le début du nom de fichier
+				if (filename_start)
+				{
+					if (!stock_filename(cmd, filename_start, OUTPUT_FILE))  // Extrait et stocke le nom de fichier
+					{
+						ft_printf("Erreur: impossible de stocker le fichier de sortie -> >\n");
+						return;
+					}
+				}
 			}
 		}
-	}
-	else if (ft_strnstr(data->line, ">", ft_strlen(data->line)))
-	{
-		cmd->output_redir_type = OUTPUT_FILE;
-		filename_start = get_filename_start(cmd, data, OUTPUT_FILE);  // Trouve le début du nom de fichier
-		if (filename_start)
-		{
-			if (!stock_filename(cmd, filename_start, OUTPUT_FILE))  // Extrait et stocke le nom de fichier
-			{
-				ft_printf("Erreur: impossible de stocker le fichier de sortie -> >\n");
-				return;
-			}
-		}
-	}
+		i++;
+	}	
 }
-
 	// if (ft_strnstr(data->line, "<<",ft_strlen(data->line)))
 	// {
 	// 	cmd->input_redir_type = HEREDOC;

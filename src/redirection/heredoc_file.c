@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_file.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: spagliar <spagliar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 14:16:43 by spagliar          #+#    #+#             */
-/*   Updated: 2024/11/09 16:19:37 by spagliar         ###   ########.fr       */
+/*   Updated: 2024/11/09 17:47:06 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 
 int ft_heredoc(t_cmd *cmd, t_data *data)
 {
+    (void)data;
     int tmp_fd;
     // Ouvrir un fichier temporaire pour le here-document
     tmp_fd = open("/tmp/heredoc_tmp", O_WRONLY | O_CREAT | O_TRUNC, MODE_HEREDOC);
