@@ -6,7 +6,7 @@
 /*   By: almarico <almarico@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 16:58:25 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/11/09 18:41:10 by almarico         ###   ########.fr       */
+/*   Updated: 2024/11/09 18:45:08 by almarico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,8 +206,8 @@ char **ft_splitt(char const *s, char c)
     return (new);
 }
 
-char *trim_quote(char **tab)
-{
-	int i = 0;
-	
-}
+// char *trim_quote(char **tab)
+// {
+// 	int i = 0;
+// 	
+// }
