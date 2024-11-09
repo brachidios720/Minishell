@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: spagliar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 14:45:23 by spagliar          #+#    #+#             */
-/*   Updated: 2024/09/09 14:45:25 by spagliar         ###   ########.fr       */
+/*   Updated: 2024/10/29 10:36:29 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
+//gestion de l option -n
 bool	echo_n(char *argv)
 {
 	int	i;
@@ -60,6 +60,7 @@ char	*ft_itoa_m(int n)
 	return (ft_return(buff));
 }
 
+//gestion $?
 char *expand_variable(char *arg, t_data *data)
 {
     if (arg[0] == '$') 
@@ -72,7 +73,7 @@ char *expand_variable(char *arg, t_data *data)
     return (arg);  // Retourner l'argument tel quel s'il ne s'agit pas d'une variable
 }
 
-void	ft_echo(char **argv, t_data *data)//cf parsing
+void	ft_echo(char **argv, t_data *data)
 {
 	int		i;
 	bool	new_line;
@@ -89,15 +90,26 @@ void	ft_echo(char **argv, t_data *data)//cf parsing
 	while (argv[i])
 	{
 	 	output = expand_variable(argv[i], data);  // Vérifier l'expansion de variable
-	    if (output) 
-            write(1, output, strlen(output));
+	    if (output)
+		{ 
+            ft_putstr_fd(output, 1);
+			//ft_putstr_fd("\n", 1);
+		}
+		else
+			ft_putstr_fd("", 1);
         if (argv[i + 1])
-            write(1, " ", 1);
+			// Affiche un espace entre les arguments
+            ft_putstr_fd(" ", 1);
         i++;
 	}
+	// Affiche un espace si l option -n est activee
+	//if (new_line)
+	//	ft_putstr_fd(" ",1);
+	// Affiche un saut de ligne si l'option -n n'est pas activée
     if (new_line)
-        write(1, "\n", 1);
+       ft_putstr_fd("\n",1);
 }
 //echo sans options -> ajoute un saut de ligne par defaut
 //echo -n -> supprime le saut de ligne
 //echo -nnnnn -> marche comme -n
+ 

@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   path.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: spagliar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 14:36:04 by spagliar          #+#    #+#             */
-/*   Updated: 2024/10/16 14:36:06 by spagliar         ###   ########.fr       */
+/*   Updated: 2024/10/29 14:34:41 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
 //cherche la valeur de path, ajoute "/"
 char	*find_command_path(char *cmd)
 {
