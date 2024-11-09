@@ -6,7 +6,7 @@
 /*   By: spagliar <spagliar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 15:12:37 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/11/07 19:16:24 by spagliar         ###   ########.fr       */
+/*   Updated: 2024/11/09 15:37:18 by spagliar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,13 @@
 #define CYAN "\033[36m"
 #define RESET "\033[0m"
 
-#define NO_REDIR 0        // Aucun type de redirection
-#define INPUT_FILE 1      // Redirection d'entrée depuis un fichier (<)
-#define HEREDOC 2         // Redirection d'entrée via heredoc (<<)
-#define OUTPUT_FILE 3     // Redirection de sortie vers un fichier (>)
-#define APPEND 4          // Redirection de sortie en mode append (ajout) (>>)
+#define NO_REDIR 0        				// Aucun type de redirection
+#define INPUT_FILE 1      				// Redirection d'entrée depuis un fichier (<)
+#define HEREDOC 2         				// Redirection d'entrée via heredoc (<<)
+#define OUTPUT_FILE 3     				// Redirection de sortie vers un fichier (>)
+#define APPEND 4          				// Redirection de sortie en mode append (ajout) (>>)
+#define READ_WRITE_EXEC 0777
+#define MODE_HEREDOC 0644
 
 extern int	g_signal;		//variable globale pour gestion des signaux
 
@@ -54,6 +56,8 @@ typedef struct s_cmd
 {
 	char	*str;	  // stock 1 chaine de car (ex : ls)
 	char	*delimiter; //identfier pour le heredoc
+	char	*filename; //nom du fichier 
+	char	*file_tmp; //fichier temporaire
 	int		num;	  // numero de token
 	char	*option; // option cmd (ex-l)
 	char	**matrice;
@@ -67,7 +71,6 @@ typedef struct s_cmd
 	int		input_fd; //utilise pour stocker le descripteur de fichier associe a la redirection d entree
 	int		output_fd; //utilisee pour stocker le descripteur de fichier associe a la redirection de sortie
 	int		append; // ajout a la fin >> -> 1 sinon 0
-	char	*filename; //nom du fichier 
 	struct s_cmd *next;
 } t_cmd;
 
@@ -186,9 +189,9 @@ int		ft_check_one_quote(char *str);
 // redirection
 //-----------------------------------------------------------------
 //->heredoc.c
+int		ft_heredoc(t_cmd *cmd, t_data *data);
 bool	read_in_stdin(t_data *data, int fd, t_cmd *cmd);
-int ft_handle_heredoc(t_cmd *cmd, t_data *data);
-//int		ft_heredoc(t_data *data, t_cmd *cmd);
+int		ft_handle_heredoc(t_cmd *cmd, t_data *data);
 //->utils_heredoc.c
 void	configure_heredoc_signals(struct sigaction *old_int, struct sigaction *old_quit);
 void	read_input_with_heredoc(int tmp_fd, t_cmd *cmd);

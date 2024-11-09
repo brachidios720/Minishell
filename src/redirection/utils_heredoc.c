@@ -6,13 +6,14 @@
 /*   By: spagliar <spagliar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 19:42:12 by spagliar          #+#    #+#             */
-/*   Updated: 2024/11/08 13:16:06 by spagliar         ###   ########.fr       */
+/*   Updated: 2024/11/09 15:31:43 by spagliar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-//configurer les signaux specidiquement pour le heredoc
+//configurer les signaux specifiquement pour le heredoc :
+//remplace donc temprorairement les gestionnaires de signaux
 void configure_heredoc_signals() 
 {
     struct sigaction sa;
@@ -40,7 +41,8 @@ void configure_heredoc_signals()
     }
 }
 
-//lecture du fichier en entree avec un heredoc, applique les nouvelles configurations
+//lit les donnees jusqu au delimiteur et ecrit dans un fichier tmp
+//restaure les signaux d origine a la fin
 void read_input_with_heredoc(int tmp_fd, t_cmd *cmd)
 {
     char *buffer;

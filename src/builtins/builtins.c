@@ -6,7 +6,7 @@
 /*   By: spagliar <spagliar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:35:56 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/11/08 18:30:26 by spagliar         ###   ########.fr       */
+/*   Updated: 2024/11/09 16:20:45 by spagliar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,8 @@ void process_commands(t_data *data, t_env **env, t_cmd **cmd)
             ft_printf("le délimiteur du heredoc n'est pas défini cf process command.\n");
             return;
         }
-        // Appel de ft_handle_heredoc après confirmation du délimiteur
-        if (ft_handle_heredoc(*cmd, data) == -1)
+        // Appel de ft_heredoc après confirmation du délimiteur
+        if (ft_heredoc(*cmd, data) == -1)
         {
             ft_printf("Erreur lors de la configuration du heredoc cf process command\n");
             return;

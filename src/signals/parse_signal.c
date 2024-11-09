@@ -6,7 +6,7 @@
 /*   By: spagliar <spagliar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 12:51:08 by spagliar          #+#    #+#             */
-/*   Updated: 2024/11/07 14:46:59 by spagliar         ###   ########.fr       */
+/*   Updated: 2024/11/09 16:13:21 by spagliar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,8 @@ void	change_signal(int pos)
 	struct sigaction	sig_int;//ctrl+c
 	struct sigaction	sig_quit;//ctrl+
 
-	ft_bzero(&sig_int, sizeof(sig_int));//reinit ou init les valeurs des structures a 0
-	ft_bzero(&sig_quit, sizeof(sig_quit));
+	//ft_bzero(&sig_int, sizeof(sig_int));//reinit ou init les valeurs des structures a 0
+	//ft_bzero(&sig_quit, sizeof(sig_quit));
 	sig_int.sa_flags = SA_RESTART; //drapeau -> appel systemes interrompus = signal redemarre automatiquement
 	sig_quit.sa_flags = SA_RESTART;
 	if (pos == 0)
