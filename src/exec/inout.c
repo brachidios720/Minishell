@@ -23,7 +23,7 @@ void	handle_redir_in_out(t_cmd **cmd)
 		fd_in = open(tmp->infile_path, O_RDONLY);
 		if (fd_in == -1)
 		{
-			printf("ffff\n");
+			//printf("ffff\n");
 			perror("Erreur ouverture fichier d'entrée");
 			exit(EXIT_FAILURE);
 		}

@@ -29,6 +29,7 @@ void    ft_cut_cont(char *str, t_data *data)
     while(data->cut_matrice[i])
     {
         data->cut_matrice[i] = ft_strtrim(data->cut_matrice[i], " ");
+        //printf("mat: %s\n", data->cut_matrice[i]);
         i++;
     }
 }
@@ -69,7 +70,7 @@ int     ft_check_one_quote(char *str)
     int y = 0;
     while(str[i])
     {
-        if(str[i] == '"')
+        if(str[i] == '\"')
             y++;
         i++;
     }

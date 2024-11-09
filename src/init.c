@@ -36,31 +36,3 @@ char    *search_in_env(t_data *data, char *name)
     return(dest);
 }*/
 
-// char *ft_tab(char **av)
-// {
-//     int i = 0;
-//     int len = 0;
-//     while(av[i])
-//     {
-//         len += ft_strlen(av[i]);
-//         i++;
-//     }
-//     char *dest = malloc((len + 1) * sizeof(char *));
-//     if(!dest)
-//         return(NULL);
-//     i = 0;
-//     int x = 0;
-//     while(av[i])
-//     {
-//         int j = 0;
-//         while(av[i][j])
-//         {
-//             dest[x] = av[i][j];
-//             j++;
-//             x++; 
-//         }
-//         i++;
-//     }
-//     dest[x] = '\0';
-//     return(dest);
-// }
