@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: raphaelcarbonnel <raphaelcarbonnel@stud    +#+  +:+       +#+         #
+#    By: spagliar <spagliar@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/11 15:22:24 by spagliar          #+#    #+#              #
-#    Updated: 2024/09/06 20:47:17 by raphaelcarb      ###   ########.fr        #
+#    Updated: 2024/11/06 20:37:20 by spagliar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 

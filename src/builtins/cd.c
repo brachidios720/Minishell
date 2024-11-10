@@ -63,7 +63,6 @@ int ft_change_directory(char *target_dir)
     }
 }
 
-
 void ft_update_env(t_env **env, char *old_pwd, char *new_pwd)
 {
     if (old_pwd)

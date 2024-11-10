@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: raphaelcarbonnel <raphaelcarbonnel@stud    +#+  +:+       +#+        */
+/*   By: almarico <almarico@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:35:56 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/09/17 18:24:40 by raphaelcarb      ###   ########.fr       */
+/*   Updated: 2024/11/09 19:36:49 by almarico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,22 +87,18 @@ void exec_builtin(t_cmd *cmd, t_env **env)
 
 void exec_external(t_cmd *cmd, t_env **env)
 {
-     // Convertir env en tableau pour execve
-    char *cmd_path;
-    char **envp;
-    envp = env_list_to_array(env);
-    cmd_path = find_command_path(cmd->matrice[0]);  // Trouver le chemin complet de la commande
+     // Convertir env en tableau par execve
+	char	*cmd_path;
+	char	**envp;
 
-    // for (int i = 0; cmd->matrice[i] != NULL; i++) {
-    //    // printf("Argument %d: %s\n", i, cmd->matrice[i]);
-    // }
-
-    if (cmd_path == NULL) 
-    {
-        perror("Commande non trouvée");
-        exit(EXIT_FAILURE);
-    }
-    execve(cmd_path, cmd->matrice, envp);
+	envp = env_list_to_array(env);
+	cmd_path = find_command_path(cmd->matrice[0]);  // Trouver le chemin complet de la commande
+	if (cmd_path == NULL)
+	{
+		perror("Commande non trouvée");
+		exit(EXIT_FAILURE);
+	}
+	execve(cmd_path, cmd->matrice, envp);
 }
 
 // void execute_command_or_builtin(t_cmd **cmd, t_env **env)

@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: spagliar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: almarico <almarico@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 14:45:23 by spagliar          #+#    #+#             */
-/*   Updated: 2024/09/09 14:45:25 by spagliar         ###   ########.fr       */
+/*   Updated: 2024/11/09 21:28:06 by almarico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
+//gestion de l option -n
 bool	echo_n(char *argv)
 {
 	int	i;
@@ -237,12 +237,18 @@ void	ft_echo(char **argv)//cf parsing
 			free(output);
 		}
         if (argv[i + 1])
-            write(1, " ", 1);
+			// Affiche un espace entre les arguments
+            ft_putstr_fd(" ", 1);
         i++;
 	}
+	// Affiche un espace si l option -n est activee
+	//if (new_line)
+	//	ft_putstr_fd(" ",1);
+	// Affiche un saut de ligne si l'option -n n'est pas activée
     if (new_line)
-        write(1, "\n", 1);
+       ft_putstr_fd("\n",1);
 }
 //echo sans options -> ajoute un saut de ligne par defaut
 //echo -n -> supprime le saut de ligne
 //echo -nnnnn -> marche comme -n
+ 
