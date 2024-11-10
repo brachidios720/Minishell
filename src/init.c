@@ -20,19 +20,34 @@ void    init_data(t_data *data)
     data->mat = NULL;
     data->rien = TRUE;
 }
-/*
-char    *search_in_env(t_data *data, char *name)
-{
-    char *dest = NULL;
-    int i = 0;
-    while(data->copy_env[i])
-    {
-        if(ft_strcmp(data->copy_env[i], name) == 0)
-        {
-            dest = ft_strcpy(dest, data->copy_env[i]);
-        }
-        i++;
-    }
-    return(dest);
-}*/
 
+// char    *search_in_env(t_data *data, char *name)
+// {
+//     char *dest = NULL;
+//     int i = 0;
+//     while(data->copy_env[i])
+//     {
+//         if(ft_strcmp(data->copy_env[i], name) == 0)
+//         {
+//             dest = ft_strcpy(dest, data->copy_env[i]);
+//         }
+//         i++;
+//     }
+//     return(dest);
+// }
+
+char    *search_in_env(t_env **env, char *name)
+{
+    t_env *tmp;
+    tmp = *env;
+    while(tmp->next != NULL)
+    {
+        if(ft_strcmp(tmp->content, name) == 0)
+        {
+            //printf("%s\n", tmp->content);
+            return(tmp->content);
+        }
+        tmp = tmp->next;
+    }
+    return("");
+}

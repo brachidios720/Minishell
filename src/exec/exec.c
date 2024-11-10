@@ -79,37 +79,64 @@
 //     exec_with_env_and_redir(cmd, data);
 // }
 
-void exec_cmd(t_data *data, t_cmd **cmd, t_env **env)
-{
-    pid_t pid;
-    int status;
-    int pidt[2];
-    t_cmd *tmp;
+// void exec_cmd(t_data *data, t_cmd **cmd, t_env **env)
+// {
+//     pid_t pid;
+//     int status;
+//     int pidt[2];
+//     t_cmd *tmp;
 
-    tmp = *cmd;
-    pid = fork();
-    if (pid == -1) 
-    {
-        perror("Erreur de fork");
-        return;
-    }
-    if (pid == 0) 
-	{
-       // printf("zzzz\n");
-        handle_redir_in_out(&tmp);
-        dup2(pidt[1], STDOUT_FILENO);  // Rediriger la sortie de cmd1 vers le pipe
-        close(pidt[0]);
-        close(pidt[1]);
-        execute_command_or_builtin(&tmp, env, data); 
-        //perror("Erreur d'exécution de la commande");
-        exit(EXIT_SUCCESS);
-    } 
-	else 
-	{
-        waitpid(pid, &status, 0);
-        data->last_exit_status = WEXITSTATUS(status);
+//     tmp = *cmd;
+//     pid = fork();
+//     if (pid == -1) 
+//     {
+//         perror("Erreur de fork");
+//         return;
+//     }
+//     if (pid == 0) 
+// 	{
+//        // printf("zzzz\n");
+//         //handle_redir_in_out(&tmp);
+//         dup2(pidt[1], STDOUT_FILENO);  // Rediriger la sortie de cmd1 vers le pipe
+//         close(pidt[0]);
+//         close(pidt[1]);
+//         execute_command_or_builtin(&tmp, env); 
+//         //perror("Erreur d'exécution de la commande");
+//         exit(EXIT_SUCCESS);
+//     } 
+// 	else 
+// 	{
+//         waitpid(pid, &status, 0);
+//         data->last_exit_status = WEXITSTATUS(status);
+//     }
+// }
+
+void exec_cmd(t_data *data, t_cmd **cmd, t_env **env) {
+    t_cmd *tmp = *cmd;
+    int status;
+
+    if (is_builtin(tmp->str)) {  // Vérifie si c'est un builtin
+        // Exécute les builtins directement dans le processus parent
+        execute_command_or_builtin(&tmp, env);
+    } else {
+        // Pour les commandes externes, on fork pour exécuter dans un processus enfant
+        pid_t pid = fork();
+        if (pid == -1) {
+            perror("Erreur de fork");
+            return;
+        }
+        if (pid == 0) {
+            // Processus enfant
+            execute_command_or_builtin(&tmp, env);
+            exit(EXIT_SUCCESS); // Assure une bonne terminaison de l'enfant
+        } else {
+            // Processus parent : attend que l'enfant se termine
+            waitpid(pid, &status, 0);
+            data->last_exit_status = WEXITSTATUS(status);
+        }
     }
 }
+
 
 
 // bool	exec(t_data *data, t_cmd **cmd)

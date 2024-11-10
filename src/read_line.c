@@ -20,7 +20,8 @@ void ft_check_line(char **av, char **envp, t_data *data, t_cmd **cmd, t_env **en
 
     signal(SIGINT, ft_handler);
     signal(SIGQUIT, ft_handlequit);
-    char *line = readline(CYAN"Minishell> "RESET);
+    char *line = NULL;
+    line = readline(CYAN"Minishell> "RESET);
     if(line == NULL || ft_strncmp(line, "exit" , ft_strlen("exit")) == 0)
         return(free(line));
     add_history(line);
@@ -34,7 +35,6 @@ void ft_check_line(char **av, char **envp, t_data *data, t_cmd **cmd, t_env **en
     }
     else
     {
-        //printf("i\n");
         process_commands(data, env, cmd);
         ft_free(line, cmd);
         ft_check_line(av, envp, data, cmd, env);

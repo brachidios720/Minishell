@@ -60,23 +60,165 @@ char	*ft_itoa_m(int n)
 	return (ft_return(buff));
 }
 
-char *expand_variable(char *arg, t_data *data)
+// char *expand_variable(char *arg, t_data *data, t_env **env)
+// {
+// 	//printf("arg = %s\n", arg);
+//     if (arg[0] == '$') 
+// 	{
+//         if (arg[1] == '?') 
+//             return (ft_itoa_m(data->last_exit_status)); 
+// 		else if(search_in_env(env, arg) == 0)
+//             return (getenv(arg + 1));  // Cherche la variable d'environnement sans le '$'
+// 		else
+// 			ft_strdup("");
+//     }
+//     return (arg);  // Retourner l'argument tel quel s'il ne s'agit pas d'une variable
+// }
+
+char *ft_strjoinn(char const *s1, char const *s2)
 {
-    if (arg[0] == '$') 
-	{
-        if (arg[1] == '?') 
-            return (ft_itoa_m(data->last_exit_status)); 
-		else 
-            return (getenv(arg + 1));  // Cherche la variable d'environnement sans le '$'
-    }
-    return (arg);  // Retourner l'argument tel quel s'il ne s'agit pas d'une variable
+    size_t len1 = 0;
+    size_t len2 = 0;
+    char *strj;
+
+    if (s1) len1 = ft_strlen(s1);  // S'assurer que s1 n'est pas NULL
+    if (s2) len2 = ft_strlen(s2);  // S'assurer que s2 n'est pas NULL
+
+    strj = malloc(len1 + len2 + 1);
+    if (strj == NULL)
+        return NULL;
+
+    if (s1) ft_memcpy(strj, s1, len1);  // Copier s1 si ce n'est pas NULL
+    if (s2) ft_memcpy(strj + len1, s2, len2);  // Copier s2 si ce n'est pas NULL
+
+    strj[len1 + len2] = '\0';  // Ajouter le caractère de fin de chaîne
+    return strj;
 }
 
-void	ft_echo(char **argv, t_data *data)//cf parsing
+char *ft_strjoin_char(char *s1, char c) {
+    int len;
+    char *result;
+
+    if (s1 != NULL)
+        len = strlen(s1);
+    else
+        len = 0;
+
+    result = malloc(len + 2);  // +2 pour le caractère et le '\0'
+    if (result == NULL)
+        return NULL;
+
+    if (s1 != NULL)
+        strcpy(result, s1);
+    
+    result[len] = c;
+    result[len + 1] = '\0';
+
+    free(s1);  // Libère s1 si elle a été allouée dynamiquement
+    return result;
+}
+
+// char *expand_variables_in_string(char *str) {
+//     char *result = NULL;
+//     char *temp;
+//     int i = 0;
+//     int start;
+//     char *var_name;
+//     char *var_value;
+
+//     while (str[i] != '\0') {
+//         if (str[i] == '$') {  // Détecte le début d'une variable
+//             i++;
+//             start = i;
+//             while (str[i] != '\0' && ft_isalpha(str[i]) == 1) {
+//                 i++;
+//             }
+
+//             var_name = ft_substr(str, start, i - start); // Extraire le nom de la variable
+//             var_value = getenv(var_name);    // Recherche la variable dans `t_env`
+//             if(var_value == NULL)
+// 				var_value = "";
+
+//             //temp = ft_strjoin(result, var_value);      // Concatène la valeur de la variable
+// 			//temp = result;
+// 			result = ft_strjoin(result, var_value); 
+// 			//free(result);
+//             //result = temp;
+//             free(var_name);
+//         } else {
+//             //temp = result;
+//             result = ft_strjoin_char(result, str[i]);    // Ajoute chaque caractère individuel
+//             //free(result);
+//             i++;
+//         }
+//     }
+//     return result;
+// }
+
+char *expand_variables_in_string(char *str) {
+    char *result = NULL;
+    int i = 0;
+    int start;
+    char *var_name;
+    char *var_value;
+
+	//printf("%s\n", str);
+    while (str[i] != '\0') {
+        if (str[i] == '$') {  // Détecte le début d'une variable
+            //printf("Détecté un '$' à la position %d\n", i);
+			i++;
+            start = i;
+            while (str[i] != '\0' && ft_isalpha(str[i]) == 1) {
+                i++;
+            }
+
+            var_name = ft_substr(str, start, i - start);  // Extrait le nom de la variable
+            //printf("Variable détectée : %s\n", var_name);  // Affiche la variable pour déboguer
+
+            // Recherche la valeur de la variable dans l'environnement
+            var_value = getenv(var_name); 
+			//printf("Valeur de la variable %s : %s\n", var_name, var_value);
+			//printf("%s\n", var_value); 
+            if (var_value == NULL) {
+                var_value = "";  // Si la variable n'est pas trouvée, remplace par une chaîne vide
+            }
+
+            // Concatène la valeur de la variable avec le résultat actuel
+            //char *temp = result;
+			//printf("Résultat avant ajout de la variable : %s\n", result);
+            result = ft_strjoinn(result, var_value);  // Concatène la chaîne
+           // printf("Résultat après ajout de la variable : %s\n", result);
+			//free(temp);  // Libère l'ancien contenu de `result`
+            free(var_name);  // Libère le nom de la variable
+        } else {
+            // Si ce n'est pas une variable, on ajoute le caractère au résultat
+     		result = ft_strjoin_char(result, str[i]);    // Ajoute chaque caractère individuel
+            i++;
+        }
+    }
+	//printf("Résultat final : %s\n", result);
+    return result;  // Retourne le résultat final
+}
+
+
+int check_dollard(char *str)
+{
+	int i = 0;
+	int count = 0;
+	while(str[i])
+	{
+		if(str[i] == '$')
+			count++;
+		i++;
+	}
+	return(count);
+}
+void	ft_echo(char **argv)//cf parsing
 {
 	int		i;
 	bool	new_line;
 	char	*output;
+	//char	**cut;
 
 	i = 1;
 	new_line = true;
@@ -88,9 +230,12 @@ void	ft_echo(char **argv, t_data *data)//cf parsing
 	}
 	while (argv[i])
 	{
-	 	output = expand_variable(argv[i], data);  // Vérifier l'expansion de variable
-	    if (output) 
+	 	output = expand_variables_in_string(argv[i]);  // Vérifier l'expansion de variable
+	    if (output)
+		{ 
             write(1, output, strlen(output));
+			free(output);
+		}
         if (argv[i + 1])
             write(1, " ", 1);
         i++;

@@ -12,35 +12,76 @@
 
 #include "../../include/minishell.h"
 
-void exec_builtin(t_cmd *cmd, t_env **env, t_data *data)
-{
-    pid_t pid = fork();
+// void exec_builtin(t_cmd *cmd, t_env **env)
+// {
+//     pid_t pid = fork();
     
-    if (pid == 0) // Processus enfant
+//     if (pid == 0) // Processus enfant
+//     {
+//         // Exécute le builtin dans l'enfant
+//         if (ft_strcmp(cmd->matrice[0], "cd") == 0)
+//             ft_cd(env, cmd->matrice);
+//         else if (ft_strcmp(cmd->matrice[0], "echo") == 0)
+//             ft_echo(cmd->matrice);
+//         else if (ft_strcmp(cmd->matrice[0], "env") == 0)
+//             ft_env(env);
+//         else if (ft_strcmp(cmd->matrice[0], "pwd") == 0)
+//             ft_pwd();
+//         else if (ft_strcmp(cmd->matrice[0], "export") == 0)
+//             ft_export(env, cmd->matrice);
+//         else if (ft_strcmp(cmd->matrice[0], "unset") == 0)
+//             ft_unset(env, cmd->matrice);
+//           // Quitter après l'exécution du builtin
+//     }
+//     else if (pid > 0)  // Processus parent
+//     {
+//         waitpid(pid, NULL, 0);  // Attendre que le processus enfant se termine
+//     }
+//     else
+//     {
+//         perror("Erreur de fork");
+//         exit(EXIT_FAILURE);
+//     }
+// }
+
+void exec_builtin(t_cmd *cmd, t_env **env)
+{
+    // Les builtins qui doivent être exécutés dans le processus parent
+    if (ft_strcmp(cmd->matrice[0], "export") == 0)
     {
-        // Exécute le builtin dans l'enfant
-        if (ft_strcmp(cmd->matrice[0], "cd") == 0)
-            ft_cd(env, cmd->matrice);
-        else if (ft_strcmp(cmd->matrice[0], "echo") == 0)
-            ft_echo(cmd->matrice, data);
-        else if (ft_strcmp(cmd->matrice[0], "env") == 0)
-            ft_env(env);
-        else if (ft_strcmp(cmd->matrice[0], "pwd") == 0)
-            ft_pwd();
-        else if (ft_strcmp(cmd->matrice[0], "export") == 0)
-            ft_export(env, cmd->matrice);
-        else if (ft_strcmp(cmd->matrice[0], "unset") == 0)
-            ft_unset(env, cmd->matrice);
-          // Quitter après l'exécution du builtin
+        ft_export(env, cmd->matrice);
     }
-    else if (pid > 0)  // Processus parent
+    else if (ft_strcmp(cmd->matrice[0], "unset") == 0)
     {
-        waitpid(pid, NULL, 0);  // Attendre que le processus enfant se termine
+        ft_unset(env, cmd->matrice);
     }
     else
     {
-        perror("Erreur de fork");
-        exit(EXIT_FAILURE);
+        // Autres commandes peuvent être forkées
+        pid_t pid = fork();
+        
+        if (pid == 0) // Processus enfant
+        {
+            // Exécute les autres builtins dans l'enfant
+            if (ft_strcmp(cmd->matrice[0], "cd") == 0)
+                ft_cd(env, cmd->matrice);
+            else if (ft_strcmp(cmd->matrice[0], "echo") == 0)
+                ft_echo(cmd->matrice);
+            else if (ft_strcmp(cmd->matrice[0], "env") == 0)
+                ft_env(env);
+            else if (ft_strcmp(cmd->matrice[0], "pwd") == 0)
+                ft_pwd();
+            exit(EXIT_SUCCESS);  // Quitter après l'exécution du builtin
+        }
+        else if (pid > 0)  // Processus parent
+        {
+            waitpid(pid, NULL, 0);  // Attendre que le processus enfant se termine
+        }
+        else
+        {
+            perror("Erreur de fork");
+            exit(EXIT_FAILURE);
+        }
     }
 }
 
@@ -64,15 +105,51 @@ void exec_external(t_cmd *cmd, t_env **env)
     execve(cmd_path, cmd->matrice, envp);
 }
 
-void execute_command_or_builtin(t_cmd **cmd, t_env **env, t_data *data)
-{    // Redirections et exécution des builtins ou commandes externes
-    t_cmd *tmp = *cmd;
-    //handle_redirections(tmp);
+// void execute_command_or_builtin(t_cmd **cmd, t_env **env)
+// {    // Redirections et exécution des builtins ou commandes externes
+//     t_cmd *tmp = *cmd;
+//     //handle_redirections(tmp);
 
-    //printf("%s\n", tmp->str);
-    if (is_builtin(tmp->str) == 1)  // Si c'est un builtin
+//     //printf("%s\n", tmp->str);
+//     if (is_builtin(tmp->str) == 1)  // Si c'est un builtin
+//     {
+//         exec_builtin(tmp, env);  // Terminer l'enfant après avoir exécuté le builtin
+//     }
+//     else
+//     {
+//         exec_external(tmp, env);  // Exécuter une commande externe via execve
+//     }
+// }
+
+void execute_command_or_builtin(t_cmd **cmd, t_env **env)
+{
+    t_cmd *tmp = *cmd;
+
+    if (is_builtin(tmp->str))  // Si c'est un builtin
     {
-        exec_builtin(tmp, env, data);  // Terminer l'enfant après avoir exécuté le builtin
+        if (ft_strncmp(tmp->str, "export", ft_strlen("export")) == 0 || ft_strncmp(tmp->str, "unset", ft_strlen("unset")) == 0)
+        {
+            //printf("IIIII\n");
+            exec_builtin(tmp, env);  // Exécute directement sans fork
+        }
+        else
+        {
+            pid_t pid = fork();
+            if (pid == 0)
+            {
+                exec_builtin(tmp, env);
+                exit(EXIT_SUCCESS);
+            }
+            else if (pid > 0)
+            {
+                waitpid(pid, NULL, 0);
+            }
+            else
+            {
+                perror("Erreur de fork");
+                exit(EXIT_FAILURE);
+            }
+        }
     }
     else
     {
@@ -81,13 +158,14 @@ void execute_command_or_builtin(t_cmd **cmd, t_env **env, t_data *data)
 }
 
 
+
 void process_commands(t_data *data, t_env **env, t_cmd **cmd)
 {
     // Vérifier s'il y a des pipes dans les commandes
     if (count_pipe(data->line))
     {
         // Appeler la fonction qui gère l'exécution des commandes pipées
-        exec_pipe_chain(data, cmd, env);
+        exec_pipe_chain(cmd, env);
     }
     else
     {
