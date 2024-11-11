@@ -6,7 +6,7 @@
 /*   By: almarico <almarico@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 15:12:37 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/11/11 17:23:23 by almarico         ###   ########.fr       */
+/*   Updated: 2024/11/11 17:34:53 by almarico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,7 +223,7 @@ int     check_dollard(char *str);
 char    *expand_variables_in_string(char *str);
 //char    *expand_variable(char *arg, t_data *data, t_env **env);
 char	*ft_itoa_m(int n);
-void	ft_echo(char **argv);
+void	ft_echo(char **argv, int fd);
 char    *cut_tab_dollard(char *str);
 //export.c
 void    export_with_nothing(t_env *env);
