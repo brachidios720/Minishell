@@ -288,3 +288,11 @@ char *cut_tab_dollard(char *str)
 	else
 		return(str);
 }
+
+void	ft_sign(void)
+{
+	signal(SIGINT, ft_handler_sig);
+	signal(SIGINT, ft_handler_sig_cmd);
+	signal(SIGINT, ft_handler_sig_hd);
+    signal(SIGQUIT, ft_handlequit);
+}

@@ -104,13 +104,11 @@ void exec_pipe_chain(t_data *data, t_cmd **cmd, t_env **env)
 
     while (tmp != NULL)
     {
-        //printf("Executing command: %s\n", tmp->str);
         if(is_builtin_parent(tmp->str))
             execute_builtin_in_parent(tmp, env);
         else
         {
-        // Crée un pipe si une commande suivante existe
-            if (tmp->next != NULL && pipe(pipe_fd) == -1)
+            if (tmp->next != NULL && pipe(pipe_fd) == -1) // Crée un pipe si une commande suivante existe
             {
                 perror("Pipe error");
                 exit(EXIT_FAILURE);
@@ -124,23 +122,14 @@ void exec_pipe_chain(t_data *data, t_cmd **cmd, t_env **env)
         }
         else if (pid == 0)  // Processus enfant
         {
-            if (command_index == 0)  // Première commande
-            {
-                //printf("Première commande - redirection de sortie vers pipe\n");
-                ft_pipe_first_cmd(pipe_fd, tmp, data);
-            }
-            else if (tmp->next == NULL)  // Dernière commande
-            {
-                //printf("Dernière commande - redirection de lecture depuis pipe\n");
-                ft_pipe_last_cmd((int[2]){prev_fd, pipe_fd[1]}, tmp, data);
-            }
-            if (tmp->next != NULL && tmp != *cmd) // Commande intermédiaire
-			{
-                //printf("Commande intermédiaire - redirection entre pipes\n");
-    			ft_pipe_middle_cmd(prev_fd, pipe_fd, tmp);
-			}
             
-            // Exécuter la commande (builtin ou externe)
+            //ft_chaine_pipe_utils(pipe_fd, cmd, data, command_index);
+            if (command_index == 0 && tmp->next != NULL)  // Première commande
+               ft_pipe_first_cmd(pipe_fd, tmp, data);
+            else if (tmp->next == NULL)  // Dernière commande
+                ft_pipe_last_cmd((int[2]){prev_fd, pipe_fd[1]}, tmp, data);
+            if (tmp->next != NULL && tmp != *cmd) // Commande intermédiaire
+    			ft_pipe_middle_cmd(prev_fd, pipe_fd, tmp);
             execute_command_or_builtin(&tmp, env);
             exit(EXIT_SUCCESS);
         }
@@ -148,15 +137,11 @@ void exec_pipe_chain(t_data *data, t_cmd **cmd, t_env **env)
         {
             if (prev_fd != -1)
                 close(prev_fd);       // Ferme l'extrémité de lecture précédente
-
             close(pipe_fd[1]);        // Ferme l'extrémité d'écriture actuelle pour le parent
             prev_fd = pipe_fd[0];     // Définir l'extrémité de lecture actuelle pour la prochaine commande
-
             waitpid(pid, NULL, 0);    // Attend que le processus enfant se termine
-
             command_index++;
         }
-        
         tmp = tmp->next;
     }
 }

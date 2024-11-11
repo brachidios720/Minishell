@@ -268,7 +268,7 @@ void	ft_free_tab(char **av);
 void	print_minishell(void);
 
 // read_line.c
-void	ft_check_line(char **av, char **envp, t_data *data, t_cmd **cmd, t_env **env);
+void	ft_check_line(t_data *data, t_cmd **cmd, t_env **env);
 void	detect_input_redirection(t_cmd *cmd, t_data *data);
 void	detect_output_redirection(t_cmd *cmd, t_data *data);
 
@@ -313,5 +313,8 @@ void    unsetenv_in_list(t_env **env, char *name);
 void    setenv_in_list(t_env **env, char *name, char *value);
 int 	is_builtin_parent(const char *command); 
 void 	execute_builtin_in_parent(t_cmd *cmd, t_env **env);
+void	ft_sign(void);
+//pipe_utils
+void    ft_chaine_pipe_utils(int pipe_fd[2], t_cmd **cmd, t_data *data, int command_index);
 
 #endif
