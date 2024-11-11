@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: almarico <almarico@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:35:56 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/11/11 11:02:22 by pag              ###   ########.fr       */
+/*   Updated: 2024/11/11 14:04:56 by almarico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,25 +76,12 @@ void	execute_command_or_builtin(t_cmd **cmd, t_env **env, t_data *data)
 void	process_commands(t_data *data, t_env **env, t_cmd **cmd)
 {
     // Détection des redirections et heredocs pour la commande actuelle
-	detect_input_redirection(*cmd, data);
-		printf("je suis ds process commands input\n");
-	detect_output_redirection(*cmd, data);
-		printf("je suis ds process commands output\n");
-	if ((*cmd)->input_redir_type == HEREDOC)
-	{
-		// Vérification que le délimiteur est bien défini
-		if (!(*cmd)->delimiter) 
-		{
-			ft_printf("le délimiteur du heredoc n'est pas défini cf process command.\n");
-			return;
-		}
-		// Appel de ft_heredoc après confirmation du délimiteur
-		if (ft_heredoc(*cmd, data) == -1)
-		{
-			ft_printf("Erreur lors de la configuration du heredoc cf process command\n");
-			return;
-		}
-	}
+	// detect_input_redirection(*cmd, data);
+	// 	printf("je suis ds process commands input\n");
+	// detect_output_redirection(*cmd, data);
+	// 	printf("je suis ds process commands output\n");
+	detect_redirection(*cmd, data);
+	handle_redirection(*cmd, data);
 	if (count_pipe(data->line))
 	{
 		// Appeler la fonction qui gère l'exécution des commandes pipées
