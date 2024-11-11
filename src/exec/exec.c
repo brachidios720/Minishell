@@ -165,7 +165,7 @@ void exec_cmd(t_data *data, t_cmd **cmd, t_env **env)
 			}
 			close(fd_out);
 		}
-		execute_command_or_builtin(&tmp, env);
+		execute_command_or_builtin(&tmp, env, data);
 		exit(EXIT_SUCCESS);
 	}
 	else

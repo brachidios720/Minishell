@@ -53,6 +53,7 @@ int	ft_heredoc(t_cmd *cmd, t_data *data)
 		perror("Erreur lors de l'ouverture du fichier temporaire");
 		return (-1);
 	}
+	//signal(SIGINT, ft_handler_sig_hd);
 	read_input_with_heredoc(tmp_fd, cmd);
 	close(tmp_fd);
 	return (replace_matrice_with_heredoc_file(cmd));

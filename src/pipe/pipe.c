@@ -89,6 +89,7 @@ void	ft_pipe_middle_cmd(int prev_fd, int pipe_fd[2], t_cmd *cmd)
 void exec_pipe_chain(t_data *data, t_cmd **cmd, t_env **env)
 {
     pid_t pid;
+    //int status;
     t_cmd *tmp = *cmd;
     int pipe_fd[2];         // Pipe pour chaque commande
     int command_index = 0;
@@ -96,8 +97,11 @@ void exec_pipe_chain(t_data *data, t_cmd **cmd, t_env **env)
 
     while (tmp != NULL)
     {
-        if(is_builtin_parent(tmp->str))
+        if(is_builtin_parent(tmp->matrice[0]))
+        {
+            printf("LLLLLLLLLLLLLLL\n");
             execute_builtin_in_parent(tmp, env);
+        }
         else
         {
             if (tmp->next != NULL && pipe(pipe_fd) == -1) // Crée un pipe si une commande suivante existe
@@ -122,7 +126,7 @@ void exec_pipe_chain(t_data *data, t_cmd **cmd, t_env **env)
                 ft_pipe_last_cmd((int[2]){prev_fd, pipe_fd[1]}, tmp, data);
             if (tmp->next != NULL && tmp != *cmd) // Commande intermédiaire
     			ft_pipe_middle_cmd(prev_fd, pipe_fd, tmp);
-            execute_command_or_builtin(&tmp, env);
+            execute_command_or_builtin(&tmp, env, data);
             exit(EXIT_SUCCESS);
         }
         else  // Processus parent
@@ -132,10 +136,12 @@ void exec_pipe_chain(t_data *data, t_cmd **cmd, t_env **env)
             close(pipe_fd[1]);        // Ferme l'extrémité d'écriture actuelle pour le parent
             prev_fd = pipe_fd[0];     // Définir l'extrémité de lecture actuelle pour la prochaine commande
             waitpid(pid, NULL, 0);    // Attend que le processus enfant se termine
+            //g_signal = WEXITSTATUS(status);
             command_index++;
         }
         tmp = tmp->next;
     }
+    data->last_exit_status = g_signal;
 }
 
 int is_builtin_parent(const char *command) 
