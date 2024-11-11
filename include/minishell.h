@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almarico <almarico@student.42lehavre.fr>   +#+  +:+       +#+        */
+/*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 15:12:37 by raphaelcarb       #+#    #+#             */
 /*   Updated: 2024/11/11 17:34:53 by almarico         ###   ########.fr       */
@@ -54,27 +54,17 @@ extern int	g_signal;		//variable globale pour gestion des signaux
 
 typedef struct s_cmd
 {
-	char	*str;	  // stock 1 chaine de car (ex : ls)
-	char	*delimiter; //identfier pour le heredoc
-	char	*filename; //nom du fichier 
-	char	*file_tmp; //fichier temporaire
-	int		num;	  // numero de token
-	char	*option; // option cmd (ex-l)
-	char	**matrice;
-	char	**incmd;
-	// char	*input_files[30]; //liste des chemins de fichiers pour la redirection d entree
-	// char	*output_files[30]; //liste des chemins de fichiers pour la redirection de sortie
-	char	*payload[30]; //liste des chemins de fichiers pour la redirection de sortie
-	// int		*input_redir[30]; // fichier pour la redirection d'entree <
-	// int		*output_redir[30];  // fichier pour la redirection de sortie >
-	// int		input_redir_type; // stock le type de redirection d'entree 
-	// int		output_redir_type;  // stock le type de redirection de sortie
-	int		redir_type[30];
-	int		input_fd; //utilise pour stocker le descripteur de fichier associe a la redirection d entree
-	int		output_fd; //utilisee pour stocker le descripteur de fichier associe a la redirection de sortie
-	int		append; // ajout a la fin >> -> 1 sinon 0
-	struct s_cmd *next;
-} t_cmd;
+	char		*str;// stock 1 chaine de car (ex : ls)
+	char		*delimiter;// identfier pour le heredoc
+	char		*option; // option cmd (ex-l)
+	char		**matrice;
+	char		*payload[30];// liste des chemins de fichiers pour la redirection de sortie
+	int			redir_type[30];
+	int			input_fd;// utilise pour stocker le descripteur de fichier associe a la redirection d entree
+	int			output_fd;// utilisee pour stocker le descripteur de fichier associe a la redirection de sortie
+	//int			append;// ajout a la fin >> -> 1 sinon 0
+	struct	s_cmd *next;
+}	t_cmd;
 
 typedef struct s_env
 {
@@ -247,7 +237,10 @@ void	handle_redirection(t_cmd *cmd, t_data *data);
 //->heredoc_file.c
 int		ft_heredoc(t_cmd *cmd, t_data *data);
 //->read_heredoc.c
-bool read_in_stdin(t_data *data, int fd, t_cmd *cmd);
+//bool	read_in_stdin(t_data *data, int fd, t_cmd *cmd);
+void	pass_redirection_and_payload(char **line, int *i);
+void	exec_trim(char **line, char **res, int *i, int j);
+void	trim_redirections(char **line);
 //->utils_heredoc.c
 void	configure_heredoc_signals();
 void	read_input_with_heredoc(int tmp_fd, t_cmd *cmd);

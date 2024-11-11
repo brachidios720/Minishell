@@ -6,7 +6,7 @@
 /*   By: almarico <almarico@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:35:56 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/11/11 17:34:32 by almarico         ###   ########.fr       */
+/*   Updated: 2024/11/11 21:19:53 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,45 +70,42 @@ void exec_external(t_cmd *cmd, t_env **env)
 
 void execute_command_or_builtin(t_cmd **cmd, t_env **env)
 {
-    t_cmd *tmp = *cmd;
+	t_cmd *tmp = *cmd;
 
-    if (is_builtin(tmp->str))  // Si c'est un builtin
-    {
-        if (ft_strncmp(tmp->str, "export", ft_strlen("export")) == 0 || ft_strncmp(tmp->str, "unset", ft_strlen("unset")) == 0 || ft_strncmp(tmp->str, "cd", ft_strlen("cd")) == 0)
-        {
-            //printf("IIIII\n");
-            exec_builtin(tmp, env);  // Exécute directement sans fork
-        }
-        else
-        {
-            pid_t pid = fork();
-            if (pid == 0)
-            {
-                exec_builtin(tmp, env);
-                exit(EXIT_SUCCESS);
-            }
-            else if (pid > 0)
-            {
-                waitpid(pid, NULL, 0);
-            }
-            else
-            {
-                perror("Erreur de fork");
-                exit(EXIT_FAILURE);
-            }
-        }
-    }
-    else
-    {
-        exec_external(tmp, env);  // Exécuter une commande externe via execve
-    }
+	if (is_builtin(tmp->str))  // Si c'est un builtin
+	{
+		if (ft_strncmp(tmp->str, "export", ft_strlen("export")) == 0 || ft_strncmp(tmp->str, "unset", ft_strlen("unset")) == 0 || ft_strncmp(tmp->str, "cd", ft_strlen("cd")) == 0)
+		{
+			//printf("IIIII\n");
+			exec_builtin(tmp, env);  // Exécute directement sans fork
+		}
+		else
+		{
+			pid_t pid = fork();
+			if (pid == 0)
+			{
+				exec_builtin(tmp, env);
+				exit(EXIT_SUCCESS);
+			}
+			else if (pid > 0)
+			{
+				waitpid(pid, NULL, 0);
+			}
+			else
+			{
+				perror("Erreur de fork");
+				exit(EXIT_FAILURE);
+			}
+		}
+	}
+	else
+		exec_external(tmp, env);  // Exécuter une commande externe via execve
 }
 
-
-
-void process_commands(t_data *data, t_env **env, t_cmd **cmd)
+void	process_commands(t_data *data, t_env **env, t_cmd **cmd)
 {
 	detect_redirection(*cmd, data);
+	trim_redirections(&data->line);
 	handle_redirection(*cmd, data);
 	exec_pipe_chain(data, cmd, env);
 }
