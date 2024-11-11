@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almarico <almarico@student.42lehavre.fr>   +#+  +:+       +#+        */
+/*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 14:45:23 by spagliar          #+#    #+#             */
-/*   Updated: 2024/11/09 21:28:06 by almarico         ###   ########.fr       */
+/*   Updated: 2024/11/11 14:49:45 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,16 +61,16 @@ char	*ft_itoa_m(int n)
 }
 
 //gestion $?
-char *expand_variable(char *arg, t_data *data)
+char	*expand_variable(char *arg, t_data *data)
 {
-    if (arg[0] == '$') 
+	if (arg[0] == '$')
 	{
-        if (arg[1] == '?') 
-            return (ft_itoa_m(data->last_exit_status)); 
-		else 
-            return (getenv(arg + 1));  // Cherche la variable d'environnement sans le '$'
-    }
-    return (arg);  // Retourner l'argument tel quel s'il ne s'agit pas d'une variable
+		if (arg[1] == '?')
+			return (ft_itoa_m(data->last_exit_status));
+		else
+			return (getenv(arg + 1));// Cherche la variable d'environnement sans le '$'
+	}
+	return (arg);//Retourne l'argument tel quel s'il ne s'agit pas d'une variable
 }
 
 void	ft_echo(char **argv, t_data *data)
@@ -81,7 +81,6 @@ void	ft_echo(char **argv, t_data *data)
 
 	i = 1;
 	new_line = true;
-
 	while (argv[i] && echo_n(argv[i]))
 	{
 		new_line = false;
@@ -89,25 +88,17 @@ void	ft_echo(char **argv, t_data *data)
 	}
 	while (argv[i])
 	{
-	 	output = expand_variable(argv[i], data);  // Vérifier l'expansion de variable
-	    if (output)
-		{ 
-            ft_putstr_fd(output, 1);
-			//ft_putstr_fd("\n", 1);
-		}
+		output = expand_variable(argv[i], data);// Vérifier l'expansion de variable
+		if (output)
+			ft_putstr_fd(output, 1);
 		else
 			ft_putstr_fd("", 1);
-        if (argv[i + 1])
-			// Affiche un espace entre les arguments
-            ft_putstr_fd(" ", 1);
-        i++;
+		if (argv[i + 1])
+			ft_putstr_fd(" ", 1);
+		i++;
 	}
-	// Affiche un espace si l option -n est activee
-	//if (new_line)
-	//	ft_putstr_fd(" ",1);
-	// Affiche un saut de ligne si l'option -n n'est pas activée
-    if (new_line)
-       ft_putstr_fd("\n",1);
+	if (new_line)
+		ft_putstr_fd("\n", 1);
 }
 //echo sans options -> ajoute un saut de ligne par defaut
 //echo -n -> supprime le saut de ligne
