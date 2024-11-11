@@ -24,13 +24,10 @@ char	*find_command_path(char *cmd)
 	i = 0;
 	while (paths[i])
 	{
-		full_path = ft_strjoin(paths[i], "/");//printf ("avec / : %s\n", full_path);
-		full_path = ft_strjoin(full_path, cmd);//printf ("cmd : %s\n", full_path);
+		full_path = ft_strjoin(paths[i], "/");
+		full_path = ft_strjoin(full_path, cmd);
 		if (access(full_path, X_OK) == 0)
-		{
-			//printf("valeur 1 :%s\n", full_path);
 			return (full_path);
-		}
 		i++;
 	}
 	return (NULL);

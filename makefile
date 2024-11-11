@@ -49,6 +49,7 @@ src = 	src/builtins/builtins.c \
 		src/read_line.c \
 		src/utils_env.c \
 		src/utils.c \
+		src/pipe/utils_pipe.c \
 
 
 srco = $(src:.c=.o)

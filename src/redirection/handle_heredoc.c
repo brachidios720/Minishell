@@ -37,6 +37,7 @@ static int handle_single_input_redir(t_cmd *cmd, t_data *data, int i)
 //apl count_nb_redir_imput -> pour compter les redirections
 //gere chaque redir en utilisant open ou ft_heredoc
 //retourne le dernier descripteur ouvert ou -1
+
 // static int	handle_redir_input(t_cmd *cmd, t_data *data)
 // {
 //     int i;
