@@ -6,7 +6,7 @@
 /*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 15:14:10 by spagliar          #+#    #+#             */
-/*   Updated: 2024/11/09 19:30:15 by pag              ###   ########.fr       */
+/*   Updated: 2024/11/11 11:13:56 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,13 @@ int handle_single_input_redir(t_cmd *cmd, t_data *data)
 	int	i;
     int fd;
     
+    
 	i = 0;
 	//pour fichier -> elle ouvre le fichier en lecture seule.
-    if (cmd->input_redir[i] == 1)
+    if (cmd->input_redir[30] == INPUT_FILE)
         fd = open(cmd->input_files[i], O_RDONLY);
 	//pour heredoc -> apl la fonction here_doc
-    else if (cmd->input_redir[i] == 2)
+    else if (cmd->input_redir[30] == HEREDOC)
     {
         printf("redir heredoc detectee pour le fichier : %s\n", cmd->input_files[i]);
         fd = ft_heredoc(cmd, data);
@@ -63,36 +64,40 @@ int handle_redir_input(t_cmd *cmd, t_data *data)
     last_fd = STDIN_FILENO;
 	//verif si presence des redirections d'entrée.
     if (!cmd->input_redir || !cmd->input_redir[0])
+    {
+        printf("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj");
 		return (STDIN_FILENO);
 	//apl la fonction pour compter le nb de redirections d entree
+    }
     nb = count_nb_redir_input(cmd);
+    printf("nb = %d\n", nb);
     while (i < nb)
     {
-		if (cmd->input_redir[i] == 1)
+		if (cmd->input_redir_type == INPUT_FILE)
 			tmp = open(cmd->input_files[i], O_RDONLY);
-		else if (cmd->input_redir[i] == 2)
+		else if (cmd->input_redir == HEREDOC)
 			tmp = ft_heredoc(cmd, data);
 		if (i != 0)
 			close(last_fd);
 		if (tmp == -1)
 			return (-1);
-		last_fd = tmp;
 		i++;
 	}
+	last_fd = tmp;
 	//retourne le dernier descripteur de fichier utilisé.
 	return (tmp);
 }
 
 //gere une seule redirection de sortie
-//si type 1 -> fichier en mode ecriture si 2 fichier en mode ajout/ecrase
+//si type 3 -> fichier en mode ecriture si 4 fichier en mode ajout/ecrase
 //retourne le descripteur de fichier ou -1 en cas d erreur
 int handle_single_output_redir(t_cmd *cmd, int index)
 {
     int fd;
     
-    if (cmd->output_redir[index] == 1)
+    if (cmd->output_redir == OUTPUT_FILE)
         fd = open(cmd->output_files[index], O_WRONLY | O_CREAT | O_TRUNC, READ_WRITE_EXEC);
-    else if (cmd->output_redir[index] == 2)
+    else if (cmd->output_redir[index] == APPEND)
         fd = open(cmd->output_files[index], O_WRONLY | O_CREAT | O_APPEND, READ_WRITE_EXEC);
     else
     {
@@ -139,9 +144,9 @@ int handle_redir_output(t_cmd *cmd)
         }
         if (last_fd != STDOUT_FILENO)
             close(last_fd);
-        last_fd = tmp;
         i++;
     }
+    last_fd = tmp;
     return (last_fd);
 }
 

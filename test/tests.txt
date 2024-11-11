@@ -1,62 +1,63 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   tests.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: spagliar <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/07 13:21:23 by spagliar          #+#    #+#             */
-/*   Updated: 2024/10/07 13:21:24 by spagliar         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-//ECHO :
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    tests.txt                                          :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: pag <pag@student.42.fr>                    +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/10/07 13:21:23 by spagliar          #+#    #+#              #
+#    Updated: 2024/11/10 16:23:08 by pag              ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 //-----------------------------------------------------------------------------
 
 C	echo "hello"
 T	hello
-M	//OK
+M	//OK 10/11
 
-C	echo -n "hello"		//ok meme ligne
+C	echo -n "hello"		
 T	hello
-M	//OK
+M	//print sur la meme ligne mais avec "" 10/11
 
-C	echo "hello" "world"	
+C	echo "hello" "world"	                            PBME
 T	hello world	
-M	//OK
+M	//print ok mais avec les "" 10/11
 
-C	echo $	
-T    	$
-M	//OK
+C	echo $	                                            PBME
+T   $
+M	//n'affiche rien 10/11
 
 C	echo -nn		
 T	(rien)
-M	//OK
+M	//OK 10/11
 
 C	echo ---n
 T	---n
-M	//OK
+M	//OK 10/11
 
-C    echo -n $			
-R    $
+C   echo -n $			                                PBME
+T   $ sur la meme ligne
+M   //n'affiche rien 10/11
 
 // $ :
 //-----------------------------------------------------------------------------
 
-C	echo $?+$?
+C	echo $?+$?                                          PBME
 T	0+0
-M	//OK
+M	//affiche 0 10/11
 
 C	echo $USER                        
 T	Affiche la valeur de la variable d'environnement USER -> spagliar
-M
+M   //OK 10/11
 
-C	echo $?                          //ok affiche le code retour de la derniere commande
-T	Affiche le code de retour de la dernière commande.
-M	
+C	echo $?                         
+T	Affiche le code de retour de la dernière commande. -> 0
+M	//ok 10/11
     
-C	echo $NONEXISTANT               //ok chaine vide + code de retour et mess d erreur
+C	echo $NONEXISTANT
 T	Si la variable d'environnement n'existe pas, afficher une chaîne vide ou ignorer cet argument.
-M
+M   //OK 10/11
 
 
 
@@ -65,11 +66,14 @@ M
 //REDIRECTION :
 //-------------
 
-C   echo "hello" < test1.txt          //Erreur ouverture fichier d'entrée: No such file or directory
-R   bash: test1.txt: No such file or directory //"hello" < test1.txt 
+C   echo "hello" < test1.txt                PBME
+T   hello
+M   //"hello" < output.txt   10/11
 
-C   echo "hello" > test1.txt          //pas bon
-R   ecrase les elements de test1 et remplace cf test1.txt 
+
+C   echo "hello" > test1.txt          
+R   ecrase les elements de test1 et remplace cf test1.txt
+M   //"hello" > output.txt
 
 C   echo "hello" >> test1.txt         //pas bon
 R	laisse les elements et ajoute les nouveaux elements dans test1.txt //"hello" >> test1.txt 

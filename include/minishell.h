@@ -6,7 +6,7 @@
 /*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 15:12:37 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/11/09 17:40:18 by pag              ###   ########.fr       */
+/*   Updated: 2024/11/11 11:12:59 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@
 #define READ_WRITE_EXEC 0777
 #define MODE_HEREDOC 0644
 
+
 extern int	g_signal;		//variable globale pour gestion des signaux
 
 typedef struct s_cmd
@@ -64,8 +65,8 @@ typedef struct s_cmd
 	char	**incmd;
 	char	**input_files; //liste des chemins de fichiers pour la redirection d entree
 	char	**output_files; //liste des chemins de fichiers pour la redirection de sortie
-	int		*input_redir; // fichier pour la redirection d'entree <
-	int		*output_redir;  // fichier pour la redirection de sortie >
+	int		*input_redir[30]; // fichier pour la redirection d'entree <
+	int		*output_redir[30];  // fichier pour la redirection de sortie >
 	int		input_redir_type; // stock le type de redirection d'entree 
 	int		output_redir_type;  // stock le type de redirection de sortie
 	int		input_fd; //utilise pour stocker le descripteur de fichier associe a la redirection d entree

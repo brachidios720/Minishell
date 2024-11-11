@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almarico <almarico@student.42lehavre.fr>   +#+  +:+       +#+        */
+/*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:35:56 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/11/09 19:36:49 by almarico         ###   ########.fr       */
+/*   Updated: 2024/11/11 11:02:22 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,9 @@ void	process_commands(t_data *data, t_env **env, t_cmd **cmd)
 {
     // Détection des redirections et heredocs pour la commande actuelle
 	detect_input_redirection(*cmd, data);
+		printf("je suis ds process commands input\n");
 	detect_output_redirection(*cmd, data);
+		printf("je suis ds process commands output\n");
 	if ((*cmd)->input_redir_type == HEREDOC)
 	{
 		// Vérification que le délimiteur est bien défini
