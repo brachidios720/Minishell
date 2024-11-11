@@ -155,7 +155,18 @@ char *ft_strjoin_char(char *s1, char c) {
 //     return result;
 // }
 
-char *expand_variables_in_string(char *str) {
+char *last_exit(t_data *data)
+{
+	char *value;
+	//i += 2;
+
+	value = ft_itoa_m(data->last_exit_status);
+	return(value);
+
+}
+
+char *expand_variables_in_string(char *str, t_data *data) 
+{
     char *result = NULL;
     int i = 0;
     int start;
@@ -163,6 +174,11 @@ char *expand_variables_in_string(char *str) {
     char *var_value;
 
     while (str[i] != '\0') {
+		if(str[i] == '$' && str[i + 1] == '?')
+		{
+			result = last_exit(data);
+			i += 2;
+		}
         if (str[i] == '$') {  // Détecte le début d'une variable
 			i++;
             start = i;
@@ -202,7 +218,7 @@ int check_dollard(char *str)
 	}
 	return(count);
 }
-void	ft_echo(char **argv, int fd)//cf parsing
+void	ft_echo(char **argv, t_data *data)//cf parsing
 {
 	int		i;
 	bool	new_line;
@@ -220,7 +236,7 @@ void	ft_echo(char **argv, int fd)//cf parsing
 	}
 	while (argv[i])
 	{
-	 	output = expand_variables_in_string(argv[i]);  // Vérifier l'expansion de variable
+	 	output = expand_variables_in_string(argv[i], data);  // Vérifier l'expansion de variable
 	    if (output)
 		{ 
             ft_putstr_fd(output, fd);

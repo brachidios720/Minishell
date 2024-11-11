@@ -93,9 +93,9 @@ typedef struct s_data // donnees principales
 //-----------------------------------------------------------------------
 //->BUILTINS
 //	builtins.c
-void	exec_builtin(t_cmd *cmd, t_env **env);
+void	exec_builtin(t_cmd *cmd, t_env **env, t_data *data);
 void	exec_external(t_cmd *cmd, t_env **env);
-void	execute_command_or_builtin(t_cmd **cmd, t_env **env);
+void	execute_command_or_builtin(t_cmd **cmd, t_env **env, t_data *data);
 void	process_commands(t_data *data, t_env **env, t_cmd **cmd);
 //  cd.c
 char	*ft_get_env_value(char *name, t_env **env);
@@ -108,7 +108,7 @@ void	init_pwd(t_env **env);
 
 //	echo.c
 // bool	echo_n(char *argv);
-// char	*ft_itoa_m(int n);
+char	*ft_itoa_m(int n);
 //char	*expand_variable(char *arg, t_data *data);
 //void	ft_echo(char **argv, t_data *data);
 
@@ -210,10 +210,10 @@ void    ft_handlequit(int b);
 //echo.c
 bool	echo_n(char *argv);
 int     check_dollard(char *str);
-char    *expand_variables_in_string(char *str);
+char    *expand_variables_in_string(char *str, t_data *data);
 //char    *expand_variable(char *arg, t_data *data, t_env **env);
-char	*ft_itoa_m(int n);
-void	ft_echo(char **argv, int fd);
+//char	*ft_itoa_m(int n);
+void	ft_echo(char **argv, t_data *data);
 char    *cut_tab_dollard(char *str);
 //export.c
 void    export_with_nothing(t_env *env);
@@ -314,5 +314,6 @@ void 	execute_builtin_in_parent(t_cmd *cmd, t_env **env);
 void	ft_sign(void);
 //pipe_utils
 void    ft_chaine_pipe_utils(int pipe_fd[2], t_cmd **cmd, t_data *data, int command_index);
+char 	*last_exit(t_data *data);
 
 #endif

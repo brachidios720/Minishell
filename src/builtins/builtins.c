@@ -13,7 +13,7 @@
 #include "../../include/minishell.h"
 
 
-void exec_builtin(t_cmd *cmd, t_env **env)
+void exec_builtin(t_cmd *cmd, t_env **env, t_data *data)
 {
     // Les builtins qui doivent être exécutés dans le processus parent
     if (ft_strcmp(cmd->matrice[0], "export") == 0)
@@ -34,7 +34,7 @@ void exec_builtin(t_cmd *cmd, t_env **env)
             // if (ft_strcmp(cmd->matrice[0], "cd") == 0)
             //     ft_cd(env, cmd->matrice);
             if (ft_strcmp(cmd->matrice[0], "echo") == 0)
-                ft_echo(cmd->matrice, cmd->output_fd);
+                ft_echo(cmd->matrice, data);
             else if (ft_strcmp(cmd->matrice[0], "env") == 0)
                 ft_env(env);
             else if (ft_strcmp(cmd->matrice[0], "pwd") == 0)
@@ -68,38 +68,40 @@ void exec_external(t_cmd *cmd, t_env **env)
 	execve(cmd_path, cmd->matrice, envp);
 }
 
-void execute_command_or_builtin(t_cmd **cmd, t_env **env)
+void execute_command_or_builtin(t_cmd **cmd, t_env **env, t_data *data)
 {
 	t_cmd *tmp = *cmd;
 
-	if (is_builtin(tmp->str))  // Si c'est un builtin
-	{
-		if (ft_strncmp(tmp->str, "export", ft_strlen("export")) == 0 || ft_strncmp(tmp->str, "unset", ft_strlen("unset")) == 0 || ft_strncmp(tmp->str, "cd", ft_strlen("cd")) == 0)
-		{
-			//printf("IIIII\n");
-			exec_builtin(tmp, env);  // Exécute directement sans fork
-		}
-		else
-		{
-			pid_t pid = fork();
-			if (pid == 0)
-			{
-				exec_builtin(tmp, env);
-				exit(EXIT_SUCCESS);
-			}
-			else if (pid > 0)
-			{
-				waitpid(pid, NULL, 0);
-			}
-			else
-			{
-				perror("Erreur de fork");
-				exit(EXIT_FAILURE);
-			}
-		}
-	}
-	else
-		exec_external(tmp, env);  // Exécuter une commande externe via execve
+    if (is_builtin(tmp->str))  // Si c'est un builtin
+    {
+        if (ft_strncmp(tmp->str, "export", ft_strlen("export")) == 0 || ft_strncmp(tmp->str, "unset", ft_strlen("unset")) == 0 || ft_strncmp(tmp->str, "cd", ft_strlen("cd")) == 0)
+        {
+            //printf("IIIII\n");
+            exec_builtin(tmp, env);  // Exécute directement sans fork
+        }
+        else
+        {
+            pid_t pid = fork();
+            if (pid == 0)
+            {
+                exec_builtin(tmp, env);
+                exit(EXIT_SUCCESS);
+            }
+            else if (pid > 0)
+            {
+                waitpid(pid, NULL, 0);
+            }
+            else
+            {
+                perror("Erreur de fork");
+                exit(EXIT_FAILURE);
+            }
+        }
+    }
+    else
+    {
+        exec_external(tmp, env);  // Exécuter une commande externe via execve
+    }
 }
 
 void	process_commands(t_data *data, t_env **env, t_cmd **cmd)
