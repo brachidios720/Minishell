@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: almarico <almarico@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:35:56 by raphaelcarb       #+#    #+#             */
 /*   Updated: 2024/11/11 21:19:53 by pag              ###   ########.fr       */
@@ -15,42 +15,42 @@
 
 void exec_builtin(t_cmd *cmd, t_env **env)
 {
-	// Les builtins qui doivent être exécutés dans le processus parent
-	if (ft_strcmp(cmd->matrice[0], "export") == 0)
-		ft_export(env, cmd->matrice);
-	else if (ft_strcmp(cmd->matrice[0], "unset") == 0)
-		ft_unset(env, cmd->matrice);
-	else if (ft_strcmp(cmd->matrice[0], "cd") == 0)
-		ft_cd(env, cmd->matrice);
-	
-	else
-	{
-		// Autres commandes peuvent être forkées
-		pid_t pid = fork();
-		
-		if (pid == 0) // Processus enfant
-		{
-			// Exécute les autres builtins dans l'enfant
-			// if (ft_strcmp(cmd->matrice[0], "cd") == 0)
-			//     ft_cd(env, cmd->matrice);
-			if (ft_strcmp(cmd->matrice[0], "echo") == 0)
-				ft_echo(cmd->matrice);
-			else if (ft_strcmp(cmd->matrice[0], "env") == 0)
-				ft_env(env);
-			else if (ft_strcmp(cmd->matrice[0], "pwd") == 0)
-				ft_pwd();
-			exit(EXIT_SUCCESS);  // Quitter après l'exécution du builtin
-		}
-		else if (pid > 0)  // Processus parent
-		{
-			waitpid(pid, NULL, 0);  // Attendre que le processus enfant se termine
-		}
-		else
-		{
-			perror("Erreur de fork");
-			exit(EXIT_FAILURE);
-		}
-	}
+    // Les builtins qui doivent être exécutés dans le processus parent
+    if (ft_strcmp(cmd->matrice[0], "export") == 0)
+        ft_export(env, cmd->matrice);
+    else if (ft_strcmp(cmd->matrice[0], "unset") == 0)
+        ft_unset(env, cmd->matrice);
+    else if (ft_strcmp(cmd->matrice[0], "cd") == 0)
+        ft_cd(env, cmd->matrice);
+    
+    else
+    {
+        // Autres commandes peuvent être forkées
+        pid_t pid = fork();
+        
+        if (pid == 0) // Processus enfant
+        {
+            // Exécute les autres builtins dans l'enfant
+            // if (ft_strcmp(cmd->matrice[0], "cd") == 0)
+            //     ft_cd(env, cmd->matrice);
+            if (ft_strcmp(cmd->matrice[0], "echo") == 0)
+                ft_echo(cmd->matrice, cmd->output_fd);
+            else if (ft_strcmp(cmd->matrice[0], "env") == 0)
+                ft_env(env);
+            else if (ft_strcmp(cmd->matrice[0], "pwd") == 0)
+                ft_pwd();
+            exit(EXIT_SUCCESS);  // Quitter après l'exécution du builtin
+        }
+        else if (pid > 0)  // Processus parent
+        {
+            waitpid(pid, NULL, 0);  // Attendre que le processus enfant se termine
+        }
+        else
+        {
+            perror("Erreur de fork");
+            exit(EXIT_FAILURE);
+        }
+    }
 }
 
 void exec_external(t_cmd *cmd, t_env **env)
