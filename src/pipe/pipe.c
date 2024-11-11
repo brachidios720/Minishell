@@ -56,17 +56,26 @@ void ft_pipe_last_cmd(int pipe_fd[2], t_cmd *cmd, t_data *data)
         perror("Erreur de redirection d'entrée");
         exit(EXIT_FAILURE);
     }
-    if (dup2(infile_fd, STDIN_FILENO) == -1) 
+    if (infile_fd != STDIN_FILENO)  // Si un fichier d'entrée est spécifié
     {
-        perror("Erreur de redirection d'entrée");
-        exit(EXIT_FAILURE);
+        dup2(infile_fd, STDIN_FILENO);
+        close(infile_fd);
     }
+    else  // Sinon, redirige depuis l'extrémité de lecture du pipe précédent
+    {
+        dup2(pipe_fd[0], STDIN_FILENO);
+    }
+    // if (dup2(infile_fd, STDIN_FILENO) == -1) 
+    // {
+    //     perror("Erreur de redirection d'entrée");
+    //     exit(EXIT_FAILURE);
+    // }
+    close(pipe_fd[0]);  // Ferme l'extrémité de lecture du pipe
     if (handle_redir_output(cmd) == -1)  // Redirige la sortie vers fichier si spécifié
     {
         perror("Erreur redirection de sortie");
         exit(EXIT_FAILURE);
     }
-    close(pipe_fd[0]);  // Ferme l'extrémité de lecture du pipe
     if (infile_fd != STDIN_FILENO)
         close(infile_fd);  // Ferme le descripteur d'entrée si ouvert spécifiquement
 }
@@ -74,21 +83,15 @@ void ft_pipe_last_cmd(int pipe_fd[2], t_cmd *cmd, t_data *data)
 void	ft_pipe_middle_cmd(int prev_fd, int pipe_fd[2], t_cmd *cmd)
 {
     (void)cmd;
-    if (prev_fd != -1 && dup2(prev_fd, STDIN_FILENO) == -1)
+    if (prev_fd != -1)
     {
-        perror("Erreur redirection d'entrée");
-        exit(EXIT_FAILURE);
-    }
-    close(prev_fd);  // Ferme l'extrémité précédente après redirection
+        dup2(prev_fd, STDIN_FILENO);  // Redirige l'entrée standard vers le pipe précédent
+        close(prev_fd);
+    }  // Ferme l'extrémité précédente après redirection
 
-    if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)  // Redirige la sortie vers le pipe actuel
-    {
-        perror("Erreur redirection sortie");
-        exit(EXIT_FAILURE);
-    }
-
+    dup2(pipe_fd[1], STDOUT_FILENO);  // Redirige la sortie standard vers le nouveau pipe
     close(pipe_fd[1]);  // Ferme l'extrémité d'écriture du pipe
-    close(pipe_fd[0]);  // Ferme l'extrémité de lecture du pipe
+    close(pipe_fd[0]);   // Ferme l'extrémité de lecture du pipe
 }
 
 void exec_pipe_chain(t_data *data, t_cmd **cmd, t_env **env)
@@ -102,14 +105,17 @@ void exec_pipe_chain(t_data *data, t_cmd **cmd, t_env **env)
     while (tmp != NULL)
     {
         //printf("Executing command: %s\n", tmp->str);
-
-        // Crée un pipe si une commande suivante existe
-        if (tmp->next != NULL && pipe(pipe_fd) == -1)
+        if(is_builtin_parent(tmp->str))
+            execute_builtin_in_parent(tmp, env);
+        else
         {
-            perror("Pipe error");
-            exit(EXIT_FAILURE);
+        // Crée un pipe si une commande suivante existe
+            if (tmp->next != NULL && pipe(pipe_fd) == -1)
+            {
+                perror("Pipe error");
+                exit(EXIT_FAILURE);
+            }
         }
-
         pid = fork();
         if (pid == -1)
         {
@@ -135,7 +141,7 @@ void exec_pipe_chain(t_data *data, t_cmd **cmd, t_env **env)
 			}
             
             // Exécuter la commande (builtin ou externe)
-            execute_command_or_builtin(&tmp, env, data);
+            execute_command_or_builtin(&tmp, env);
             exit(EXIT_SUCCESS);
         }
         else  // Processus parent
@@ -153,4 +159,21 @@ void exec_pipe_chain(t_data *data, t_cmd **cmd, t_env **env)
         
         tmp = tmp->next;
     }
+}
+
+int is_builtin_parent(const char *command) 
+{
+    return (ft_strcmp(command, "export") == 0 || 
+            ft_strcmp(command, "unset") == 0 || 
+            ft_strcmp(command, "cd") == 0);
+}
+
+void execute_builtin_in_parent(t_cmd *cmd, t_env **env) 
+{
+    if (ft_strcmp(cmd->matrice[0], "export") == 0)
+        ft_export(env, cmd->matrice);
+    else if (ft_strcmp(cmd->matrice[0], "unset") == 0)
+        ft_unset(env, cmd->matrice);
+    else if (ft_strcmp(cmd->matrice[0], "cd") == 0)
+        ft_cd(env, cmd->matrice);
 }

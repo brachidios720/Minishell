@@ -26,27 +26,35 @@ void ft_check_line(char **av, char **envp, t_data *data, t_cmd **cmd, t_env **en
 	//gérer la lecture de la ligne (bloque les interruptions comme Ctrl+C ou réinitialise les handlers).
 	change_signal(0);
 	line = readline(CYAN"Minishell> "RESET); 
-	if(line == NULL || ft_strncmp(line, "exit" , ft_strlen("exit")) == 0)
-		return(free(line));
-	add_history(line);
-	data->line = line;
-	init_data(data);
-	ft_do_all(line, cmd, data, new_node);
-	if(ft_check_option(data) == 1)
+	if(line[0] == '\0')
 	{
-		ft_free(line, cmd);
+		free(line);
 		ft_check_line(av, envp, data, cmd, env);
 	}
+	else if(line == NULL || ft_strncmp(line, "exit" , ft_strlen("exit")) == 0)
+		return(free(line));
 	else
 	{
-		change_signal(2);  // Configuration pour here-document
+		add_history(line);
+		data->line = line;
+		init_data(data);
+		ft_do_all(line, cmd, data, new_node);
+		if(ft_check_option(data) == 1)
+		{
+			ft_free(line, cmd);
+			ft_check_line(av, envp, data, cmd, env);
+		}
+		else
+		{
+			change_signal(2);  // Configuration pour here-document
+			
+			change_signal(1);  // Configuration pour l'exécution de commande
+			process_commands(data, env, cmd);
+			
+			ft_free(line, cmd);
+			ft_check_line(av, envp, data, cmd, env);
+		}
 		
-		change_signal(1);  // Configuration pour l'exécution de commande
-		process_commands(data, env, cmd);
-		
-		ft_free(line, cmd);
-		ft_check_line(av, envp, data, cmd, env);
-	}
 }
 
 // Détecte et gère les redirections et le heredoc dans la ligne de commande

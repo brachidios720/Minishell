@@ -45,15 +45,11 @@ void export_with_variable(t_env *env, char *new_var)
         }
         ptr = ptr->next;
     }
-
-    // Si la variable n'existe pas, on l'ajoute à la liste
     new_node = malloc(sizeof(t_env));
     if (!new_node)
         return;
     new_node->content = ft_strdup(new_var);
     new_node->next = NULL;
-
-    // Ajout du nouveau nœud en fin de la liste
     if (env == NULL)
     {
         env = new_node;  // Si liste vide, on init avec la nouvelle variable
@@ -67,12 +63,6 @@ void export_with_variable(t_env *env, char *new_var)
             //printf("%s\n", new_node->content);
         }
         ptr->next = new_node;  // Ajout à la fin de la liste
-        // ptr = env;
-        // while(ptr)
-        // {
-        //     printf("%s\n", ptr->content);
-        //     ptr = ptr->next;
-        // }
     }
 }
 
@@ -80,22 +70,16 @@ void ft_export(t_env **env, char **args)//cf parsing
 {
     int i;
     if (!args[1]) //si pas d argu
-    {
         export_with_nothing(*env);
-    }
     else
     {
         i = 1; //apres export qui est 0
         while (args[i]) //si argu
         {
-            //if(ft_is_valid_export(args) == 1)
-            //{
-                //printf("%s", args[i]);
+            if(ft_is_valid_export(args) == 1)
                 export_with_variable(*env, args[i]);
-
-            //}
-            //else
-                //printf(RED"ERROR\n"RESET);
+            else
+                printf(RED"ERROR\n"RESET);
             i++;
         }
 
@@ -104,7 +88,7 @@ void ft_export(t_env **env, char **args)//cf parsing
 
 int ft_is_valid_export(char **mat)
 {
-   if(ft_isalpha(mat[1][0]) || ((mat[1][0] == '_' && mat[1][1] != '\0') || ft_isalnum(mat[1][1])))
+   if(ft_isalpha(mat[1][0]) || ((mat[1][0] == '_' && mat[1][1] != '\0' && mat[1][1] != '=') || (ft_isalpha(mat[1][0]) &&(mat[1][1]))))
         return(1);
     return(0);
 }

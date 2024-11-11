@@ -111,26 +111,28 @@
 //     }
 // }
 
-void exec_cmd(t_data *data, t_cmd **cmd, t_env **env) {
+void exec_cmd(t_data *data, t_cmd **cmd, t_env **env)
+{
     t_cmd *tmp = *cmd;
     int status;
 
-    if (is_builtin(tmp->str)) {  // Vérifie si c'est un builtin
-        // Exécute les builtins directement dans le processus parent
+    if (is_builtin(tmp->str)) 
         execute_command_or_builtin(&tmp, env);
-    } else {
-        // Pour les commandes externes, on fork pour exécuter dans un processus enfant
+	else 
+	{
         pid_t pid = fork();
-        if (pid == -1) {
+        if (pid == -1) 
+		{
             perror("Erreur de fork");
             return;
         }
-        if (pid == 0) {
-            // Processus enfant
+        if (pid == 0) 
+		{
             execute_command_or_builtin(&tmp, env);
             exit(EXIT_SUCCESS); // Assure une bonne terminaison de l'enfant
-        } else {
-            // Processus parent : attend que l'enfant se termine
+        } 
+		else 
+		{
             waitpid(pid, &status, 0);
             data->last_exit_status = WEXITSTATUS(status);
         }
@@ -156,3 +158,4 @@ void exec_cmd(t_data *data, t_cmd **cmd, t_env **env) {
 // 	}
 // 	return (true);
 // }
+

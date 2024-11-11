@@ -61,13 +61,14 @@ int handle_redir_input(t_cmd *cmd, t_data *data)
     
     i = 0;
     last_fd = STDIN_FILENO;
-	//verif si presence des redirections d'entrée.
+	// verif si presence des redirections d'entrée.
     if (!cmd->input_redir || !cmd->input_redir[0])
 		return (STDIN_FILENO);
-	//apl la fonction pour compter le nb de redirections d entree
+	// apl la fonction pour compter le nb de redirections d entree
     nb = count_nb_redir_input(cmd);
     while (i < nb)
     {
+        printf("IIIIIIIIIIIIIIII\n");
 		if (cmd->input_redir[i] == 1)
 			tmp = open(cmd->input_files[i], O_RDONLY);
 		else if (cmd->input_redir[i] == 2)

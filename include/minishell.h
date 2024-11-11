@@ -84,7 +84,7 @@ typedef struct s_data // donnees principales
 	t_env	*copy_env;
 	char	*path;
 	char	*pwd;
-	char	**old_pwd;
+	char	*old_pwd;
 	char	*line;
 	char	**matrice;
 	char	*mat;
@@ -101,9 +101,9 @@ typedef struct s_data // donnees principales
 //-----------------------------------------------------------------------
 //->BUILTINS
 //	builtins.c
-void	exec_builtin(t_cmd *cmd, t_env **env, t_data *data);
+void	exec_builtin(t_cmd *cmd, t_env **env);
 void	exec_external(t_cmd *cmd, t_env **env);
-void	execute_command_or_builtin(t_cmd **cmd, t_env **env, t_data *data);
+void	execute_command_or_builtin(t_cmd **cmd, t_env **env);
 void	process_commands(t_data *data, t_env **env, t_cmd **cmd);
 //  cd.c
 char	*ft_get_env_value(char *name, t_env **env);
@@ -115,18 +115,18 @@ void	ft_cd(t_env **env, char **target_dir);
 void	init_pwd(t_env **env);
 
 //	echo.c
-bool	echo_n(char *argv);
-char	*ft_itoa_m(int n);
-char	*expand_variable(char *arg, t_data *data);
-void	ft_echo(char **argv, t_data *data);
+// bool	echo_n(char *argv);
+// char	*ft_itoa_m(int n);
+//char	*expand_variable(char *arg, t_data *data);
+//void	ft_echo(char **argv, t_data *data);
 
 //	env.c
 void	ft_env(t_env **env);
 
 // export.c
-void	export_with_nothing(t_env *env);
-void	export_with_variable(t_env **env, char *new_var);
-void	ft_export(t_env **env, char **args);
+// void	export_with_nothing(t_env *env);
+// void	export_with_variable(t_env **env, char *new_var);
+// void	ft_export(t_env **env, char **args);
 
 //ft_pwd.c
 int    ft_pwd(void);
@@ -208,7 +208,7 @@ int		ft_check_one_quote(char *str);
 //pipe
 //pipe.c
 void	handle_pipe(t_cmd *cmd1, t_cmd *cmd2);
-void	exec_pipe_chain(t_cmd **cmd, t_env **env);
+//void	exec_pipe_chain(t_cmd **cmd, t_env **env);
 //void	exec_pipe_chain(t_cmd **cmd, t_data *data);
 //path.c
 char	*find_command_path(char *cmd);
@@ -219,7 +219,8 @@ void    ft_handlequit(int b);
 //echo.c
 bool	echo_n(char *argv);
 int     check_dollard(char *str);
-char    *expand_variable(char *arg, t_data *data, t_env **env);
+char    *expand_variables_in_string(char *str);
+//char    *expand_variable(char *arg, t_data *data, t_env **env);
 char	*ft_itoa_m(int n);
 void	ft_echo(char **argv);
 char    *cut_tab_dollard(char *str);
@@ -275,11 +276,11 @@ void	detect_output_redirection(t_cmd *cmd, t_data *data);
 char	**env_list_to_array(t_env **env_list);
 
 void    execute_command(t_cmd *cmd, t_env **env);
-void    exec_builtin(t_cmd *cmd, t_env **env);
+//void    exec_builtin(t_cmd *cmd, t_env **env);
 void    execute_pipeline(t_cmd *cmd_list, t_env **env, t_data *data);
 int     is_builtin(char *cmd);
 void    exec_external(t_cmd *cmd, t_env **env);
-void    execute_command_or_builtin(t_cmd **cmd, t_env **env);
+//void    execute_command_or_builtin(t_cmd **cmd, t_env **env);
 void    handle_redirections(t_cmd *cmd);
 void    process_commands(t_data *data, t_env **env, t_cmd **cmd);
 int	    ft_llstsize(t_cmd *cmd);
@@ -287,9 +288,9 @@ int	    ft_llstsize(t_cmd *cmd);
 
 void	ft_pipe(t_data *data, t_cmd *cmd, int pipe_fd[2]);
 //void	ft_pipe_middle_cmd(int pipe_fd[2], t_cmd *cmd);
-void	ft_pipe_last_cmd(int pipe_fd[2], t_cmd *cmd);
-void	ft_pipe_first_cmd(int pipe_fd[2], t_cmd *cmd);
-void	ft_pipe_middle_cmd(int prev_fd, int pipe_fd[2], t_cmd *cmd);
+// void	ft_pipe_last_cmd(int pipe_fd[2], t_cmd *cmd);
+// void	ft_pipe_first_cmd(int pipe_fd[2], t_cmd *cmd);
+// void	ft_pipe_middle_cmd(int prev_fd, int pipe_fd[2], t_cmd *cmd);
 
 int	    ft_verifcharr(char c, char set);
 char	*ft_strdupsizee(const char *s, int size);
@@ -304,12 +305,13 @@ void	shift_str(char *str, int length);
 void	trim_quotes(char **option);
 char    *search_in_env(t_env **env, char *name);
 char    *ft_strjoin_char(char *s1, char c);
-char    *expand_variables_in_string(char *str);
 char    *ft_strjoinn(char const *s1, char const *s2);
 int     ft_is_valid_export(char **mat);
 void    read_env_changes_from_pipe(int fd, t_env **env);
 void    exec_builtin_with_changes(t_cmd *cmd, t_env **env);
 void    unsetenv_in_list(t_env **env, char *name);
 void    setenv_in_list(t_env **env, char *name, char *value);
+int 	is_builtin_parent(const char *command); 
+void 	execute_builtin_in_parent(t_cmd *cmd, t_env **env);
 
 #endif

@@ -162,10 +162,8 @@ char *expand_variables_in_string(char *str) {
     char *var_name;
     char *var_value;
 
-	//printf("%s\n", str);
     while (str[i] != '\0') {
         if (str[i] == '$') {  // Détecte le début d'une variable
-            //printf("Détecté un '$' à la position %d\n", i);
 			i++;
             start = i;
             while (str[i] != '\0' && ft_isalpha(str[i]) == 1) {
@@ -173,22 +171,13 @@ char *expand_variables_in_string(char *str) {
             }
 
             var_name = ft_substr(str, start, i - start);  // Extrait le nom de la variable
-            //printf("Variable détectée : %s\n", var_name);  // Affiche la variable pour déboguer
 
             // Recherche la valeur de la variable dans l'environnement
             var_value = getenv(var_name); 
-			//printf("Valeur de la variable %s : %s\n", var_name, var_value);
-			//printf("%s\n", var_value); 
             if (var_value == NULL) {
                 var_value = "";  // Si la variable n'est pas trouvée, remplace par une chaîne vide
             }
-
-            // Concatène la valeur de la variable avec le résultat actuel
-            //char *temp = result;
-			//printf("Résultat avant ajout de la variable : %s\n", result);
             result = ft_strjoinn(result, var_value);  // Concatène la chaîne
-           // printf("Résultat après ajout de la variable : %s\n", result);
-			//free(temp);  // Libère l'ancien contenu de `result`
             free(var_name);  // Libère le nom de la variable
         } else {
             // Si ce n'est pas une variable, on ajoute le caractère au résultat
@@ -218,11 +207,9 @@ void	ft_echo(char **argv)//cf parsing
 	int		i;
 	bool	new_line;
 	char	*output;
-	//char	**cut;
 
 	i = 1;
 	new_line = true;
-
 	while (argv[i] && echo_n(argv[i]))
 	{
 		new_line = false;
@@ -236,15 +223,10 @@ void	ft_echo(char **argv)//cf parsing
             write(1, output, strlen(output));
 			free(output);
 		}
-        if (argv[i + 1])
-			// Affiche un espace entre les arguments
+        if (argv[i + 1])// Affiche un espace entre les arguments
             ft_putstr_fd(" ", 1);
         i++;
 	}
-	// Affiche un espace si l option -n est activee
-	//if (new_line)
-	//	ft_putstr_fd(" ",1);
-	// Affiche un saut de ligne si l'option -n n'est pas activée
     if (new_line)
        ft_putstr_fd("\n",1);
 }
@@ -252,3 +234,7 @@ void	ft_echo(char **argv)//cf parsing
 //echo -n -> supprime le saut de ligne
 //echo -nnnnn -> marche comme -n
  
+	// Affiche un espace si l option -n est activee
+	//if (new_line)
+	//	ft_putstr_fd(" ",1);
+	// Affiche un saut de ligne si l'option -n n'est pas activée
