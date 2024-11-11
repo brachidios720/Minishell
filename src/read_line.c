@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_line.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: almarico <almarico@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 19:17:57 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/11/09 21:37:02 by almarico         ###   ########.fr       */
+/*   Updated: 2024/11/11 13:30:02 by almarico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,76 @@ void ft_check_line(char **av, char **envp, t_data *data, t_cmd **cmd, t_env **en
 	}
 }
 
+void detect_input_redirection(t_cmd *cmd, t_data *data, int *i, int *j)
+{
+	if (data->line[*i + 1] == '<')
+	{
+		cmd->redir_type[*j++] = HEREDOC;
+		// if (!ft_extract_delimiter(cmd, data))
+		// 	return ((void)ft_printf("Erreur : impossible d'extraire le délimiteur\n"));
+		*i += 1;
+	}
+	else
+	{
+		cmd->redir_type[*j++] = INPUT_FILE;
+	}
+}
+
+void detect_output_redirection(t_cmd *cmd, t_data *data, int *i, int *j)
+{
+	if (data->line[*i + 1] == '>')
+	{
+		cmd->redir_type[*j++] = APPEND;
+		*i += 1;
+	}
+	else
+	{
+		cmd->redir_type[*j++] = OUTPUT_FILE;
+	}
+}
+
+void detect_redirection(t_cmd *cmd, t_data *data)
+{
+	int			i;
+	int			j;
+
+	j = 0;
+	while (j < 30)
+		cmd->redir_type[j++] = -1;
+	i = 0;
+	j = 0;
+    while (data->line[i])
+    {
+        if (data->line[i] == '<')
+		{
+			detect_input_redirection(cmd, data, &i, &j);
+			i += 1;
+			while (ft_isspace(data->line[i]))
+				i += 1;
+			if (data->line[i] != '<')
+				stock_filename(cmd, &data->line[i], j);
+		}
+		else if (data->line[i] == '>')
+		{
+			detect_output_redirection(cmd, data, &i, &j);
+			i += 1;
+			while (ft_isspace(data->line[i]))
+				i += 1;
+			if (data->line[i] != '>')
+				stock_filename(cmd, &data->line[i], j);
+		}
+        i++;
+    }
+}
+
+/*
 // Détecte et gère les redirections et le heredoc dans la ligne de commande
 void detect_input_redirection(t_cmd *cmd, t_data *data)
 {
 	const char *filename_start;
 	int	i;
+	cmd->input_redir_type = NO_REDIR;
+
 
 	i = 0;
 	while (data->line[i])
@@ -79,48 +144,54 @@ void detect_input_redirection(t_cmd *cmd, t_data *data)
 		i++;
 	}
 }
-
-void detect_output_redirection(t_cmd *cmd, t_data *data)
-{
-	const char	*filename_start;
-	int	i;
-	
-	i = 0;
-	filename_start = NULL;
-	while (data->line[i])
-	{
-		if (data->line[i] == '>')
-		{
-			if (data->line[i + 1] == '>')
-			{
-				cmd->output_redir_type = APPEND;
-				filename_start = get_filename_start(cmd, data, APPEND);  // Trouve le début du nom de fichier
-				if (filename_start)
-				{
-					if (!stock_filename(cmd, filename_start, APPEND))  // Extrait et stocke le nom de fichier
-					{
-						ft_printf("Erreur: impossible de stocker le fichier en mode append -> >>\n");
-						return;
-					}
-				}
-			}
-			else
-			{
-				cmd->output_redir_type = OUTPUT_FILE;
-				filename_start = get_filename_start(cmd, data, OUTPUT_FILE);  // Trouve le début du nom de fichier
-				if (filename_start)
-				{
-					if (!stock_filename(cmd, filename_start, OUTPUT_FILE))  // Extrait et stocke le nom de fichier
-					{
-						ft_printf("Erreur: impossible de stocker le fichier de sortie -> >\n");
-						return;
-					}
-				}
-			}
-		}
-		i++;
-	}	
-}
+*/
+// void detect_output_redirection(t_cmd *cmd, t_data *data)
+// {
+// 	const char	*filename_start;
+// 	int	i;
+// 	cmd->output_redir_type = NO_REDIR;
+// 	
+// 	i = 0;
+// 	
+// 	while (data->line[i])
+// 	{
+// 		printf("ok 1 %c\n", data->line[i]);
+// 		if (data->line[i] == '>')
+// 		{
+// 			printf("ok 2\n");
+// 			if (data->line[i + 1] == '>')
+// 			{
+// 				printf("ok 3\n");
+// 				cmd->output_redir_type = APPEND;
+// 				filename_start = get_filename_start(cmd, data, APPEND);  // Trouve le début du nom de fichier
+// 				if (filename_start)
+// 				{
+// 					if (!stock_filename(cmd, filename_start, APPEND))  // Extrait et stocke le nom de fichier
+// 					{
+// 						ft_printf("Erreur: impossible de stocker le fichier en mode append -> >>\n");
+// 						return;
+// 					}
+// 				}
+// 			}
+// 			else
+// 			{
+// 				printf("ok output1\n");
+// 				cmd->output_redir_type = OUTPUT_FILE;
+// 				filename_start = get_filename_start(cmd, data, OUTPUT_FILE);  // Trouve le début du nom de fichier
+// 				if (filename_start)
+// 				{
+// 					printf("ok output2\n");
+// 					if (!stock_filename(cmd, filename_start, OUTPUT_FILE))  // Extrait et stocke le nom de fichier
+// 					{
+// 						ft_printf("Erreur: impossible de stocker le fichier de sortie -> >\n");
+// 						return;
+// 					}
+// 				}
+// 			}
+// 		}
+// 		i++;
+// 	}	
+// }
 	// if (ft_strnstr(data->line, "<<",ft_strlen(data->line)))
 	// {
 	// 	cmd->input_redir_type = HEREDOC;

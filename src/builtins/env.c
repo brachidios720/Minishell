@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: raphaelcarbonnel <raphaelcarbonnel@stud    +#+  +:+       +#+        */
+/*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:35:54 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/09/09 16:45:58 by raphaelcarb      ###   ########.fr       */
+/*   Updated: 2024/11/11 15:09:53 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 void    ft_env(t_env **env)
 {
-    t_env *ptr;
+	t_env	*ptr;
 
-    ptr = *env;
-    while(ptr)
-    {
-        ft_printf("%s\n", ptr->content);
-        ptr = ptr->next;
-    }
+	ptr = *env;
+	while (ptr)
+	{
+		ft_printf("%s\n", ptr->content);
+		ptr = ptr->next;
+	}
 }
