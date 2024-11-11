@@ -6,7 +6,7 @@
 /*   By: almarico <almarico@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 15:14:10 by spagliar          #+#    #+#             */
-/*   Updated: 2024/11/11 14:10:48 by almarico         ###   ########.fr       */
+/*   Updated: 2024/11/11 17:20:55 by almarico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ static int handle_single_input_redir(t_cmd *cmd, t_data *data, int i)
     int fd;
     
     
+	fd = -1;
 	//pour fichier -> elle ouvre le fichier en lecture seule.
     if (cmd->redir_type[i] == INPUT_FILE)
         fd = open(cmd->payload[i], O_RDONLY);
@@ -104,6 +105,7 @@ int handle_single_output_redir(t_cmd *cmd, int index)
 {
     int fd;
     
+	fd = -1;
     if (cmd->redir_type[index] == OUTPUT_FILE)
         fd = open(cmd->payload[index], O_WRONLY | O_CREAT | O_TRUNC, READ_WRITE_EXEC);
     else if (cmd->redir_type[index] == APPEND)

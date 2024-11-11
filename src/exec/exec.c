@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: almarico <almarico@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 15:53:41 by spagliar          #+#    #+#             */
-/*   Updated: 2024/11/11 16:36:13 by pag              ###   ########.fr       */
+/*   Updated: 2024/11/11 17:15:46 by almarico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,7 +165,7 @@ void exec_cmd(t_data *data, t_cmd **cmd, t_env **env)
 			}
 			close(fd_out);
 		}
-		execute_command_or_builtin(&tmp, env, data);
+		execute_command_or_builtin(&tmp, env);
 		exit(EXIT_SUCCESS);
 	}
 	else

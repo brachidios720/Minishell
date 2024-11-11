@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: almarico <almarico@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 15:12:37 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/11/11 16:38:38 by pag              ###   ########.fr       */
+/*   Updated: 2024/11/11 17:23:23 by almarico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -271,8 +271,11 @@ void	print_minishell(void);
 
 // read_line.c
 void	ft_check_line(t_data *data, t_cmd **cmd, t_env **env);
-void	detect_input_redirection(t_cmd *cmd, t_data *data);
-void	detect_output_redirection(t_cmd *cmd, t_data *data);
+// void	detect_input_redirection(t_cmd *cmd, t_data *data);
+// void	detect_output_redirection(t_cmd *cmd, t_data *data);
+void	detect_output_redirection(t_cmd *cmd, t_data *data, int *i, int *j);
+void	detect_input_redirection(t_cmd *cmd, t_data *data, int *i, int *j);
+void	detect_redirection(t_cmd *cmd, t_data *data);
 
 // utils_env
 char	**env_list_to_array(t_env **env_list);
