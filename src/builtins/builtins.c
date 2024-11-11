@@ -128,8 +128,8 @@ void process_commands(t_data *data, t_env **env, t_cmd **cmd)
 	// 	}
 	// }
     // // Vérifier s'il y a des pipes dans les commandes
-    if (count_pipe(data->line))
+    //if (count_pipe(data->line))
         exec_pipe_chain(data, cmd, env);// Appeler la fonction qui gère l'exécution des commandes pipées
-    else
-       exec_cmd(data, cmd, env);// Si pas de pipe, exécuter la commande (builtin ou externe)
+    // else
+    //    exec_cmd(data, cmd, env);// Si pas de pipe, exécuter la commande (builtin ou externe)
 }
