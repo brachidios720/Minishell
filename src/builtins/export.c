@@ -3,27 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: spagliar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 15:53:41 by spagliar          #+#    #+#             */
-/*   Updated: 2024/09/09 15:53:43 by spagliar         ###   ########.fr       */
+/*   Updated: 2024/11/11 15:21:08 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "../../include/minishell.h"
 
+#include "../../include/minishell.h"
 //si je tape export -> affichage de l'env
 
-void export_with_nothing(t_env *env)
+void	export_with_nothing(t_env *env)
 {
-	t_env *ptr; //parcourt la liste chainee
-    //char *tmp; //stock le contenu de la variable pour chaque noeud
-
-    ptr = env; //assigne ptr en debut de liste
-    while(ptr)
-    {
-        printf("declare -x %s\n", ptr->content); //print la var d environnement
-        ptr = ptr->next; //passe au noeud suivant
-    }
+	t_env	*ptr; //parcourt la liste chainee
+	//char *tmp; //stock le contenu de la variable pour chaque noeud
+	ptr =	env; //assigne ptr en debut de liste
+	while (ptr)
+	{
+		printf ("declare -x %s\n", ptr->content);//print la var d environnement
+		ptr = ptr->next; //passe au noeud suivant
+	}
 }
 
 //si je tape export MY_VAR="Pag"
@@ -66,7 +65,7 @@ void export_with_variable(t_env *env, char *new_var)
     }
 }
 
-void ft_export(t_env **env, char **args)//cf parsing
+void	ft_export(t_env **env, char **args)//cf parsing
 {
     int i;
     if (!args[1]) //si pas d argu
@@ -82,7 +81,6 @@ void ft_export(t_env **env, char **args)//cf parsing
                 printf(RED"ERROR\n"RESET);
             i++;
         }
-
     }
 }
 
