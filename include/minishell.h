@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almarico <almarico@student.42lehavre.fr>   +#+  +:+       +#+        */
+/*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 15:12:37 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/11/11 14:11:41 by almarico         ###   ########.fr       */
+/*   Updated: 2024/11/11 16:38:38 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,8 +139,6 @@ int		ft_unset(t_env **env, char **args);
 
 //	utils_builtins.c
 int		is_builtin(char *cmd);
-
-
 // EXEC
 //---------------------------------------------------------------------------
 //	exec.c
@@ -178,9 +176,9 @@ void	ft_do_all(char *str, t_cmd **cmd, t_data *data, t_cmd *new_node);
 int		ft_check_pipe(char *str);
 
 //->utils_parsing_line
-int			ft_isspace(char c);
+int		ft_isspace(char c);
+void	stock_filename(t_cmd *cmd, const char *start, int j);
 // const char	*get_filename_start(t_cmd *cmd, t_data *data, int redir_type);
-const char	*stock_filename(t_cmd *cmd, const char *start, int j);
 // const char	*stock_filename(t_cmd *cmd, const char *start, int redir_type);
 char		*ft_extract_delimiter(t_cmd *cmd, t_data *data);
 

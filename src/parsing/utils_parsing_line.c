@@ -3,8 +3,8 @@
 //identifier si caractere espace ou speciale
 int ft_isspace(char c)
 {
-    return (c == ' ' || c == '\t' || c == '\n' ||
-        c == '\v' || c == '\f' || c == '\r');
+	return (c == ' ' || c == '\t' || c == '\n' ||
+		c == '\v' || c == '\f' || c == '\r');
 }
 
 //donne la position du debut du nom de fichier apres un symbole de redirection
@@ -36,27 +36,23 @@ int ft_isspace(char c)
 // Fonction pour extraire et stocker le nom de fichier dans la structure t_cmd
 void	stock_filename(t_cmd *cmd, const char *start, int j)
 {
-    // Trouve la fin du nom de fichier
-    const char *pos;
-    size_t len;
-    char *filename;
-    
-    pos = start;
-    while (*pos && !ft_isspace(*pos))
-        pos++;
+	const char	*pos;
+	size_t		len;
+	char		*filename;
 
-    // Copie le nom du fichier dans une nouvelle chaîne
-    len = pos - start;
-    filename = malloc(len + 1);
-    if (!filename)
-        return NULL;
-
-    ft_strncpy((char *)start, filename, len);
-    filename[len] = '\0';
+	pos	= start;
+	while (*pos && !ft_isspace(*pos))
+		pos++;
+	len = pos - start;
+	filename = malloc(len + 1);
+	if (!filename)
+		return ;
+	ft_strncpy((char *)start, filename, len);
+	filename[len] = '\0';
 	cmd->payload[j] = ft_strdup(filename);
 	free(filename);
-    // Stocke le nom du fichier dans cmd selon le type de redirection
 }
+
 // const char *stock_filename(t_cmd *cmd, const char *start, int redir_type)
 // {
 //     // Trouve la fin du nom de fichier
