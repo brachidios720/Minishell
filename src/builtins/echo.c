@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: almarico <almarico@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 14:45:23 by spagliar          #+#    #+#             */
-/*   Updated: 2024/11/11 14:49:45 by pag              ###   ########.fr       */
+/*   Updated: 2024/11/11 17:33:54 by almarico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,7 +202,7 @@ int check_dollard(char *str)
 	}
 	return(count);
 }
-void	ft_echo(char **argv)//cf parsing
+void	ft_echo(char **argv, int fd)//cf parsing
 {
 	int		i;
 	bool	new_line;
@@ -210,6 +210,8 @@ void	ft_echo(char **argv)//cf parsing
 
 	i = 1;
 	new_line = true;
+	if (fd == -1)
+		fd = 1;
 	while (argv[i] && echo_n(argv[i]))
 	{
 		new_line = false;
@@ -220,15 +222,15 @@ void	ft_echo(char **argv)//cf parsing
 	 	output = expand_variables_in_string(argv[i]);  // Vérifier l'expansion de variable
 	    if (output)
 		{ 
-            write(1, output, strlen(output));
+			write(fd, output, strlen(output));
 			free(output);
 		}
         if (argv[i + 1])// Affiche un espace entre les arguments
-            ft_putstr_fd(" ", 1);
+            ft_putstr_fd(" ", fd);
         i++;
 	}
     if (new_line)
-       ft_putstr_fd("\n",1);
+       ft_putstr_fd("\n",fd);
 }
 //echo sans options -> ajoute un saut de ligne par defaut
 //echo -n -> supprime le saut de ligne
