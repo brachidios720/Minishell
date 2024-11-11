@@ -6,7 +6,7 @@
 /*   By: almarico <almarico@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 14:45:23 by spagliar          #+#    #+#             */
-/*   Updated: 2024/11/11 17:33:54 by almarico         ###   ########.fr       */
+/*   Updated: 2024/11/11 22:40:54 by almarico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,7 +210,7 @@ void	ft_echo(char **argv, int fd)//cf parsing
 
 	i = 1;
 	new_line = true;
-	if (fd == -1)
+	if (fd < 1)
 		fd = 1;
 	while (argv[i] && echo_n(argv[i]))
 	{

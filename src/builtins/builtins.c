@@ -6,7 +6,7 @@
 /*   By: almarico <almarico@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:35:56 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/11/11 21:19:53 by pag              ###   ########.fr       */
+/*   Updated: 2024/11/11 22:57:37 by almarico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,12 @@ void execute_command_or_builtin(t_cmd **cmd, t_env **env)
 void	process_commands(t_data *data, t_env **env, t_cmd **cmd)
 {
 	detect_redirection(*cmd, data);
-	trim_redirections(&data->line);
+	if ((*cmd)->redir_type[0] > 0)
+	{
+		trim_redirections(&data->line);
+		ft_free_tab((*cmd)->matrice);
+		(*cmd)->matrice = ft_splitt(data->line, ' ');
+	}
 	handle_redirection(*cmd, data);
 	exec_pipe_chain(data, cmd, env);
 }

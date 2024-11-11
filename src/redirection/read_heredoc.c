@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_heredoc.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: almarico <almarico@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 15:11:39 by spagliar          #+#    #+#             */
-/*   Updated: 2024/11/11 21:51:41 by pag              ###   ########.fr       */
+/*   Updated: 2024/11/11 22:39:40 by almarico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,10 @@ void	exec_trim(char **line, char **res, int *i, int j)
 		*i += 1;
 	sub_str = ft_substr((*line), j, (*i - j));
 	if ((*line)[*i] == '\0')
-		*res = ft_strjoin(tmp, sub_str);
+		*res = ft_strjoinn(tmp, sub_str);
 	else if ((*line)[*i] && ft_is_in_quote((*line), *i) == FALSE
 		&& ft_is_in_doublequote((*line), *i) == FALSE)
-		*res = ft_strjoin(tmp, sub_str);
+		*res = ft_strjoinn(tmp, sub_str);
 	free(tmp);
 	free(sub_str);
 	pass_redirection_and_payload(line, i);
