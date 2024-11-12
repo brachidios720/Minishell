@@ -6,7 +6,7 @@
 /*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 13:14:51 by spagliar          #+#    #+#             */
-/*   Updated: 2024/11/12 18:53:51 by pag              ###   ########.fr       */
+/*   Updated: 2024/11/12 19:20:36 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,72 +122,57 @@ void	exec_pipe_chain(t_data *data, t_cmd **cmd, t_env **env)
 /*
 void	exec_pipe_chain(t_data *data, t_cmd **cmd, t_env **env)
 {
-	(void)data;
-	pid_t	pid;
-	t_cmd	*tmp;
-	int		pipe_fd[2];
-	int		command_index;
-	int		prev_fd;
+    pid_t pid;
+    t_cmd *tmp = *cmd;
+    int pipe_fd[2];         // Pipe pour chaque commande
+    int command_index = 0;
+    int prev_fd = -1;       // Fichier de l'extrémité de lecture du pipe précédent
 
-	tmp = *cmd;
-	command_index = 0;
-	prev_fd = -1;
-	while (tmp != NULL)
-	{
-		if (is_builtin_parent(tmp->str))
-			execute_builtin_in_parent(tmp, env);
-		else
-		{
-			if (tmp->next != NULL && pipe(pipe_fd) == -1) // Crée un pipe si une commande suivante existe
-			{
-				perror("Pipe error");
-				exit(EXIT_FAILURE);
-			}
-		}
-		pid = fork();
-		if (pid == -1)
-		{
-			perror("Fork error");
-			exit(EXIT_FAILURE);
-		}
-		else if (pid == 0)
-		{
-			if (command_index == 0 && tmp->next != NULL)
-				ft_pipe_first_cmd(pipe_fd, tmp);
-			else if (tmp->next == NULL)
-				ft_pipe_last_cmd((int[2]){prev_fd, pipe_fd[1]}, tmp);
-			else
-				ft_pipe_middle_cmd(prev_fd, pipe_fd);
-			execute_command_or_builtin(&tmp, env);
-			exit(EXIT_SUCCESS); //termine pcssus enfant
-		}
-		else//pcssus parent
-		{
-			if (prev_fd != -1)//ferme l extrmite de lecture precedente
-				close(prev_fd);
-			close(pipe_fd[1]);//ferme l extrmite actuelle du pipe
-			prev_fd = pipe_fd[0];//prepare prev pr la cmd suivante
-			waitpid(pid, NULL, 0); //fin processus enfant
-			command_index++;//incremente l index des commandes
-		}
-		tmp = tmp->next;//cmd suivante
-	}
-	if (prev_fd != -1)
-	{
-		if (close(prev_fd) == -1)
-			perror("Erreur lors de la fermeture finale de prev_fd");
-	}
+    while (tmp != NULL)
+    {
+        if(is_builtin_parent(tmp->str))
+            execute_builtin_in_parent(tmp, env);
+        else
+        {
+            if (tmp->next != NULL && pipe(pipe_fd) == -1) // Crée un pipe si une commande suivante existe
+            {
+                perror("Pipe error");
+                exit(EXIT_FAILURE);
+            }
+        }
+        pid = fork();
+        if (pid == -1)
+        {
+            perror("Fork error");
+            exit(EXIT_FAILURE);
+        }
+        else if (pid == 0)  // Processus enfant
+        {
+            
+            //ft_chaine_pipe_utils(pipe_fd, cmd, data, command_index);
+            if (command_index == 0 && tmp->next != NULL)  // Première commande
+               ft_pipe_first_cmd(pipe_fd, tmp, data);
+            else if (tmp->next == NULL)  // Dernière commande
+                ft_pipe_last_cmd((int[2]){prev_fd, pipe_fd[1]}, tmp, data);
+            if (tmp->next != NULL && tmp != *cmd) // Commande intermédiaire
+    			ft_pipe_middle_cmd(prev_fd, pipe_fd, tmp);
+            execute_command_or_builtin(&tmp, env);
+            exit(EXIT_SUCCESS);
+        }
+        else  // Processus parent
+        {
+            if (prev_fd != -1)
+                close(prev_fd);       // Ferme l'extrémité de lecture précédente
+            close(pipe_fd[1]);        // Ferme l'extrémité d'écriture actuelle pour le parent
+            prev_fd = pipe_fd[0];     // Définir l'extrémité de lecture actuelle pour la prochaine commande
+            waitpid(pid, NULL, 0);    // Attend que le processus enfant se termine
+            command_index++;
+        }
+        tmp = tmp->next;
+    }
 }
-*/
-/*	-> Gere l'exécution d'une chaîne de commandes connectées par des pipes.
-	- Crée des processus enfant avec fork.
-	- Configure les redirections en fonction de la position de la commande
-	  dans la chaîne (première, intermédiaire ou dernière) :
-	- Appelle ft_pipe_first_cmd, ft_pipe_middle_cmd, ou ft_pipe_last_cmd.
-	- Exécute la commande ou un builtin avec execute_command_or_builtin.
-	- Attend la fin des processus enfant avec waitpid.*/
 
-int	is_builtin_parent(const char *command)
+int is_builtin_parent(const char *command) 
 {
 	return (ft_strcmp(command, "export") == 0 || ft_strcmp(command, "unset") == 0 || ft_strcmp(command, "cd") == 0);
 }

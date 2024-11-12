@@ -6,7 +6,7 @@
 /*   By: almarico <almarico@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 14:45:23 by spagliar          #+#    #+#             */
-/*   Updated: 2024/11/11 22:40:54 by almarico         ###   ########.fr       */
+/*   Updated: 2024/11/12 10:29:17 by almarico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,18 @@ char *ft_strjoin_char(char *s1, char c) {
 //     return result;
 // }
 
-char *expand_variables_in_string(char *str) {
+char *last_exit(t_data *data)
+{
+	char *value;
+	//i += 2;
+
+	value = ft_itoa_m(data->last_exit_status);
+	return(value);
+
+}
+
+char *expand_variables_in_string(char *str, t_data *data) 
+{
     char *result = NULL;
     int i = 0;
     int start;
@@ -163,6 +174,11 @@ char *expand_variables_in_string(char *str) {
     char *var_value;
 
     while (str[i] != '\0') {
+		if(str[i] == '$' && str[i + 1] == '?')
+		{
+			result = last_exit(data);
+			i += 2;
+		}
         if (str[i] == '$') {  // Détecte le début d'une variable
 			i++;
             start = i;
@@ -202,7 +218,7 @@ int check_dollard(char *str)
 	}
 	return(count);
 }
-void	ft_echo(char **argv, int fd)//cf parsing
+void	ft_echo(char **argv, t_data *data)//cf parsing
 {
 	int		i;
 	bool	new_line;
@@ -210,8 +226,6 @@ void	ft_echo(char **argv, int fd)//cf parsing
 
 	i = 1;
 	new_line = true;
-	if (fd < 1)
-		fd = 1;
 	while (argv[i] && echo_n(argv[i]))
 	{
 		new_line = false;
@@ -219,18 +233,18 @@ void	ft_echo(char **argv, int fd)//cf parsing
 	}
 	while (argv[i])
 	{
-	 	output = expand_variables_in_string(argv[i]);  // Vérifier l'expansion de variable
+	 	output = expand_variables_in_string(argv[i], data);  // Vérifier l'expansion de variable
 	    if (output)
 		{ 
-			write(fd, output, strlen(output));
+            ft_putstr_fd(output, 1);
 			free(output);
 		}
         if (argv[i + 1])// Affiche un espace entre les arguments
-            ft_putstr_fd(" ", fd);
+            ft_putstr_fd(" ", 1);
         i++;
 	}
     if (new_line)
-       ft_putstr_fd("\n",fd);
+       ft_putstr_fd("\n", 1);
 }
 //echo sans options -> ajoute un saut de ligne par defaut
 //echo -n -> supprime le saut de ligne

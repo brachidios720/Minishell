@@ -64,7 +64,7 @@ int	ft_change_directory(char *target_dir)
 		return (1);
 	else
 	{
-		perror("cd failed");
+		//perror("cd failed");
 		return (0);
 	}
 }
