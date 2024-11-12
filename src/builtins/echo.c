@@ -6,7 +6,7 @@
 /*   By: almarico <almarico@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 14:45:23 by spagliar          #+#    #+#             */
-/*   Updated: 2024/11/12 00:15:33 by almarico         ###   ########.fr       */
+/*   Updated: 2024/11/12 10:29:17 by almarico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,9 +226,6 @@ void	ft_echo(char **argv, t_data *data)//cf parsing
 
 	i = 1;
 	new_line = true;
-	(void)fd;
-	// if (fd < 1)
-	// 	fd = 1;
 	while (argv[i] && echo_n(argv[i]))
 	{
 		new_line = false;
@@ -239,15 +236,15 @@ void	ft_echo(char **argv, t_data *data)//cf parsing
 	 	output = expand_variables_in_string(argv[i], data);  // Vérifier l'expansion de variable
 	    if (output)
 		{ 
-            ft_putstr_fd(output, fd);
+            ft_putstr_fd(output, 1);
 			free(output);
 		}
         if (argv[i + 1])// Affiche un espace entre les arguments
-            ft_putstr_fd(" ", fd);
+            ft_putstr_fd(" ", 1);
         i++;
 	}
     if (new_line)
-       ft_putstr_fd("\n", fd);
+       ft_putstr_fd("\n", 1);
 }
 //echo sans options -> ajoute un saut de ligne par defaut
 //echo -n -> supprime le saut de ligne
