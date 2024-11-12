@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: raphaelcarbonnel <raphaelcarbonnel@stud    +#+  +:+       +#+        */
+/*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 16:54:54 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/09/17 15:25:27 by raphaelcarb      ###   ########.fr       */
+/*   Updated: 2024/11/11 14:17:21 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ int	main(int ac, char **av, char **envp)//nbr d'argument + var d'env
 	cmd = NULL;
 	env = NULL;
 	(void)ac;
+	(void)av;
 	print_minishell();
 	data = malloc(sizeof(t_data));
 	if (data == NULL)
@@ -68,7 +69,7 @@ int	main(int ac, char **av, char **envp)//nbr d'argument + var d'env
 	}
 	env = init_env(envp);
 	init_pwd(&env);
-	ft_check_line(av, envp, data, &cmd, &env);
+	ft_check_line(data, &cmd, &env);
 	free (cmd);
 	free (data);
 	return (0);

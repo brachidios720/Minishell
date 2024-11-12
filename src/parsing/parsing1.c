@@ -13,8 +13,8 @@ t_cmd	*ft_lsttnew(t_data *data, int i)
         free(newnode);
         return (NULL);
     }
-    newnode->num = i;
     newnode->matrice = ft_splitt(newnode->str, ' ');
+    trim_quotes(newnode->matrice);
     newnode->option = ft_check_dash(newnode->str);
 	//newnode->delimiter = NULL;
     newnode->next = NULL;

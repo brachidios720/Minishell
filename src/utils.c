@@ -6,7 +6,7 @@
 /*   By: almarico <almarico@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 16:58:25 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/11/09 18:45:08 by almarico         ###   ########.fr       */
+/*   Updated: 2024/11/09 21:07:38 by almarico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,8 +206,91 @@ char **ft_splitt(char const *s, char c)
     return (new);
 }
 
-// char *trim_quote(char **tab)
-// {
-// 	int i = 0;
-// 	
-// }
+
+void	is_a_quote(char c, int *state)
+{
+	if (c == '\'' && *state == 0)
+		*state = 1;
+	else if (c == '\'' && *state == 1)
+		*state = 0;
+	if (c == '\"' && *state == 0)
+		*state = 2;
+	else if (c == '\"' && *state == 2)
+		*state = 0;
+}
+
+void	shift_str(char *str, int length)
+{
+	int	i;
+
+	i = 0;
+	while (str[i + length])
+	{
+		str[i] = str[i + length];
+		i++;
+	}
+	str[i] = '\0';
+}
+
+void	trim_quotes(char **option)
+{
+	int	i;
+	int	j;
+	int	state;
+	
+	state = 0;
+	i = 0;
+	while (option[i])
+	{
+		j = 0;
+		while (option[i][j])
+		{
+			is_a_quote(option[i][j], &state);
+			if ((option[i][j] == '\"' && state != 1)
+				|| (option[i][j] == '\'' && state != 2))
+			{
+				shift_str((option[i] + j), 1);
+				j--;
+			}
+			if (j < (int)ft_strlen(option[i]))
+				j++;
+		}
+		i++;
+	}
+}
+
+char *cut_tab_dollard(char *str)
+{
+	int i = 0;
+	int len = 0;
+	int start = 0;
+	char *dest = NULL;
+	if(check_dollard(str))
+	{
+		while(str[i])
+		{
+			if(str[i] == '$')
+			{
+				i++;
+				start = i;
+				while(ft_isalpha(str[i]) == 1)
+					i++;
+				len = (i - start) + 1;
+				dest = malloc(sizeof(char) * len); 
+				ft_strncpy(str, dest, len);
+			}
+			i++;
+		}
+		return(dest);
+	}
+	else
+		return(str);
+}
+
+void	ft_sign(void)
+{
+	signal(SIGINT, ft_handler_sig);
+	signal(SIGINT, ft_handler_sig_cmd);
+	signal(SIGINT, ft_handler_sig_hd);
+    //signal(SIGQUIT, ft_handlequit);
+}

@@ -24,7 +24,7 @@ void    ft_handler_sig(int signal)
     	rl_on_new_line();
     	rl_replace_line("", 0);
     	rl_redisplay();
-		g_signal = SIGINT;
+		g_signal = 130;
 	}
 }
 
@@ -43,20 +43,22 @@ void	ft_handler_sig_cmd(int signal)
 		rl_replace_line("", 1);
 		g_signal = SIGINT;
 	}
-	if (signal == SIGQUIT)
-		ft_putstr_fd("\b\b  \b\b", STDOUT_FILENO);
+	else if (signal == SIGQUIT)
+		g_signal = 0;
 }
 
 //pour un heredoc
 void	ft_handler_sig_hd(int signal)
 {
-	if (signal == SIGINT)
-	{
-		write(1, "\n", 1);
-		g_signal = SIGINT;
-	}
-	if (signal == SIGQUIT)
-		ft_putstr_fd("\b\b  \b\b", STDOUT_FILENO);
+    if (signal == SIGINT)
+    {
+        write(1, "\n", 1);
+        rl_replace_line("", 0);  // Efface la ligne en cours
+        rl_done = 1;  // Forcer readline à terminer la ligne courante
+        g_signal = 130;  // Met à jour g_signal
+    }
+	// if (signal == SIGQUIT)
+	// 	g_signal = 0;
 }
 
 //fonction global qui permet de choisir les actions suivant l'argument

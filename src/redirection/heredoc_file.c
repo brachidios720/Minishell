@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_file.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almarico <almarico@student.42lehavre.fr>   +#+  +:+       +#+        */
+/*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 14:16:43 by spagliar          #+#    #+#             */
-/*   Updated: 2024/11/09 20:11:03 by almarico         ###   ########.fr       */
+/*   Updated: 2024/11/11 18:31:25 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int	replace_matrice_with_heredoc_file(t_cmd *cmd)
 	index_matrice = 0;
 	while (cmd->matrice[index_matrice])
 		index_matrice++;
-	index_matrice -= 2;
+	index_matrice -= 1;
 	tmp_matrice = malloc((index_matrice + 1) * sizeof(char *));
 	if (!tmp_matrice)
 		return (-1);
@@ -33,8 +33,7 @@ static int	replace_matrice_with_heredoc_file(t_cmd *cmd)
 	while (cmd->matrice[index_matrice])
 		tmp_matrice[i++] = ft_strdup(cmd->matrice[index_matrice++]);
 	ft_free_tab(cmd->matrice);
-	cmd->matrice = ft_strdup_tab(tmp_matrice);
-	ft_free_tab(tmp_matrice);
+	cmd->matrice = &(*tmp_matrice);
 	return (0);
 }
 
@@ -54,6 +53,7 @@ int	ft_heredoc(t_cmd *cmd, t_data *data)
 		perror("Erreur lors de l'ouverture du fichier temporaire");
 		return (-1);
 	}
+	//signal(SIGINT, ft_handler_sig_hd);
 	read_input_with_heredoc(tmp_fd, cmd);
 	close(tmp_fd);
 	return (replace_matrice_with_heredoc_file(cmd));
