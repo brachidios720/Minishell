@@ -77,14 +77,14 @@ void execute_command_or_builtin(t_cmd **cmd, t_env **env, t_data *data)
         if (ft_strncmp(tmp->str, "export", ft_strlen("export")) == 0 || ft_strncmp(tmp->str, "unset", ft_strlen("unset")) == 0 || ft_strncmp(tmp->str, "cd", ft_strlen("cd")) == 0)
         {
             //printf("IIIII\n");
-            exec_builtin(tmp, env);  // Exécute directement sans fork
+            exec_builtin(tmp, env, data);  // Exécute directement sans fork
         }
         else
         {
             pid_t pid = fork();
             if (pid == 0)
             {
-                exec_builtin(tmp, env);
+                exec_builtin(tmp, env, data);
                 exit(EXIT_SUCCESS);
             }
             else if (pid > 0)
