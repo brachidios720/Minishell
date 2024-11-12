@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almarico <almarico@student.42lehavre.fr>   +#+  +:+       +#+        */
+/*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 16:58:25 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/11/09 21:07:38 by almarico         ###   ########.fr       */
+/*   Updated: 2024/11/11 23:17:27 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,28 +118,36 @@ int	ft_llstsize(t_cmd *cmd)
 	return (i);
 }
 
-int ft_is_in_quote(char *str, int i) 
+int	ft_is_in_quote(char *str, int i)
 {
-    int count = 0;
-    int ind = 0;
-    while (ind < i) {
-        if (str[ind] == '\'')
-            count++;
-        ind++;
-    }
-    return (count % 2 == 1);
+	int	count;
+	int	ind;
+
+	count = 0;
+	ind = 0;
+	while (ind < i)
+	{
+		if (str[ind] == '\'')
+			count++;
+		ind++;
+	}
+	return (count % 2 == 1);
 }
 
-int ft_is_in_doublequote(char *str, int i) 
+int	ft_is_in_doublequote(char *str, int i)
 {
-    int count = 0;
-    int ind = 0;
-    while (ind < i) {
-        if (str[ind] == '\"')
-            count++;
-        ind++;
-    }
-    return (count % 2 == 1);
+	int	count;
+	int	ind;
+
+	count = 0;
+	ind = 0;
+	while (ind < i)
+	{
+		if (str[ind] == '\"')
+			count++;
+		ind++;
+	}
+	return (count % 2 == 1);
 }
 
 char *ft_strdupsizee(const char *s, int size) 

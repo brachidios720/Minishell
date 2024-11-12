@@ -6,7 +6,7 @@
 /*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 15:12:37 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/11/11 17:34:53 by almarico         ###   ########.fr       */
+/*   Updated: 2024/11/12 16:00:43 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,7 +198,16 @@ void	ft_cut_cont(char *str, t_data *data);
 int		ft_check_one_quote(char *str);
 //pipe
 //pipe.c
-void	handle_pipe(t_cmd *cmd1, t_cmd *cmd2);
+void	handle_redir_fd(int src_fd, int dest_fd);
+void	ft_pipe_first_cmd(int pipe_fd[2], t_cmd *cmd);
+void	ft_pipe_last_cmd(int pipe_fd[2], t_cmd *cmd);
+void	ft_pipe_middle_cmd(int prev_fd, int pipe_fd[2]);
+void	exec_pipe_chain(t_data *data, t_cmd **cmd, t_env **env);
+int		is_builtin_parent(const char *command);
+void	execute_builtin_in_parent(t_cmd *cmd, t_env **env);
+//utils_pipe.c
+void	ft_chaine_pipe_utils(int pipe_fd[2], t_cmd **cmd, t_data *data, int command_index);
+//void	handle_pipe(t_cmd *cmd1, t_cmd *cmd2);
 //void	exec_pipe_chain(t_cmd **cmd, t_env **env);
 //void	exec_pipe_chain(t_cmd **cmd, t_data *data);
 //path.c
@@ -222,9 +231,6 @@ void    ft_export(t_env **env, char **args);
 //unset.c
 void    unset_with_variable(t_env **env, char *my_var);
 int     ft_unset(t_env **env, char **args);
-void	ft_pipe_first_cmd(int pipe_fd[2], t_cmd *cmd, t_data *data);
-void	ft_pipe_last_cmd(int pipe_fd[2], t_cmd *cmd, t_data *data);
-void	ft_pipe_middle_cmd(int prev_fd, int pipe_fd[2], t_cmd *cmd);
 void	exec_pipe_chain(t_data *data, t_cmd **cmd, t_env **env);
 // redirection
 //-----------------------------------------------------------------
@@ -282,8 +288,6 @@ void    exec_external(t_cmd *cmd, t_env **env);
 void    handle_redirections(t_cmd *cmd);
 void    process_commands(t_data *data, t_env **env, t_cmd **cmd);
 int	    ft_llstsize(t_cmd *cmd);
-
-
 void	ft_pipe(t_data *data, t_cmd *cmd, int pipe_fd[2]);
 //void	ft_pipe_middle_cmd(int pipe_fd[2], t_cmd *cmd);
 // void	ft_pipe_last_cmd(int pipe_fd[2], t_cmd *cmd);

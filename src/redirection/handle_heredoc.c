@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_heredoc.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almarico <almarico@student.42lehavre.fr>   +#+  +:+       +#+        */
+/*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 15:14:10 by spagliar          #+#    #+#             */
-/*   Updated: 2024/11/11 17:20:55 by almarico         ###   ########.fr       */
+/*   Updated: 2024/11/11 23:37:26 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,10 @@
 //gère une seule redirection d'entrée.
 //vérifie le type de redirection (1 pour fichier en lecture seule, 2 pour heredoc).
 //retourne un descripteur de fichier ou -1 si erreur
-static int handle_single_input_redir(t_cmd *cmd, t_data *data, int i)
+static	int	handle_single_input_redir(t_cmd *cmd, t_data *data, int i)
 {
-    int fd;
-    
-    
+	int	fd;
+
 	fd = -1;
 	//pour fichier -> elle ouvre le fichier en lecture seule.
     if (cmd->redir_type[i] == INPUT_FILE)
@@ -101,16 +100,17 @@ static int handle_single_input_redir(t_cmd *cmd, t_data *data, int i)
 //gere une seule redirection de sortie
 //si type 3 -> fichier en mode ecriture si 4 fichier en mode ajout/ecrase
 //retourne le descripteur de fichier ou -1 en cas d erreur
-int handle_single_output_redir(t_cmd *cmd, int index)
+
+int	handle_single_output_redir(t_cmd *cmd, int index)
 {
-    int fd;
-    
+	int	fd;
+
 	fd = -1;
-    if (cmd->redir_type[index] == OUTPUT_FILE)
-        fd = open(cmd->payload[index], O_WRONLY | O_CREAT | O_TRUNC, READ_WRITE_EXEC);
-    else if (cmd->redir_type[index] == APPEND)
-        fd = open(cmd->payload[index], O_WRONLY | O_CREAT | O_APPEND, READ_WRITE_EXEC);
-    return fd;
+	if (cmd->redir_type[index] == OUTPUT_FILE)
+		fd = open(cmd->payload[index], O_WRONLY | O_CREAT | O_TRUNC, READ_WRITE_EXEC);
+	else if (cmd->redir_type[index] == APPEND)
+		fd = open(cmd->payload[index], O_WRONLY | O_CREAT | O_APPEND, READ_WRITE_EXEC);
+	return (fd);
 }
 //gere plusieurs redirection de sortie
 //compte les redirections ->count_nb_redir_output
