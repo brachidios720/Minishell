@@ -95,7 +95,7 @@ R	//la fonction redirigerait l'entrée du fichier input.txt pour que cat lise ce
 C	echo "hello" >> log.txt
 R	//la sortie serait ajoutée à la fin du fichier log.txt sans en effacer le contenu existant.
 
-
+cat
 // controler le mode d ouverture des fichiers cf inout_files
 //------------------------------------------------------------
 - Creer un fichier txt avec une phrase

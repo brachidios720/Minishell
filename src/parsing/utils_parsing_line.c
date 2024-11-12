@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils_parsing_line.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: almarico <almarico@student.42lehavre.fr>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/11 21:09:33 by pag               #+#    #+#             */
+/*   Updated: 2024/11/11 23:58:02 by almarico         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/minishell.h"
 
 //identifier si caractere espace ou speciale
-int ft_isspace(char c)
+int	ft_isspace(char c)
 {
 	return (c == ' ' || c == '\t' || c == '\n' ||
 		c == '\v' || c == '\f' || c == '\r');
@@ -49,7 +61,7 @@ void	stock_filename(t_cmd *cmd, const char *start, int j)
 		return ;
 	ft_strncpy((char *)start, filename, len);
 	filename[len] = '\0';
-	cmd->payload[j] = ft_strdup(filename);
+	cmd->payload[j - 1] = ft_strdup(filename);
 	free(filename);
 }
 
