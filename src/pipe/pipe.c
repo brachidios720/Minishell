@@ -59,14 +59,7 @@ void ft_pipe_last_cmd(int pipe_fd[2], t_cmd *cmd, t_data *data)
         close(infile_fd);
     }
     else  // Sinon, redirige depuis l'extrémité de lecture du pipe précédent
-    {
         dup2(pipe_fd[0], STDIN_FILENO);
-    }
-    // if (dup2(infile_fd, STDIN_FILENO) == -1) 
-    // {
-    //     perror("Erreur de redirection d'entrée");
-    //     exit(EXIT_FAILURE);
-    // }
     close(pipe_fd[0]);  // Ferme l'extrémité de lecture du pipe
     if (infile_fd != STDIN_FILENO)
         close(infile_fd);  // Ferme le descripteur d'entrée si ouvert spécifiquement
@@ -141,6 +134,7 @@ void exec_pipe_chain(t_data *data, t_cmd **cmd, t_env **env)
         }
         tmp = tmp->next;
     }
+
     data->last_exit_status = g_signal;
 }
 
