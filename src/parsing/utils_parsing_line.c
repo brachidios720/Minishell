@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_parsing_line.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: almarico <almarico@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:09:33 by pag               #+#    #+#             */
-/*   Updated: 2024/11/11 21:09:54 by pag              ###   ########.fr       */
+/*   Updated: 2024/11/11 23:58:02 by almarico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	stock_filename(t_cmd *cmd, const char *start, int j)
 		return ;
 	ft_strncpy((char *)start, filename, len);
 	filename[len] = '\0';
-	cmd->payload[j] = ft_strdup(filename);
+	cmd->payload[j - 1] = ft_strdup(filename);
 	free(filename);
 }
 
