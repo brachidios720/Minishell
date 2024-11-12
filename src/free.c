@@ -23,3 +23,7 @@ void    ft_free_tab(char **av)
     free(av);
 }
 
+void    ft_free_all()
+{
+    
+}

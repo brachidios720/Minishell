@@ -252,8 +252,6 @@ void	trim_quotes(char **option)
 				shift_str((option[i] + j), 1);
 				j--;
 			}
-			// if (option[i][j] == '$' && state != 1)
-			// 	transform_string(&option[i], copy, &j);
 			if (j < (int)ft_strlen(option[i]))
 				j++;
 		}
@@ -294,5 +292,5 @@ void	ft_sign(void)
 	signal(SIGINT, ft_handler_sig);
 	signal(SIGINT, ft_handler_sig_cmd);
 	signal(SIGINT, ft_handler_sig_hd);
-    signal(SIGQUIT, ft_handlequit);
+    //signal(SIGQUIT, ft_handlequit);
 }
