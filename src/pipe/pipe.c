@@ -6,7 +6,7 @@
 /*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 13:14:51 by spagliar          #+#    #+#             */
-/*   Updated: 2024/11/12 19:20:36 by pag              ###   ########.fr       */
+/*   Updated: 2024/11/12 20:04:04 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ void	ft_pipe_last_cmd(int pipe_fd[2], t_cmd *cmd)
 //Configure la redirection pour une commande intermédiaire dans un pipeline.
 void	ft_pipe_middle_cmd(int prev_fd, int pipe_fd[2])
 {
+	printf("nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn\n");
 	handle_redir_fd(prev_fd, STDIN_FILENO); // Redirige l'entrée depuis le pipe précédent
 	handle_redir_fd(pipe_fd[1], STDOUT_FILENO); // Redirige la sortie vers l'extrémité d'écriture du pipe
 	//pas de fermeture car utilise ds prochaine cmd
@@ -93,13 +94,13 @@ void	exec_pipe_chain(t_data *data, t_cmd **cmd, t_env **env)
 		}
 		if (pid == 0)
 		{
-			if (command_index == 0)
+			if (command_index == 0 && tmp->next != NULL)
 				ft_pipe_first_cmd(pipe_fd, tmp);
 			else if (tmp->next == NULL)
 				ft_pipe_last_cmd(pipe_fd, tmp);
 			else
 				ft_pipe_middle_cmd(prev_fd, pipe_fd);
-			execute_command_or_builtin(&tmp, env);
+			execute_command_or_builtin(&tmp, env, data);
 			exit(EXIT_SUCCESS);
 		}
 		else //processus parent
@@ -113,11 +114,11 @@ void	exec_pipe_chain(t_data *data, t_cmd **cmd, t_env **env)
 		}
 		tmp = tmp->next;//cmd suivante
 	}
-	if (prev_fd != -1)
-	{
-		if (close(prev_fd) == -1)
-			perror("Erreur lors de la fermeture finale de prev_fd");
-	}
+	// if (prev_fd != -1)
+	// {
+	// 	if (close(prev_fd) == -1)
+	// 		perror("Erreur lors de la fermeture finale de prev_fd");
+	// }
 }
 /*
 void	exec_pipe_chain(t_data *data, t_cmd **cmd, t_env **env)
@@ -170,9 +171,9 @@ void	exec_pipe_chain(t_data *data, t_cmd **cmd, t_env **env)
         }
         tmp = tmp->next;
     }
-}
+}*/
 
-int is_builtin_parent(const char *command) 
+int	is_builtin_parent(const char *command) 
 {
 	return (ft_strcmp(command, "export") == 0 || ft_strcmp(command, "unset") == 0 || ft_strcmp(command, "cd") == 0);
 }
@@ -186,7 +187,6 @@ void execute_builtin_in_parent(t_cmd *cmd, t_env **env)
 	else if (ft_strcmp(cmd->matrice[0], "cd") == 0)
 		ft_cd(env, cmd->matrice);
 }
-
 /*
 void	ft_pipe_first_cmd(int pipe_fd[2], t_cmd *cmd, t_data *data)
 {

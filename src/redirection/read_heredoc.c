@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_heredoc.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almarico <almarico@student.42lehavre.fr>   +#+  +:+       +#+        */
+/*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 15:11:39 by spagliar          #+#    #+#             */
-/*   Updated: 2024/11/11 22:39:40 by almarico         ###   ########.fr       */
+/*   Updated: 2024/11/12 21:08:08 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 // Fonction pour lire du stdin jusqu'à un mot spécifique pour le heredoc
 // donc ligne par ligne jusqu au delimiteur
 // ecrit chaque ligne dans un fichier tant que le delimiteur n est pas atteint
-bool	read_in_stdin(t_data *data, int fd, t_cmd *cmd)
+/*bool	read_in_stdin(t_data *data, int fd, t_cmd *cmd)
 {
 	char		*line;
 
@@ -35,7 +35,7 @@ bool	read_in_stdin(t_data *data, int fd, t_cmd *cmd)
 		free (line);
 	}
 	return (true);
-}
+}*/
 
 /*
 Cette fonction avance dans une chaîne de caractères en sautant les redirections (<, >) et

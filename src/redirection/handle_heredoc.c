@@ -6,7 +6,7 @@
 /*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 15:14:10 by spagliar          #+#    #+#             */
-/*   Updated: 2024/11/11 23:37:26 by pag              ###   ########.fr       */
+/*   Updated: 2024/11/12 20:54:20 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,33 @@ static	int	handle_single_input_redir(t_cmd *cmd, t_data *data, int i)
 	}
    	//retourne le descripteur
 	return (fd);
+}
+
+int	handle_single_output_redir(t_cmd *cmd, int index)
+{
+	int	fd;
+
+	fd = -1;
+	if (cmd->redir_type[index] == OUTPUT_FILE)
+		fd = open(cmd->payload[index], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	else if (cmd->redir_type[index] == APPEND)
+		fd = open(cmd->payload[index], O_WRONLY | O_CREAT | O_APPEND, 0777);
+	return (fd);
+}
+
+void	handle_redirection(t_cmd *cmd, t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (cmd->redir_type[i] != -1)
+	{
+		if (cmd->redir_type[i] == INPUT_FILE || cmd->redir_type[i] == HEREDOC)
+			cmd->input_fd = handle_single_input_redir(cmd, data, i);
+		else if (cmd->redir_type[i] == OUTPUT_FILE || cmd->redir_type[i] == APPEND)
+			cmd->output_fd = handle_single_output_redir(cmd, i);
+		i++;
+	}
 }
 //gere plusieurs redirection d entree pour une cmd
 //apl count_nb_redir_imput -> pour compter les redirections
@@ -101,17 +128,6 @@ static	int	handle_single_input_redir(t_cmd *cmd, t_data *data, int i)
 //si type 3 -> fichier en mode ecriture si 4 fichier en mode ajout/ecrase
 //retourne le descripteur de fichier ou -1 en cas d erreur
 
-int	handle_single_output_redir(t_cmd *cmd, int index)
-{
-	int	fd;
-
-	fd = -1;
-	if (cmd->redir_type[index] == OUTPUT_FILE)
-		fd = open(cmd->payload[index], O_WRONLY | O_CREAT | O_TRUNC, READ_WRITE_EXEC);
-	else if (cmd->redir_type[index] == APPEND)
-		fd = open(cmd->payload[index], O_WRONLY | O_CREAT | O_APPEND, READ_WRITE_EXEC);
-	return (fd);
-}
 //gere plusieurs redirection de sortie
 //compte les redirections ->count_nb_redir_output
 //applique chaque redrection et utilise dupe pour rediriger la sortie standard
@@ -153,17 +169,3 @@ int	handle_single_output_redir(t_cmd *cmd, int index)
 //     return (last_fd);
 // }
 
-void	handle_redirection(t_cmd *cmd, t_data *data)
-{
-	int	i;
-
-	i = 0;
-	while (cmd->redir_type[i] != -1)
-	{
-		if (cmd->redir_type[i] == INPUT_FILE || cmd->redir_type[i] == HEREDOC)
-			cmd->input_fd = handle_single_input_redir(cmd, data, i);
-		else if (cmd->redir_type[i] == OUTPUT_FILE || cmd->redir_type[i] == APPEND)
-			cmd->output_fd = handle_single_output_redir(cmd, i);
-		i++;
-	}
-}

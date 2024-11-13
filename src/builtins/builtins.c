@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almarico <almarico@student.42lehavre.fr>   +#+  +:+       +#+        */
+/*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:35:56 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/11/12 00:06:39 by almarico         ###   ########.fr       */
+/*   Updated: 2024/11/12 21:52:53 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void exec_builtin(t_cmd *cmd, t_env **env, t_data *data)
             // if (ft_strcmp(cmd->matrice[0], "cd") == 0)
             //     ft_cd(env, cmd->matrice);
             if (ft_strcmp(cmd->matrice[0], "echo") == 0)
-                ft_echo(cmd->matrice, data);
+                ft_echo(cmd->matrice, data, cmd->output_fd);
             else if (ft_strcmp(cmd->matrice[0], "env") == 0)
                 ft_env(env);
             else if (ft_strcmp(cmd->matrice[0], "pwd") == 0)

@@ -6,7 +6,7 @@
 /*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 14:16:43 by spagliar          #+#    #+#             */
-/*   Updated: 2024/11/11 18:31:25 by pag              ###   ########.fr       */
+/*   Updated: 2024/11/12 20:56:39 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	ft_heredoc(t_cmd *cmd, t_data *data)
 
 	(void)data;
     // Ouvrir un fichier temporaire pour le here-document
-	tmp_fd = open("/tmp/heredoc_tmp", O_WRONLY | O_CREAT | O_TRUNC, MODE_HEREDOC);
+	tmp_fd = open("/tmp/heredoc_tmp", O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (tmp_fd == -1)
 	{
 		perror("Erreur lors de l'ouverture du fichier temporaire");

@@ -6,7 +6,7 @@
 /*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 15:12:37 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/11/12 16:00:43 by pag              ###   ########.fr       */
+/*   Updated: 2024/11/12 21:52:32 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,6 @@
 # define HEREDOC 2         				// Redirection d'entrée via heredoc (<<)
 # define OUTPUT_FILE 3     				// Redirection de sortie vers un fichier (>)
 # define APPEND 4          				// Redirection de sortie en mode append (ajout) (>>)
-# define READ_WRITE_EXEC 0777
-# define MODE_HEREDOC 0644
 
 extern int	g_signal;		//variable globale pour gestion des signaux
 
@@ -222,7 +220,7 @@ int     check_dollard(char *str);
 char    *expand_variables_in_string(char *str, t_data *data);
 //char    *expand_variable(char *arg, t_data *data, t_env **env);
 //char	*ft_itoa_m(int n);
-void	ft_echo(char **argv, t_data *data);
+void	ft_echo(char **argv, t_data *data, int fd);
 char    *cut_tab_dollard(char *str);
 //export.c
 void    export_with_nothing(t_env *env);
