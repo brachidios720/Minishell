@@ -6,7 +6,7 @@
 /*   By: almarico <almarico@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 13:14:51 by spagliar          #+#    #+#             */
-/*   Updated: 2024/11/14 10:15:09 by pag              ###   ########.fr       */
+/*   Updated: 2024/11/14 15:09:19 by almarico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 // et effectue un nettoyage en fermant les descripteurs inutilisés.
 void	handle_redir_fd(int src_fd, int dest_fd)
 {
-	dprintf(2, "src_fd; %d\n", src_fd);
+	dprintf(2, "src_fd: %d, dest_fd: %d\n", src_fd, dest_fd);
 	if (src_fd != -1 && dup2(src_fd, dest_fd) == -1)
 	{
 		perror("Erreur redirection");
@@ -36,7 +36,7 @@ void	exec_redir(t_cmd **cmd, t_data *data, t_env **env)
 	t_cmd	*tmp;
 	tmp = *cmd;
 	printf("passe dans exec_redir\n");
-	while (!tmp)
+	while (tmp != NULL)
 	{
 		pid = fork(); //debut processus child
 		if (pid == -1)
@@ -44,10 +44,15 @@ void	exec_redir(t_cmd **cmd, t_data *data, t_env **env)
 			perror("fork error\n");
 			exit(EXIT_FAILURE);
 		}
+        printf("pid = %d\n", pid);
 		if (pid == 0)
 		{
 			handle_redirection(tmp, data);
-			handle_redir_fd(tmp->input_fd, tmp->output_fd);
+             if (tmp->input_fd != -1)
+                handle_redir_fd(tmp->input_fd, STDIN_FILENO);
+            if (tmp->output_fd != -1)
+                handle_redir_fd(tmp->output_fd, STDOUT_FILENO);
+			//handle_redir_fd(tmp->input_fd, tmp->output_fd);
 			execute_command_or_builtin(&tmp, env, data);
 		}
 		else //processus parent
@@ -57,6 +62,7 @@ void	exec_redir(t_cmd **cmd, t_data *data, t_env **env)
 		tmp = tmp->next;
 	}	
 }
+
 int	is_builtin_parent(const char *command) 
 {
 	return (ft_strcmp(command, "export") == 0 || ft_strcmp(command, "unset") == 0 || ft_strcmp(command, "cd") == 0);
