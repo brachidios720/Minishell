@@ -16,13 +16,7 @@
 void ft_check_line(t_data *data, t_cmd **cmd, t_env **env)
 {
 	t_cmd *new_node;
-	//ft_sign();
 	data->last_exit_status = g_signal;
-	signal(SIGINT, ft_handler_sig);
-	signal(SIGINT, ft_handler_sig_cmd);
-	signal(SIGQUIT, SIG_IGN);
-	//signal(SIGINT, ft_handler_sig_hd);
-    //signal(SIGQUIT, ft_handlequit);
 	char *line;
 
 	new_node = NULL;
@@ -50,8 +44,8 @@ void ft_check_line(t_data *data, t_cmd **cmd, t_env **env)
 		else
 		{
 			data->last_exit_status = g_signal;
-			change_signal(2);  // Configuration pour here-document
-			change_signal(1);  // Configuration pour l'exécution de commande
+			//change_signal(2);  // Configuration pour here-document
+			//change_signal(1);  // Configuration pour l'exécution de commande
 			process_commands(data, env, cmd);
 			ft_free(line, cmd);
 			g_signal = 0;

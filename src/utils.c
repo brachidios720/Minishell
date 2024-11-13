@@ -302,3 +302,4 @@ void	ft_sign(void)
 	signal(SIGINT, ft_handler_sig_hd);
     //signal(SIGQUIT, ft_handlequit);
 }
+

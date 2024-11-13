@@ -28,11 +28,6 @@ void    ft_handler_sig(int signal)
 	}
 }
 
-void    ft_handlequit(int b)
-{
-    (void)b;
-}
-
 //gestion de signal pour un cmd
 void	ft_handler_sig_cmd(int signal)
 {
@@ -57,8 +52,8 @@ void	ft_handler_sig_hd(int signal)
         rl_done = 1;  // Forcer readline à terminer la ligne courante
         g_signal = 130;  // Met à jour g_signal
     }
-	// if (signal == SIGQUIT)
-	// 	g_signal = 0;
+	if (signal == SIGQUIT)
+		g_signal = 0;
 }
 
 //fonction global qui permet de choisir les actions suivant l'argument
@@ -71,6 +66,8 @@ void	change_signal(int pos)
 	//ft_bzero(&sig_quit, sizeof(sig_quit));
 	sig_int.sa_flags = SA_RESTART; //drapeau -> appel systemes interrompus = signal redemarre automatiquement
 	sig_quit.sa_flags = SA_RESTART;
+	sigemptyset(&(sig_int.sa_mask));
+	sigemptyset(&(sig_quit.sa_mask));
 	if (pos == 0)
 	{
 		sig_int.sa_handler = &ft_handler_sig;
