@@ -62,8 +62,7 @@ int	main(int ac, char **av, char **envp)//nbr d'argument + var d'env
 	(void)av;
 	print_minishell();
 	data = malloc(sizeof(t_data));
-	cmd = malloc(sizeof(t_cmd));
-	if (data == NULL || cmd == NULL)
+	if (data == NULL)
 	{
 		perror("Erreur d'allocation mémoire pour data");
 		return (1);

@@ -19,6 +19,7 @@ void ft_check_line(t_data *data, t_cmd **cmd, t_env **env)
 	data->last_exit_status = g_signal;
 	char *line;
 
+	*cmd = malloc(sizeof(t_cmd));
 	new_node = NULL;
 	//gérer la lecture de la ligne (bloque les interruptions comme Ctrl+C ou réinitialise les handlers).
 	change_signal(0);
