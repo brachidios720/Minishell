@@ -6,7 +6,7 @@
 /*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:35:56 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/11/13 17:44:11 by pag              ###   ########.fr       */
+/*   Updated: 2024/11/13 20:31:46 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,5 +116,5 @@ void	process_commands(t_data *data, t_env **env, t_cmd **cmd)
 	}
 	handle_redirection(*cmd, data);
     printf("after handle redir\n");
-	exec_pipe_chain(data, cmd, env);
+	exec_redir(cmd, data, env);
 }

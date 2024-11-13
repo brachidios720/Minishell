@@ -16,8 +16,8 @@ void    init_cmd(t_cmd *cmd)
 
     cmd->input_fd = -1;
     cmd->output_fd = -1;
-    cmd->pipe_fd[0] = -1; //desc fichier pr lire
-    cmd->pipe_fd[1] = -1; //desc fichier pr ecrire
+    //cmd->pipe_fd[0] = -1; //desc fichier pr lire
+    //cmd->pipe_fd[1] = -1; //desc fichier pr ecrire
     
     i = 0;
     while (i < 30)

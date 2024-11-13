@@ -6,7 +6,7 @@
 /*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 13:14:51 by spagliar          #+#    #+#             */
-/*   Updated: 2024/11/13 17:56:09 by pag              ###   ########.fr       */
+/*   Updated: 2024/11/13 20:34:17 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,46 +30,48 @@ void	handle_redir_fd(int src_fd, int dest_fd)
 	}	
 
 }
-
-//Configure la redirection pour la 1ere cmd dans un pipe
-void	ft_pipe_first_cmd(int pipe_fd[2], t_cmd *cmd)
+void	exec_redir(t_cmd **cmd, t_data *data, t_env **env)
 {
-	if (cmd->input_fd == -1)
+	pid_t pid;
+	t_cmd	*tmp;
+	tmp = *cmd;
+	printf("mmmmmmmmmmmmmm\n");
+	while (!tmp)
 	{
-		perror("Erreur de redir d'entrée pour pipe 1rst cmd : %d\n");
-		exit(EXIT_FAILURE);
-	}
-	handle_redir_fd(cmd->input_fd, STDIN_FILENO);//redirige l entree
-	handle_redir_fd(pipe_fd[1], STDOUT_FILENO);//redirige la sortie vers l extrmite d ecriture du pipe
-	//if (close(pipe_fd[0]) == -1)//ferme l extrmite non utilisee
-	//{
-	//	perror("Erreur a la fermeture du pipe");
-	//}
+		pid = fork(); //debut processus child
+		if (pid == -1)
+		{
+			perror("fork error\n");
+			exit(EXIT_FAILURE);
+		}
+		if (pid == 0)
+		{
+			handle_redirection(tmp, data);
+			handle_redir_fd(tmp->input_fd, tmp->output_fd);
+			execute_command_or_builtin(&tmp, env, data);
+		}
+		else //processus parent
+		{
+			waitpid(pid, NULL, 0); //attente fin de processus enfant	
+		}
+		tmp = tmp->next;
+	}	
 }
-
-//Configure la redirection pour la dernière commande dans un pipeline.
-void	ft_pipe_last_cmd(int pipe_fd[2], t_cmd *cmd)
+int	is_builtin_parent(const char *command) 
 {
-	if (cmd->input_fd == -1)
-	{
-		perror("Erreur de redirection d'entrée pour pipe last cmd");
-		exit(EXIT_FAILURE);
-	}
-	if (cmd->input_fd != -1) //signifie qu un fichier a ete specifie comme source d entree
-		handle_redir_fd(cmd->input_fd, STDIN_FILENO); //Redirige l entree standard vers ce fichier
-	else
-		handle_redir_fd(pipe_fd[0], STDIN_FILENO); //sinon la cmd doit lireles infos qui vient du pipe
-		//pas de fermeture le parent s en charge
+	return (ft_strcmp(command, "export") == 0 || ft_strcmp(command, "unset") == 0 || ft_strcmp(command, "cd") == 0);
 }
 
-//Configure la redirection pour une commande intermédiaire dans un pipeline.
-void	ft_pipe_middle_cmd(int prev_fd, int pipe_fd[2])
+void execute_builtin_in_parent(t_cmd *cmd, t_env **env)
 {
-	handle_redir_fd(prev_fd, STDIN_FILENO); // Redirige l'entrée depuis le pipe précédent
-	handle_redir_fd(pipe_fd[1], STDOUT_FILENO); // Redirige la sortie vers l'extrémité d'écriture du pipe
-	//pas de fermeture car utilise ds prochaine cmd
+	if (ft_strcmp(cmd->matrice[0], "export") == 0)
+		ft_export(env, cmd->matrice);
+	else if (ft_strcmp(cmd->matrice[0], "unset") == 0)
+		ft_unset(env, cmd->matrice);
+	else if (ft_strcmp(cmd->matrice[0], "cd") == 0)
+		ft_cd(env, cmd->matrice);
 }
-
+/*
 void	exec_pipe_chain(t_data *data, t_cmd **cmd, t_env **env)
 {
 	(void)data;
@@ -124,7 +126,45 @@ void	exec_pipe_chain(t_data *data, t_cmd **cmd, t_env **env)
 	// 		perror("Erreur lors de la fermeture finale de prev_fd");
 	// }
 }
-/*
+//Configure la redirection pour la 1ere cmd dans un pipe
+void	ft_pipe_first_cmd(int pipe_fd[2], t_cmd *cmd)
+{
+	if (cmd->input_fd == -1)
+	{
+		perror("Erreur de redir d'entrée pour pipe 1rst cmd : %d\n");
+		exit(EXIT_FAILURE);
+	}
+	handle_redir_fd(cmd->input_fd, STDIN_FILENO);//redirige l entree
+	handle_redir_fd(pipe_fd[1], STDOUT_FILENO);//redirige la sortie vers l extrmite d ecriture du pipe
+	//if (close(pipe_fd[0]) == -1)//ferme l extrmite non utilisee
+	//{
+	//	perror("Erreur a la fermeture du pipe");
+	//}
+}
+
+//Configure la redirection pour la dernière commande dans un pipeline.
+void	ft_pipe_last_cmd(int pipe_fd[2], t_cmd *cmd)
+{
+	if (cmd->input_fd == -1)
+	{
+		perror("Erreur de redirection d'entrée pour pipe last cmd");
+		exit(EXIT_FAILURE);
+	}
+	if (cmd->input_fd != -1) //signifie qu un fichier a ete specifie comme source d entree
+		handle_redir_fd(cmd->input_fd, STDIN_FILENO); //Redirige l entree standard vers ce fichier
+	else
+		handle_redir_fd(pipe_fd[0], STDIN_FILENO); //sinon la cmd doit lireles infos qui vient du pipe
+		//pas de fermeture le parent s en charge
+}
+
+//Configure la redirection pour une commande intermédiaire dans un pipeline.
+void	ft_pipe_middle_cmd(int prev_fd, int pipe_fd[2])
+{
+	handle_redir_fd(prev_fd, STDIN_FILENO); // Redirige l'entrée depuis le pipe précédent
+	handle_redir_fd(pipe_fd[1], STDOUT_FILENO); // Redirige la sortie vers l'extrémité d'écriture du pipe
+	//pas de fermeture car utilise ds prochaine cmd
+}
+
 void	exec_pipe_chain(t_data *data, t_cmd **cmd, t_env **env)
 {
     pid_t pid;
@@ -177,20 +217,6 @@ void	exec_pipe_chain(t_data *data, t_cmd **cmd, t_env **env)
     }
 }*/
 
-int	is_builtin_parent(const char *command) 
-{
-	return (ft_strcmp(command, "export") == 0 || ft_strcmp(command, "unset") == 0 || ft_strcmp(command, "cd") == 0);
-}
-
-void execute_builtin_in_parent(t_cmd *cmd, t_env **env)
-{
-	if (ft_strcmp(cmd->matrice[0], "export") == 0)
-		ft_export(env, cmd->matrice);
-	else if (ft_strcmp(cmd->matrice[0], "unset") == 0)
-		ft_unset(env, cmd->matrice);
-	else if (ft_strcmp(cmd->matrice[0], "cd") == 0)
-		ft_cd(env, cmd->matrice);
-}
 /*
 void	ft_pipe_first_cmd(int pipe_fd[2], t_cmd *cmd, t_data *data)
 {
