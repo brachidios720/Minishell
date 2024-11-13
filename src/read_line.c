@@ -16,18 +16,12 @@
 void ft_check_line(t_data *data, t_cmd **cmd, t_env **env)
 {
 	t_cmd *new_node;
-	//ft_sign();
 	data->last_exit_status = g_signal;
-	signal(SIGINT, ft_handler_sig);
-	signal(SIGINT, ft_handler_sig_cmd);
-	signal(SIGQUIT, SIG_IGN);
-	// signal(SIGINT, ft_handler_sig_hd);
-    // signal(SIGQUIT, ft_handlequit);
 	char *line;
 
 	new_node = NULL;
 	//gérer la lecture de la ligne (bloque les interruptions comme Ctrl+C ou réinitialise les handlers).
-	//change_signal(0);
+	change_signal(0);
 	line = readline(CYAN"Minishell> "RESET); 
 	if(line[0] == '\0')
 	{

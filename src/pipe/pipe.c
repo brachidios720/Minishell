@@ -28,6 +28,7 @@ void	ft_pipe_first_cmd(int pipe_fd[2], t_cmd *cmd, t_data *data)
     {
         if (dup2(infile_fd, STDIN_FILENO) == -1)
         {
+           // printf("IIIIIIII\n");
             perror("Erreur redirection d'entrée");
             exit(EXIT_FAILURE);
         }
@@ -87,7 +88,8 @@ void exec_pipe_chain(t_data *data, t_cmd **cmd, t_env **env)
     int pipe_fd[2];         // Pipe pour chaque commande
     int command_index = 0;
     int prev_fd = -1;       // Fichier de l'extrémité de lecture du pipe précédent
-
+    change_signal(1);
+    change_signal(2);
     while (tmp != NULL)
     {
         if(is_builtin_parent(tmp->matrice[0]))

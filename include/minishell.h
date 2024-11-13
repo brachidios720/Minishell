@@ -316,4 +316,5 @@ void	ft_sign(void);
 void    ft_chaine_pipe_utils(int pipe_fd[2], t_cmd **cmd, t_data *data, int command_index);
 char 	*last_exit(t_data *data);
 
+
 #endif

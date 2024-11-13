@@ -93,7 +93,7 @@ void read_input_with_heredoc(int tmp_fd, t_cmd *cmd)
         //verif ligne = delimiteur
         if (ft_strcmp(buffer, tmp_limite) == 0)
         {
-            free (buffer);
+            free(buffer);
             break;
         }
         ft_putstr_fd (buffer, tmp_fd);

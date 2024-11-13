@@ -28,10 +28,15 @@ static int	replace_matrice_with_heredoc_file(t_cmd *cmd)
 	tmp_matrice[index_matrice] = NULL;
 	tmp_matrice[0] = ft_strdup(cmd->matrice[0]);
 	tmp_matrice[1] = ft_strdup("/tmp/heredoc_tmp");
+	//printf("======%s", cmd->matrice[1]);
+	//printf("IIIIIIIIIIIIIIIIIIIIIIIII\n");
 	i = 2;
-	index_matrice = 3;
-	while (cmd->matrice[index_matrice])
+	index_matrice = 0;
+	while (cmd->matrice[index_matrice]) 
+	{
+		//printf("matrice: %s\n", cmd->matrice[index_matrice]);
 		tmp_matrice[i++] = ft_strdup(cmd->matrice[index_matrice++]);
+	}
 	ft_free_tab(cmd->matrice);
 	cmd->matrice = &(*tmp_matrice);
 	return (0);
@@ -47,6 +52,7 @@ int	ft_heredoc(t_cmd *cmd, t_data *data)
 
 	(void)data;
     // Ouvrir un fichier temporaire pour le here-document
+	change_signal(2);
 	tmp_fd = open("/tmp/heredoc_tmp", O_WRONLY | O_CREAT | O_TRUNC, MODE_HEREDOC);
 	if (tmp_fd == -1)
 	{
@@ -56,5 +62,6 @@ int	ft_heredoc(t_cmd *cmd, t_data *data)
 	//signal(SIGINT, ft_handler_sig_hd);
 	read_input_with_heredoc(tmp_fd, cmd);
 	close(tmp_fd);
+	// cmd->input_fd = "/tmp/heredoc_tmp";
 	return (replace_matrice_with_heredoc_file(cmd));
 }

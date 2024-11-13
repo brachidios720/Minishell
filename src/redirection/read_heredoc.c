@@ -15,27 +15,27 @@
 // Fonction pour lire du stdin jusqu'à un mot spécifique pour le heredoc
 // donc ligne par ligne jusqu au delimiteur
 // ecrit chaque ligne dans un fichier tant que le delimiteur n est pas atteint
-bool	read_in_stdin(t_data *data, int fd, t_cmd *cmd)
-{
-	char		*line;
+// bool	read_in_stdin(t_data *data, int fd, t_cmd *cmd)
+// {
+// 	char		*line;
 
-	(void) data;
-	while (1)
-	{
-		line = readline("> ");
-		if (!line)
-			return (false);
-		if (strcmp(line, cmd->delimiter) == 0)
-		{
-			free(line);
-			break ;
-		}
-		write (fd, line, strlen(line));
-		write (fd, "\n", 1);
-		free (line);
-	}
-	return (true);
-}
+// 	(void) data;
+// 	while (1)
+// 	{
+// 		line = readline("> ");
+// 		if (!line)
+// 			return (false);
+// 		if (strcmp(line, cmd->delimiter) == 0)
+// 		{
+// 			free(line);
+// 			break ;
+// 		}
+// 		write (fd, line, strlen(line));
+// 		write (fd, "\n", 1);
+// 		free (line);
+// 	}
+// 	return (true);
+// }
 
 /*
 Cette fonction avance dans une chaîne de caractères en sautant les redirections (<, >) et
