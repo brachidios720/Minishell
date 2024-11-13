@@ -6,7 +6,7 @@
 /*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 14:45:23 by spagliar          #+#    #+#             */
-/*   Updated: 2024/11/12 21:56:24 by pag              ###   ########.fr       */
+/*   Updated: 2024/11/13 18:37:16 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,21 +60,7 @@ char	*ft_itoa_m(int n)
 	return (ft_return(buff));
 }
 
-// char *expand_variable(char *arg, t_data *data, t_env **env)
-// {
-// 	//printf("arg = %s\n", arg);
-//     if (arg[0] == '$') 
-// 	{
-//         if (arg[1] == '?') 
-//             return (ft_itoa_m(data->last_exit_status)); 
-// 		else if(search_in_env(env, arg) == 0)
-//             return (getenv(arg + 1));  // Cherche la variable d'environnement sans le '$'
-// 		else
-// 			ft_strdup("");
-//     }
-//     return (arg);  // Retourner l'argument tel quel s'il ne s'agit pas d'une variable
-// }
-
+//pour $
 char *ft_strjoinn(char const *s1, char const *s2)
 {
     size_t len1 = 0;
@@ -118,43 +104,7 @@ char *ft_strjoin_char(char *s1, char c) {
     return result;
 }
 
-// char *expand_variables_in_string(char *str) {
-//     char *result = NULL;
-//     char *temp;
-//     int i = 0;
-//     int start;
-//     char *var_name;
-//     char *var_value;
-
-//     while (str[i] != '\0') {
-//         if (str[i] == '$') {  // Détecte le début d'une variable
-//             i++;
-//             start = i;
-//             while (str[i] != '\0' && ft_isalpha(str[i]) == 1) {
-//                 i++;
-//             }
-
-//             var_name = ft_substr(str, start, i - start); // Extraire le nom de la variable
-//             var_value = getenv(var_name);    // Recherche la variable dans `t_env`
-//             if(var_value == NULL)
-// 				var_value = "";
-
-//             //temp = ft_strjoin(result, var_value);      // Concatène la valeur de la variable
-// 			//temp = result;
-// 			result = ft_strjoin(result, var_value); 
-// 			//free(result);
-//             //result = temp;
-//             free(var_name);
-//         } else {
-//             //temp = result;
-//             result = ft_strjoin_char(result, str[i]);    // Ajoute chaque caractère individuel
-//             //free(result);
-//             i++;
-//         }
-//     }
-//     return result;
-// }
-
+//exit code
 char *last_exit(t_data *data)
 {
 	char *value;
@@ -234,9 +184,11 @@ void	ft_echo(char **argv, t_data *data, int fd)//cf parsing
 	while (argv[i])
 	{
 	 	output = expand_variables_in_string(argv[i], data);  // Vérifier l'expansion de variable
-	    if (output)
-		{ 
-            ft_putstr_fd(output, fd);
+		if (output)
+		{	
+	    	//dprintf(2, "output of echo: %s\n", output);
+            //dprintf(2, "fd= %d\n", );
+			ft_putstr_fd(output, fd);
 			free(output);
 		}
         if (argv[i + 1])// Affiche un espace entre les arguments
@@ -251,6 +203,56 @@ void	ft_echo(char **argv, t_data *data, int fd)//cf parsing
 //echo -n -> supprime le saut de ligne
 //echo -nnnnn -> marche comme -n
  
+// char *expand_variable(char *arg, t_data *data, t_env **env)
+// {
+// 	//printf("arg = %s\n", arg);
+//     if (arg[0] == '$') 
+// 	{
+//         if (arg[1] == '?') 
+//             return (ft_itoa_m(data->last_exit_status)); 
+// 		else if(search_in_env(env, arg) == 0)
+//             return (getenv(arg + 1));  // Cherche la variable d'environnement sans le '$'
+// 		else
+// 			ft_strdup("");
+//     }
+//     return (arg);  // Retourner l'argument tel quel s'il ne s'agit pas d'une variable
+// }
+// char *expand_variables_in_string(char *str) {
+//     char *result = NULL;
+//     char *temp;
+//     int i = 0;
+//     int start;
+//     char *var_name;
+//     char *var_value;
+
+//     while (str[i] != '\0') {
+//         if (str[i] == '$') {  // Détecte le début d'une variable
+//             i++;
+//             start = i;
+//             while (str[i] != '\0' && ft_isalpha(str[i]) == 1) {
+//                 i++;
+//             }
+
+//             var_name = ft_substr(str, start, i - start); // Extraire le nom de la variable
+//             var_value = getenv(var_name);    // Recherche la variable dans `t_env`
+//             if(var_value == NULL)
+// 				var_value = "";
+
+//             //temp = ft_strjoin(result, var_value);      // Concatène la valeur de la variable
+// 			//temp = result;
+// 			result = ft_strjoin(result, var_value); 
+// 			//free(result);
+//             //result = temp;
+//             free(var_name);
+//         } else {
+//             //temp = result;
+//             result = ft_strjoin_char(result, str[i]);    // Ajoute chaque caractère individuel
+//             //free(result);
+//             i++;
+//         }
+//     }
+//     return result;
+// }
 	// Affiche un espace si l option -n est activee
 	//if (new_line)
 	//	ft_putstr_fd(" ",1);

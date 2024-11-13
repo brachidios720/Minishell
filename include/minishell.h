@@ -6,7 +6,7 @@
 /*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 15:12:37 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/11/12 21:52:32 by pag              ###   ########.fr       */
+/*   Updated: 2024/11/13 18:41:13 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@
 
 extern int	g_signal;		//variable globale pour gestion des signaux
 
+#define close(X) printf("CLOSE: %d\n", X); close(X) 
+
 typedef struct s_cmd
 {
 	char		*str;// stock 1 chaine de car (ex : ls)
@@ -60,7 +62,8 @@ typedef struct s_cmd
 	int			redir_type[30];
 	int			input_fd;// utilise pour stocker le descripteur de fichier associe a la redirection d entree
 	int			output_fd;// utilisee pour stocker le descripteur de fichier associe a la redirection de sortie
-	//int			append;// ajout a la fin >> -> 1 sinon 0
+	int			pipe_fd[2];
+	int			append;// ajout a la fin >> -> 1 sinon 0
 	struct	s_cmd *next;
 }	t_cmd;
 
@@ -143,6 +146,7 @@ t_env	*init_env(char **envp);
 
 //init
 void    init_data(t_data *data);
+void    init_cmd(t_cmd *cmd);
 
 // parsing
 //------------------------------------------------------------------
@@ -157,7 +161,7 @@ int		ft_check_option(t_data *data);
 char	*ft_check_dash(char *str);
 
 //->parsing1.c
-t_cmd	*ft_lsttnew(t_data *data, int i);
+t_cmd	*ft_lsttnew(t_data *data, int i, t_cmd *cmd);
 void	ft_do_all(char *str, t_cmd **cmd, t_data *data, t_cmd *new_node);
 
 // utils 

@@ -6,7 +6,7 @@
 /*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 13:14:51 by spagliar          #+#    #+#             */
-/*   Updated: 2024/11/12 20:04:04 by pag              ###   ########.fr       */
+/*   Updated: 2024/11/13 17:56:09 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,18 @@
 // et effectue un nettoyage en fermant les descripteurs inutilisés.
 void	handle_redir_fd(int src_fd, int dest_fd)
 {
+	dprintf(2, "src_fd; %d\n", src_fd);
 	if (src_fd != -1 && dup2(src_fd, dest_fd) == -1)
 	{
 		perror("Erreur redirection");
 		exit(EXIT_FAILURE);
 	}
-	if (src_fd != STDIN_FILENO || src_fd != STDOUT_FILENO)
+	if (src_fd > 2)
 	{
-		if (close(src_fd) == -1)
-			perror("Erreur lors de la fermeture du descripteur");
-	}
+		close(src_fd);
+		//perror("Erreur lors de la fermeture du descripteur");
+	}	
+
 }
 
 //Configure la redirection pour la 1ere cmd dans un pipe
@@ -39,8 +41,10 @@ void	ft_pipe_first_cmd(int pipe_fd[2], t_cmd *cmd)
 	}
 	handle_redir_fd(cmd->input_fd, STDIN_FILENO);//redirige l entree
 	handle_redir_fd(pipe_fd[1], STDOUT_FILENO);//redirige la sortie vers l extrmite d ecriture du pipe
-	if (close(pipe_fd[0]) == -1)//ferme l extrmite non utilisee
-		perror("Erreur a la fermeture du pipe");
+	//if (close(pipe_fd[0]) == -1)//ferme l extrmite non utilisee
+	//{
+	//	perror("Erreur a la fermeture du pipe");
+	//}
 }
 
 //Configure la redirection pour la dernière commande dans un pipeline.
@@ -61,7 +65,6 @@ void	ft_pipe_last_cmd(int pipe_fd[2], t_cmd *cmd)
 //Configure la redirection pour une commande intermédiaire dans un pipeline.
 void	ft_pipe_middle_cmd(int prev_fd, int pipe_fd[2])
 {
-	printf("nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn\n");
 	handle_redir_fd(prev_fd, STDIN_FILENO); // Redirige l'entrée depuis le pipe précédent
 	handle_redir_fd(pipe_fd[1], STDOUT_FILENO); // Redirige la sortie vers l'extrémité d'écriture du pipe
 	//pas de fermeture car utilise ds prochaine cmd
@@ -72,16 +75,17 @@ void	exec_pipe_chain(t_data *data, t_cmd **cmd, t_env **env)
 	(void)data;
 	pid_t	pid;
 	t_cmd	*tmp;
-	int		pipe_fd[2];
+	//int		pipe_fd[2];
 	int		prev_fd;
 	int		command_index;
 
 	tmp = *cmd;
 	prev_fd = -1;
 	command_index = 0;
+	
 	while (tmp != NULL)
 	{
-		if (tmp->next != NULL && pipe(pipe_fd) == -1) // Crée un pipe si une commande suivante existe
+		if (tmp->next != NULL && pipe(tmp->pipe_fd) == -1) // Crée un pipe si une commande suivante existe
 		{
 			perror("Pipe error");
 			exit(EXIT_FAILURE);
@@ -95,20 +99,20 @@ void	exec_pipe_chain(t_data *data, t_cmd **cmd, t_env **env)
 		if (pid == 0)
 		{
 			if (command_index == 0 && tmp->next != NULL)
-				ft_pipe_first_cmd(pipe_fd, tmp);
+				ft_pipe_first_cmd(tmp->pipe_fd, tmp);
 			else if (tmp->next == NULL)
-				ft_pipe_last_cmd(pipe_fd, tmp);
+				ft_pipe_last_cmd(tmp->pipe_fd, tmp);
 			else
-				ft_pipe_middle_cmd(prev_fd, pipe_fd);
+				ft_pipe_middle_cmd(prev_fd, tmp->pipe_fd);
 			execute_command_or_builtin(&tmp, env, data);
 			exit(EXIT_SUCCESS);
 		}
 		else //processus parent
 		{
-			if (prev_fd != -1)//ferme l extrmite de lecture precedente
-				close(prev_fd);
-			close(pipe_fd[1]);//ferme l extrmite actuelle du pipe
-			prev_fd = pipe_fd[0];//prepare prev pr la cmd suivante
+			//if (prev_fd != -1)//ferme l extrmite de lecture precedente
+			//	close(prev_fd);
+			//close(tmp->pipe_fd[1]);//ferme l extrmite actuelle du pipe
+			prev_fd = tmp->pipe_fd[0];//prepare prev pr la cmd suivante
 			waitpid(pid, NULL, 0); //fin processus enfant
 			command_index++;//incremente l index des commandes
 		}

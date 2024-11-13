@@ -6,7 +6,7 @@
 /*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 16:54:54 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/11/11 14:17:21 by pag              ###   ########.fr       */
+/*   Updated: 2024/11/13 16:33:13 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,8 @@ int	main(int ac, char **av, char **envp)//nbr d'argument + var d'env
 	(void)av;
 	print_minishell();
 	data = malloc(sizeof(t_data));
-	if (data == NULL)
+	cmd = malloc(sizeof(t_cmd));
+	if (data == NULL || cmd == NULL)
 	{
 		perror("Erreur d'allocation mémoire pour data");
 		return (1);

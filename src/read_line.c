@@ -6,7 +6,7 @@
 /*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 19:17:57 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/11/11 21:21:39 by pag              ###   ########.fr       */
+/*   Updated: 2024/11/13 14:14:54 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void ft_check_line(t_data *data, t_cmd **cmd, t_env **env)
 		free(line);
 		ft_check_line(data, cmd, env);
 	}
-	else if(line == NULL || ft_strncmp(line, "exit" , ft_strlen("exit")) == 0)
+	else if (line == NULL || ft_strncmp(line, "exit" , ft_strlen("exit")) == 0)
 		return(free(line));
 	else
 	{

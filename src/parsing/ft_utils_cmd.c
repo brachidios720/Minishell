@@ -41,8 +41,3 @@ void ft_lstclearr(t_cmd **cmd)
     }
 }
 
-void ft_free(char *str, t_cmd **cmd)
-{
-	ft_lstclearr(cmd);
-	free(str);
-}
