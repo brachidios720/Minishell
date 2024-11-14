@@ -2,6 +2,7 @@
 
 t_cmd	*ft_lsttnew(t_data *data, int i, t_cmd *cmd)
 {
+    (void)cmd;
 	t_cmd	*newnode;
 
 	newnode = malloc(sizeof(t_cmd));
