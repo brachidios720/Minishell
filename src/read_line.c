@@ -20,7 +20,6 @@ void ft_check_line(t_data *data, t_cmd **cmd, t_env **env)
 	char *line;
 
 	*cmd = malloc(sizeof(t_cmd));
-	*cmd = malloc(sizeof(t_cmd));
     init_cmd(*cmd);
 	new_node = NULL;
 	//gérer la lecture de la ligne (bloque les interruptions comme Ctrl+C ou réinitialise les handlers).

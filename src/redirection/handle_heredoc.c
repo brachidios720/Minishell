@@ -47,12 +47,6 @@ int	handle_single_output_redir(t_cmd *cmd, int index)
 void handle_redirection(t_cmd *cmd, t_data *data)
 {
     int i = 0;
-	int y = 0;
-	while(cmd->redir_type[y])
-	{
-		printf("cmd_redirtype = %d\n", y);
-		y++;
-	}
     while (cmd->redir_type[i] != -1)
     {
 		//printf("Fffffffffffffff\n");

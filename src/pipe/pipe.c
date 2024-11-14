@@ -55,7 +55,7 @@ void	exec_redir(t_cmd **cmd, t_data *data, t_env **env)
 			//handle_redir_fd(tmp->input_fd, tmp->output_fd);
 			execute_command_or_builtin(&tmp, env, data);
 		}
-		else //processus parent
+		if(tmp->next != NULL) //processus parent
 		{
 			waitpid(pid, NULL, 0); //attente fin de processus enfant	
 		}
