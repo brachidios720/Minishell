@@ -7,7 +7,6 @@
     data->old_pwd = data->pwd;
     data->mat = NULL;
     data->rien = TRUE;
-
 }
 
 void    init_cmd(t_cmd *cmd)
@@ -26,7 +25,6 @@ void    init_cmd(t_cmd *cmd)
         cmd->payload[i] = NULL;
         i++;
     }
-    
     cmd->matrice = NULL;
     cmd->option = NULL;
     cmd->delimiter = NULL;

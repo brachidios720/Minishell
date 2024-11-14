@@ -6,7 +6,7 @@
 /*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 19:17:57 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/11/13 14:14:54 by pag              ###   ########.fr       */
+/*   Updated: 2024/11/14 13:47:59 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,20 @@ void ft_check_line(t_data *data, t_cmd **cmd, t_env **env)
 	char *line;
 
 	*cmd = malloc(sizeof(t_cmd));
+	*cmd = malloc(sizeof(t_cmd));
+    init_cmd(*cmd);
 	new_node = NULL;
 	//gérer la lecture de la ligne (bloque les interruptions comme Ctrl+C ou réinitialise les handlers).
+    init_cmd(*cmd);
 	change_signal(0);
 	line = readline(CYAN"Minishell> "RESET); 
-	if(line[0] == '\0')
+	if (line == NULL || ft_strncmp(line, "exit" , ft_strlen("exit")) == 0)
+		return(free(line));
+	else if(line[0] == '\0')
 	{
 		free(line);
 		ft_check_line(data, cmd, env);
 	}
-	else if (line == NULL || ft_strncmp(line, "exit" , ft_strlen("exit")) == 0)
-		return(free(line));
 	else
 	{
 		add_history(line);
@@ -45,8 +48,6 @@ void ft_check_line(t_data *data, t_cmd **cmd, t_env **env)
 		else
 		{
 			data->last_exit_status = g_signal;
-			//change_signal(2);  // Configuration pour here-document
-			//change_signal(1);  // Configuration pour l'exécution de commande
 			process_commands(data, env, cmd);
 			ft_free(line, cmd);
 			g_signal = 0;
