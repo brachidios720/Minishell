@@ -7,7 +7,6 @@
     data->old_pwd = data->pwd;
     data->mat = NULL;
     data->rien = TRUE;
-
 }
 
 void    init_cmd(t_cmd *cmd)
@@ -16,8 +15,8 @@ void    init_cmd(t_cmd *cmd)
 
     cmd->input_fd = -1;
     cmd->output_fd = -1;
-    cmd->pipe_fd[0] = -1; //desc fichier pr lire
-    cmd->pipe_fd[1] = -1; //desc fichier pr ecrire
+    //cmd->pipe_fd[0] = -1; //desc fichier pr lire
+    //cmd->pipe_fd[1] = -1; //desc fichier pr ecrire
     
     i = 0;
     while (i < 30)
@@ -26,7 +25,6 @@ void    init_cmd(t_cmd *cmd)
         cmd->payload[i] = NULL;
         i++;
     }
-    
     cmd->matrice = NULL;
     cmd->option = NULL;
     cmd->delimiter = NULL;
