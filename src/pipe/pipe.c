@@ -6,7 +6,7 @@
 /*   By: almarico <almarico@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 13:14:51 by spagliar          #+#    #+#             */
-/*   Updated: 2024/11/14 10:15:09 by pag              ###   ########.fr       */
+/*   Updated: 2024/11/14 15:09:19 by almarico         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	exec_redir(t_cmd **cmd, t_data *data, t_env **env)
 	pid_t pid;
 	t_cmd	*tmp;
 	tmp = *cmd;
+	printf("passe dans exec_redir\n");
 	while (tmp != NULL)
 	{
 		pid = fork(); //debut processus child
