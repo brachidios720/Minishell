@@ -115,6 +115,6 @@ void	process_commands(t_data *data, t_env **env, t_cmd **cmd)
 		trim_quotes((*cmd)->matrice);
 	}
 	handle_redirection(*cmd, data);
-    printf("after handle redir\n");
+   // printf("after handle redir\n");
 	exec_redir(cmd, data, env);
 }
