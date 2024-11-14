@@ -6,7 +6,7 @@
 /*   By: pag <pag@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 15:12:37 by raphaelcarb       #+#    #+#             */
-/*   Updated: 2024/11/13 20:30:20 by pag              ###   ########.fr       */
+/*   Updated: 2024/11/14 10:40:08 by pag              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ typedef struct s_cmd
 	char		**matrice;
 	char		*payload[30];// liste des chemins de fichiers pour la redirection de sortie
 	int			redir_type[30];
-	int			input_fd;// utilise pour stocker le descripteur de fichier associe a la redirection d entree
+	int			input_fd;// utilisee pour stocker le descripteur de fichier associe a la redirection d entree
 	int			output_fd;// utilisee pour stocker le descripteur de fichier associe a la redirection de sortie
 	int			append;// ajout a la fin >> -> 1 sinon 0
 	struct	s_cmd *next;
