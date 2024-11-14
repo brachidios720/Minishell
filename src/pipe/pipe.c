@@ -44,7 +44,7 @@ void	exec_redir(t_cmd **cmd, t_data *data, t_env **env)
 			perror("fork error\n");
 			exit(EXIT_FAILURE);
 		}
-        printf("pid = %d\n", pid);
+       // printf("pid = %d\n", pid);
 		if (pid == 0)
 		{
 			handle_redirection(tmp, data);

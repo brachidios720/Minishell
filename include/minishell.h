@@ -50,7 +50,7 @@
 
 extern int	g_signal;		//variable globale pour gestion des signaux
 
-#define close(X) printf("CLOSE: %d\n", X); close(X) 
+//#define close(X) printf("CLOSE: %d\n", X); close(X) 
 
 typedef struct s_cmd
 {
