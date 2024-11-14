@@ -4,17 +4,16 @@ t_cmd	*ft_lsttnew(t_data *data, int i, t_cmd *cmd)
 {
 	t_cmd	*newnode;
 
-	(void)cmd;
 	newnode = malloc(sizeof(t_cmd));
 	if (!newnode)
 		return (NULL);
+    init_cmd(newnode);
     newnode->str = ft_strdup(data->cut_matrice[i]);
 	if (!newnode->str)
     {
         free(newnode);
         return (NULL);
     }
-    // init_cmd(cmd);
     newnode->matrice = ft_splitt(newnode->str, ' ');
     trim_quotes(newnode->matrice);
     newnode->option = ft_check_dash(newnode->str);
