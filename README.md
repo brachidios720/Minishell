@@ -1,28 +1,34 @@
-## philosopher42 — `README.md`
+## Minishell — `README.md`
 
 ```md
-# philosopher42
+# Minishell
 
-Implémentation du problème des philosophes en C avec threads et synchronisation.
+Mini shell UNIX développé en C dans le cadre du cursus 42.
 
 ## À propos
 
-Ce projet explore la programmation concurrente à travers le célèbre problème des dining philosophers.
+`Minishell` reproduit une partie du comportement d’un shell comme Bash.
 
-## Notions travaillées
+Le projet couvre notamment :
+- le parsing d’une ligne de commande,
+- l’exécution de commandes,
+- la gestion des pipes,
+- les redirections,
+- les variables d’environnement,
+- certains builtins.
 
-- threads
-- mutex
-- synchronisation
-- race conditions
-- deadlocks
-- gestion du temps
+## Fonctionnalités
 
-## Objectif
-
-Construire une simulation fiable, sans data races, avec une gestion propre des ressources partagées.
+- exécution de commandes simples
+- support des pipes
+- redirections d’entrée / sortie
+- gestion de l’environnement
+- builtins usuels (`echo`, `cd`, `pwd`, `export`, `unset`, `env`, `exit`)
+- gestion des signaux selon l’implémentation
 
 ## Compilation
 
 ```bash
 make
+Lancement
+./minishell
